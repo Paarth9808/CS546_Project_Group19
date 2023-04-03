@@ -8,7 +8,7 @@ const createGame= async (
     description,
     systemRequirements,
     ageRating
-    //photo                         //Not sure
+    //photo                         //Not sure..
 )=>{
     //Validation pending
     let newGame={
