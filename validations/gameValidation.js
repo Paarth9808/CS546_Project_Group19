@@ -1,6 +1,22 @@
+let isValidArray=(array)=>{
+    for(let i=0;i<array.length;i++){
+        if(!array[i])
+            return false;
+    }
+    return true;
+}
+
+let trimStringArray=(array)=>{
+    for(let i in array){
+        array[i]=array[i].trim()
+    }
+    return array
+}
+
 const exportedMethods={
+    
     checkId(id){
-        if (!id) throw 'All fields need to have valid values';
+        if (!id) throw 'Id not provided';
         if (typeof id !== 'string') throw 'Error: id must be a string';
         id = id.trim();
         //if(!id) throw 'All fields need to have valid values';
@@ -10,7 +26,7 @@ const exportedMethods={
         return id;
         },
     checkString(strVal,strName){
-        if(!strVal){ throw `All fields need to have valid values`}
+        if(!strVal){ throw `${strName} not provided`}
         if (typeof(strVal)!== 'string'){ throw `Error: ${strName} must be a string!`; }
         strVal = strVal.trim();
         if (strVal.length === 0){throw `Error: ${strName} cannot be an empty string or string with just spaces`;}
@@ -18,7 +34,7 @@ const exportedMethods={
         return strVal;
     },
     checkStringArray(arrayVal,arrayName){
-        if(!arrayVal){ throw `All fields need to have valid values`}
+        if(!arrayVal){ throw `${arrayName} not provided`}
         //if(!arrayVal.trim()){ throw `All fields need to have valid values`}
         if(typeof(arrayVal)==='string')
             if(!arrayVal.trim()){throw `All fields need to have valid values`}
@@ -32,12 +48,13 @@ const exportedMethods={
         return arrayVal
     },
     checkNumber(numVal,numName){
-        if(!numVal){throw `All fields need to have valid values`}
+        if(!numVal){throw `${numName} not provided`}
         if(isNaN(numVal)){throw `Error: ${numName} should be a valid number`}
         if(typeof(numVal)!=='number'){throw `Error: ${numName} should be a number`}
         return numVal
     },
     checkAgeRating(rating,ratingName){
+        if(!rating){throw `${ratingName} not provided`}
         let ratingArray=['Everyone','10+','Teen','17+','18+']
         if(!ratingArray.includes(rating)){
             throw `Error: Invalid age rating(Valid ratings: 'Everyone','10+','Teen','17+','18+')`
@@ -46,7 +63,7 @@ const exportedMethods={
     },
     checkDate(dateVal){
         let currentDate=new Date();
-        let finalYear=currentDate.getFullYear()+1
+        let finalYear=currentDate.getFullYear()
         dateVal=dateVal.trim();
         let dateElements=dateVal.split('/')
         if(dateElements.length!=3){throw `Error: Year should be in MM/DD/YYYY format`}
