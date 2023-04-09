@@ -1,5 +1,6 @@
 import { games } from "../config/mongoCollection.js";
-import { ObjectId } from "mongodb"
+import { ObjectId } from "mongodb";
+import validation from '../validations/gameValidation.js';
 
 const createGame= async (
     releaseDate,
@@ -24,6 +25,13 @@ const createGame= async (
         ageRating: ageRating,
         commentIds: []
     }
+    releaseDate=validation.checkDate(releaseDate)
+    name=validation.checkString(name,'Name')
+    genre=validation.checkStringArray(genre,'Genre')
+    description=validation.checkString(description,'Description')
+    systemRequirements=validation.checkStringArray(systemRequirements,'System Requirements')
+    ageRating=validation.checkString(ageRating,'Age rating')
+    ageRating=validation.checkAgeRating(ageRating,'Age rating')
     const gameCollection= await games();
     const insertInfo=await gameCollection.insertOne(newGame);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
@@ -42,4 +50,26 @@ const getGame = async (id) => {
     return game;
   };
 
-export default {createGame,getGame}
+const getAll = async () => {
+    const gameCollection=await games();
+    let allGames=await gameCollection.find({}).toArray();
+    allGames=allGames.map((element)=>{element._id=element._id.toString();
+    return element
+    })
+    return allGames
+};
+
+const updateGame=async(
+  id,
+  releaseDate,
+  name,
+  genre,
+  description,
+  systemRequirements,
+  ageRating
+)=>{
+
+}
+
+
+export default {createGame,getGame,getAll}
