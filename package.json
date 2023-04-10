@@ -1,0 +1,23 @@
+{
+  "name": "cs546_project_group19",
+  "version": "1.0.0",
+  "description": "Heng Zhao's branch",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Paarth9808/CS546_Project_Group19.git"
+  },
+  "author": "Heng Zhao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Paarth9808/CS546_Project_Group19/issues"
+  },
+  "homepage": "https://github.com/Paarth9808/CS546_Project_Group19#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb": "^5.2.0"
+  }
+}
