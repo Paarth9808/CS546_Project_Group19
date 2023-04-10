@@ -31,6 +31,7 @@ const createComment=async(
         content:content,
         photo:photo,
         date:(now.getMonth()+1).toString().padStart(2,'0')+"/"+now.getDate()+"/"+now.getFullYear(),
+        date:now.getMonth().toString.padStart(2,'0')+"/"+now.getDay()+"/"+now.getFullYear(),
         agree:0,
         report:0
     };
