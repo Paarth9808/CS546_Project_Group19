@@ -22,11 +22,13 @@ const createComment=async(
     const tempgame=await gameCollection.findOne({_id:gameID});
     if(tempgame==null)
         throw "game does not exist"; 
+    const now=new Date();
     const tempcomment={
         userID:userID,
         gameID:gameID,
         content:content,
         photo:photo,
+        date:now.getMonth().toString.padStart(2,'0')+"/"+now.getDay()+"/"+now.getFullYear(),
         agree:0,
         report:0
     };
@@ -72,7 +74,9 @@ const updateComment=async(
     content=checkcontent(content);
     photo=checkphoto(photo);
     const commentCollection=await comment();
-    const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$set:{content:content,photo:photo}},{returnDocument: 'after'});
+    const now=new Date();
+    const now_string= now.getMonth().toString.padStart(2,'0')+"/"+now.getDay()+"/"+now.getFullYear();
+    const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$set:{content:content,photo:photo,date:now_string}},{returnDocument: 'after'});
     if(commentupdateInfo.lastErrorObject.n==0)
         throw "could not update this comment in comment db";
 }
