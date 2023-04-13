@@ -68,8 +68,39 @@ const updateGame=async(
   systemRequirements,
   ageRating
 )=>{
-
+    id=validation.checkId(id);
+    releaseDate=validation.checkDate(releaseDate)
+    name=validation.checkString(name,'Name')
+    genre=validation.checkStringArray(genre,'Genre')
+    description=validation.checkString(description,'Description')
+    systemRequirements=validation.checkStringArray(systemRequirements,'System Requirements')
+    ageRating=validation.checkString(ageRating,'Age rating')
+    ageRating=validation.checkAgeRating(ageRating,'Age rating')
+    const updateGame={
+      releaseDate:releaseDate,
+      name:name,
+      genre:genre,
+      description:description,
+      systemRequirements:systemRequirements,
+      ageRating:ageRating,
+    }
+    const gameCollection=await games();
+    let currentGame=await getGame(id);
+    if(currentGame.name===name&&validation.checkArraysEqual(currentGame.genre,genre)&&currentGame.description===description&&validation.checkArraysEqual(currentGame.systemRequirements,systemRequirements)&&currentGame.ageRating===ageRating){
+      throw `New game and current game are the same`
+    }
+    if(currentGame===null){throw `Game with id: ${id} not found`}
+    const updatedInfo= await gameCollection.findOneAndUpdate(
+      {_id: new ObjectId(id)},
+      {$set: updateGame},
+      {returnDocument: 'after'}
+    );
+    if (updatedInfo.lastErrorObject.n === 0) {
+      throw 'Could not update game successfully';
+    }
+    updatedInfo.value._id=updatedInfo.value._id.toString();
+    return updatedInfo.value;
 }
 
 
-export default {createGame,getGame,getAll}
+export default {createGame,getGame,getAll,updateGame}

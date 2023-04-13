@@ -80,6 +80,13 @@ const exportedMethods={
             throw `Error: Invalid date`
         }
         return dateVal;
+    },
+    checkArraysEqual(arr1,arr2){
+        //console.log("Length arr1: "+arr1.length+"Length arr2: "+arr2.length)
+        if(arr1.length!==arr2.length){
+            return false
+        }
+        return JSON.stringify(arr1) === JSON.stringify(arr2);
     }
 }
 
