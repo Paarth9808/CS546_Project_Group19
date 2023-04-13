@@ -71,5 +71,11 @@ const updateGame=async(
 
 }
 
+const updateGameRating = async(rate) => {
+
+  //test
+
+}
+
 
 export default {createGame,getGame,getAll}
