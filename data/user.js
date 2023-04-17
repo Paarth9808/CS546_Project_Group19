@@ -2,14 +2,15 @@ import { comment } from "../config/mongoCollection";
 import { ObjectId } from "mongodb"
 import validation from '../validations/userValidation.js';
 import bcrypt from "bcrypt";
-
+// npm i bcryptjs
 let exportedMethods = {
     async createUser (userName, age, email, hashedPassword, avatar) {
+        // check username , mail lowercase if exists(all should be unique)
         userName = validation.checkString(userName, "username");
         age = validation.checkAge(age);
         email = validation.checkMail(email);
         hashedPassword = validation.checkString(hashedPassword, "password");
-        password = await bcrypt.hash(hashedPassword, 15);
+        password = await bcrypt.hash(hashedPassword, 10); //(password, rounds)
 
         let newUser = {
             userName : userName,
@@ -94,14 +95,23 @@ let exportedMethods = {
     // WIP
     async addReviewsToUser(id, reviewId) {
         const userCollection = await users();
-        const updateInfo = await userCollection.updateOne({ _id: ObjectId(id)}, { $addToSet: {reviewedId: reviewId}});
-        if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';
-    
-        return await this.getUser(id);
+        const userComment = await userCollection.findOne({ _id: ObjectId(id) });
+        if (userComment === null) throw 'No user with that ID';
+        const updateInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $addToSet: { reviewedIds: reviewId } });
+        if (!updateInfo.matchedCount && !updateInfo.modifiedCount) 
+            throw 'Update failed';
+
+        return await this.getUserById(id);
     },
     
-    async addCommentsToUser(id, commentId) {
-        
+    async addRatingsToUser(id, gameId) {
+        const userCollection = await users();
+        const userRating = await userCollection.findOne({ _id: ObjectId(id) });
+        if (userRating === null) throw 'No user with that ID';
+        const updateInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $addToSet: { ratedIds: gameId } });
+        if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';
+
+        return userRating;
     }
 };
 
