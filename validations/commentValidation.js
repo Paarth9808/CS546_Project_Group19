@@ -23,7 +23,7 @@ const checkgameID=(gameID)=>{
 
 const checkcommentID=(commentID)=>{
     if(typeof commentID!="string")
-    throw "commentID should be a string";
+        throw "commentID should be a string";
     commentID=commentID.trim();
     if(commentID=="")
         throw "commentID should not be empty spaces";
@@ -33,14 +33,9 @@ const checkcommentID=(commentID)=>{
 }
 
 const checkcontent=(content)=>{
-    if(!(content instanceof Array))
-        throw "content should be an Array of strings";
-    if(content.length<1)
-        throw "content should not be empty";
-    for(var i=0;i<content.length;i++)
-        if(typeof content[i]!="string")
-            throw "every elements in content should be string";
-    return content;
+    if(typeof content!="string")
+        throw "content should be a string";
+    return content.trim();
 }
 
 const checkphoto=(photo)=>{

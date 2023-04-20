@@ -1,6 +1,6 @@
-import { comment } from "../config/mongoCollection";
-import { user } from "../config/mongoCollection";
-import { games } from "../config/mongoCollection";
+import { comment } from "../config/mongoCollection.js";
+import { user } from "../config/mongoCollection.js";
+import { games } from "../config/mongoCollection.js";
 import { ObjectId } from "mongodb"
 import { checkuserID,checkgameID,checkcommentID,checkcontent,checkphoto } from "../validations/commentValidation.js";
 
@@ -14,6 +14,8 @@ const createComment=async(
     gameID=checkgameID(gameID);
     content=checkcontent(content);
     photo=checkphoto(photo);
+    if(content==""&&photo.length==0)
+        throw "comment should not be empty"
     const userCollection=await user();
     const tempuser=await userCollection.findOne({_id:userID});
     if(tempuser==null)
@@ -122,3 +124,4 @@ const reportComment=async(
         throw "could not update this comment in comment db";
 }
 
+export{createComment,deleteComment,updateComment,getCommentById,agreeComment,nonagreeComment,reportComment};
