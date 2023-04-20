@@ -2,7 +2,7 @@ import { comment } from "../config/mongoCollection";
 import { user } from "../config/mongoCollection";
 import { games } from "../config/mongoCollection";
 import { ObjectId } from "mongodb"
-import { checkuserID,checkgameID,checkcommentID,checkcontent,checkphoto } from "../validation/commentValidation.js";
+import { checkuserID,checkgameID,checkcommentID,checkcontent,checkphoto } from "../validations/commentValidation.js";
 
 const createComment=async(
     userID,
