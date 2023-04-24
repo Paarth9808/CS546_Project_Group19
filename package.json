@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Paarth9808/CS546_Project_Group19#readme",
   "dependencies": {
     "express": "^4.18.2",
+    "express-handlebars": "^7.0.7",
     "mongodb": "^5.1.0"
   }
 }
