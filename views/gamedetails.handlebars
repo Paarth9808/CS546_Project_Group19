@@ -1,1 +1,18 @@
-<h1>{{name}}</h1>
+<header><h1>{{game.name}}</h1></header>
+<div>
+{{#if game.description}}
+    <p>{{game.description}}</p>
+{{else}}
+    <p>No description</p>
+{{/if}}
+<h3>Rating: {{game.rating}}</h3>
+<h3>System requirements: </h3>
+<ul>
+    {{#each game.systemRequirements}}
+        <li>{{this}}</li>
+    {{/each}}
+</ul>
+<h3>Likes: {{game.like}}</h3>
+<h3>Dislikes: {{game.dislike}}</h3>
+
+</div>
