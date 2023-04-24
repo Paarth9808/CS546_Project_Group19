@@ -90,7 +90,33 @@ let exportedMethods = {
         }else{
             email = validation.checkMail(email);
         }
-        
+
+        if(!hashedPassword){
+            hashedPassword = updateUser.hashedPassword;
+        }else{
+            hashedPassword = validation.checkString(hashedPassword);
+            password1 = await bcrypt.hash(hashedPassword, 10);
+        }
+        //check avatar
+        if(!avatar){
+            avatar = updateUser.avatar;
+        }else{
+            avatar = avatar;
+        }
+        const userUpdated = {
+            userName : userName,
+            age : age,
+            email : email,
+            hashedPassword : password,
+            avatar : avatar
+        };
+
+        const updatedInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $set: userUpdated });
+        if (updatedInfo.modifiedCount === 0) {
+            throw 'could not update user successfully';
+        }
+
+        return await this.getUserById(id);
     },
     // WIP
     async addReviewsToUser(id, reviewId) {
