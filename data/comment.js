@@ -30,7 +30,7 @@ const createComment=async(
         gameID:gameID,
         content:content,
         photo:photo,
-        date:now.getMonth().toString.padStart(2,'0')+"/"+now.getDay()+"/"+now.getFullYear(),
+        date:(now.getMonth()+1).toString().padStart(2,'0')+"/"+now.getDate()+"/"+now.getFullYear(),
         agree:0,
         report:0
     };
@@ -49,6 +49,12 @@ const createComment=async(
     }
 }
 
+const getpartComment=async(start,length)=>{
+    const commentCollection=await comment();
+
+    const res=commentCollection.find({}).skip(start).limit(length).toArray();
+    return res;
+}
 const deleteComment=async(
     commentid
 )=>{
@@ -124,4 +130,4 @@ const reportComment=async(
         throw "could not update this comment in comment db";
 }
 
-export{createComment,deleteComment,updateComment,getCommentById,agreeComment,nonagreeComment,reportComment};
+export{createComment,getpartComment,deleteComment,updateComment,getCommentById,agreeComment,nonagreeComment,reportComment};
