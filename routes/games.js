@@ -11,7 +11,8 @@ router.route('/:id').get(async (req,res)=>{
     }
     try{
         const game=await gameData.getGame(req.params.id);
-        return res.status(200).json(game)
+        //return res.status(200).json(game)
+        return res.render('gamedetails',{Titlename:'Game details',game:game})
         // res.json({'test':'test'})
     }catch(e){
         return res.status(404).json({error:e})
