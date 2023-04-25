@@ -12,56 +12,81 @@ router.route('/gameList').get(async (req,res)=>{
     }catch(e){
         return res.status(404).json({error:e})
     }
-});
+})
+.post(async (req, res) => {
+    //code here for POST
 
-router.route('/gameList/genre').get(async (req,res)=>{
+    const genre = req.body.genreInput;
+    const platform = req.body.platformInput;
+    const sortWay = req.body.sortWayInput;
+    const sortBy = req.body.sortByInput;
 
-    const genre = req.body.genre;
+    if (!genre && !platform && !sortWay && !sortBy) res.status(400).render('gameList', {title: "gameList", showErrorMessage : 'Sort/Filter missing'});
 
-    try{
-        const game = await gameListData.getGameByGerne(gerne);
-        return res.status(200).json(game)
-        
-    }catch(e){
-        return res.status(404).json({error:e})
+
+
+    try {
+        if (genre) {
+            if (genre.trim() == '') throw 'platform should be no empty spaces';
+            if (typeof(genre) != 'string') throw 'sortWay type wrong';
+        }
+        if (platform) {
+            if (platform.trim() == '') throw 'platform should be no empty spaces';
+            if (typeof(platform) != 'string') throw 'sortWay type wrong';
+            if (platform != 'xbox' || platform != 'switch' || platform != 'ps5' || platform != 'pc') throw 'sortWay input wrong';
+        }
+        if (sortWay && sortBy) {
+            if (sortWay.trim() == '') throw 'sortWay should be no empty spaces';
+            if (typeof(sortWay) != 'string') throw 'sortWay type wrong';
+            if (sortWay != 'ascending' || sortWay != 'descending') throw 'sortWay input wrong';
+            if (sortWay.trim() == '') throw 'sortWay should be no empty spaces';
+            if (typeof(sortWay) != 'string') throw 'sortWay type wrong';
+            if (sortWay != 'ascending' || sortWay != 'descending') throw 'sortWay input wrong';
+        }
+
+
+    } catch (e) {
+      res.status(400).render('gameList', {title: "gameList", showErrorMessage : e});
     }
-});
 
-router.route('/gameList/Platform').get(async (req,res)=>{
 
-    const platform = req.body.platform;
 
-    try{
-        const game = await gameListData.getGameByPlatform(platform);
-        return res.status(200).json(game)
+
+
+    try {
+        if (genre) {
+            let ans = await gameListData.getGameByGerne(genre);
+            
+            ans.render('gameList', {title: "gameList", sortTerm: ans});
         
-    }catch(e){
-        return res.status(404).json({error:e})
+
+      } else if (platform) {
+
+        let ans = await gameListData.getGameByPlatform(platform);
+            
+        ans.render('gameList', {title: "gameList", sortTerm: ans});
+
+      } else if (sortWay && sortBy) {
+        if (sortBy == 'date') {
+            let ans = await gameListData.sortGameByDate(sortWay);
+            
+            ans.render('gameList', {title: "gameList", sortTerm: ans});
+
+        } else if (sortBy == 'rate') {
+            let ans = await gameListData.sortGameByRate(sortWay);
+            
+            ans.render('gameList', {title: "gameList", sortTerm: ans});
+        }
+
+      } else {
+        res.status(500).render('error', {title : "error", message: "Internal Server Error" });
+      }
+
+    } catch (e) {
+      res.render('gameList', {title: "gameList", showErrorMessage : e});
     }
-});
 
-router.route('/gameList/sortByRate').get(async (req,res)=>{
+  });
 
-
-    try{
-        const game = await gameListData.sortGameByRate();
-        return res.status(200).json(game)
-        
-    }catch(e){
-        return res.status(404).json({error:e})
-    }
-});
-
-router.route('/gameList/sortByDate').get(async (req,res)=>{
-
-
-    try{
-        const game = await gameListData.sortGameByDate();
-        return res.status(200).json(game)
-        
-    }catch(e){
-        return res.status(404).json({error:e})
-    }
-});
 
 export default router;

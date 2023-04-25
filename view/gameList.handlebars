@@ -1,0 +1,70 @@
+    <h1>Game List</h1>
+
+    <form method="POST" id="getGameForm">
+
+    <label for="platformInput">platform</label>
+    <select name= "platformInput" id="platformInput">
+        <option value="xbox">xbox</option>
+        <option value="switch">switch</option>
+        <option value="ps5">ps5</option>
+        <option value="pc">pc</option>
+
+    </select>
+
+    <button type="submit">get</button>
+
+
+    </form>
+
+
+    <form id="gerneForm" method="post">
+            <label for="genreInput">genre Input:</label>
+            <textarea name="genreInput" id="genreInput"></textarea>
+            <button type="submit">submit</button>
+
+    </form>
+
+
+    <form id="sortForm" method="post">
+        <label for="sortWayInput">order</label>
+        <select name= "sortWayInput" id="sortWayInput">
+            <option value="-">--</option>
+            <option value="ascending">ascending</option>
+            <option value="descending">descending</option>
+
+        </select>
+
+        <label for="sortByInput">order</label>
+        <select name= "sortByInput" id="sortByInput">
+            <option value="-">--</option>
+            <option value="rate">Rate</option>
+            <option value="date">Date</option>
+        </select>
+
+        <button type="submit">sort</button>
+
+    </form>
+
+
+
+
+
+        <div id="errorTextR" class="hidden">
+
+       </div>
+
+    {{#if showErrorMessage }}
+        <p>{{showErrorMessage}}</p>
+    {{/if}}
+
+
+    <h2>{{sortTerm}}</h2>
+
+        <ol>
+            {{#each sortTerm}}
+            <li>
+                <a href="/gameDetails/{{id}}">{{name}}</a>
+            </li>
+            {{/each}}
+
+        </ol>
