@@ -57,25 +57,25 @@ router.route('/gameList').get(async (req,res)=>{
         if (genre) {
             let ans = await gameListData.getGameByGerne(genre);
             
-            ans.render('gameList', {title: "gameList", sortTerm: ans});
+            res.render('gameList', {title: "gameList", sortTerm: ans});
         
 
       } else if (platform) {
 
         let ans = await gameListData.getGameByPlatform(platform);
             
-        ans.render('gameList', {title: "gameList", sortTerm: ans});
+        res.render('gameList', {title: "gameList", sortTerm: ans});
 
       } else if (sortWay && sortBy) {
         if (sortBy == 'date') {
             let ans = await gameListData.sortGameByDate(sortWay);
             
-            ans.render('gameList', {title: "gameList", sortTerm: ans});
+            res.render('gameList', {title: "gameList", sortTerm: ans});
 
         } else if (sortBy == 'rate') {
             let ans = await gameListData.sortGameByRate(sortWay);
             
-            ans.render('gameList', {title: "gameList", sortTerm: ans});
+            res.render('gameList', {title: "gameList", sortTerm: ans});
         }
 
       } else {
