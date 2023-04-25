@@ -1,0 +1,22 @@
+{{!-- user profile page --}}
+{{#if error}}
+    <h2>{{etext}}</h2>
+{{else}}
+    <div>
+     {{!-- <h2>Hey!</h2> --}}
+        <img src="../{{profilePic}}" class="profile" alt="{{firstName}}"/>
+        <h2 class='profile-text'>{{firstName}} {{lastName}}</h2>
+        <h2 class='profile-text'>{{email}}</h2>
+        <section id="edit">
+            <button class='edit' type="button">Edit Profile</button>
+        </section>
+    </div>
+
+    <h2>Reviewed Games</h2>
+    {{#each posts}}
+        <section class="reviews">
+            <h3><a href="/games/{{gameId}}">{{game_name}}</a></h3>
+            <p>{{rating}} {{userReviews}}</p>
+        </section>
+    {{/each}}
+{{/if}}
