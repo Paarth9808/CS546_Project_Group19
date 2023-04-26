@@ -10,13 +10,13 @@ router
     try {
       req.params.id = validation.checkId(req.params.id);
     } catch (e) {
-      return res.status(400).json({ error: e });
-    //   return res.render("userProfile", {
-    //     id: '123',
-    //     userName: 'user1.userName',
-    //     age: 12,
-    //     email: 'user1.email',
-    //   });
+      // return res.status(400).json({ error: e });
+      return res.render("userProfile", {
+        id: '123',
+        userName: 'user1.userName',
+        age: 12,
+        email: 'user1.email',
+      });
     }
     try {
       const user1 = await userData.getUserById(req.params.id);
@@ -84,5 +84,6 @@ router
         }
       );
   });
+// do i need another route for update avatar?
 
 export default router;
