@@ -10,7 +10,7 @@ let exportedMethods = {
         age = validation.checkAge(age);
         email = validation.checkMail(email);
         hashedPassword = validation.checkString(hashedPassword, "password");
-        password = await bcrypt.hash(hashedPassword, 10); //(password, rounds)
+        let password = await bcrypt.hash(hashedPassword, 10); //(password, rounds)
 
         let newUser = {
             userName : userName,
@@ -23,12 +23,12 @@ let exportedMethods = {
         }
 
         const userCollection = await user();
-        const checkMailExist = await userCollection.findOne({email: email})
+        const checkMailExist = await userCollection.findOne({email: email.toLowerCase()})
         if(checkMailExist) throw "Email already exists";
 
         let insertUser = await userCollection.insertOne(newUser);
         if (!insertUser.insertedId) throw 'Insert failed!';
-        return await this.getUserById(newInsertInformation.insertedId.toString());
+        return {insertedUser : true};
     },
 
     async getAllUsers (){
@@ -54,16 +54,16 @@ let exportedMethods = {
         if (deleteInfo.lastErrorObject.n === 0)
             throw `Error: Could not delete user with id of ${id}`;
       
-        return {...deleteInfo.value, deleted: true};
+        return {deleted: true};
     },
-
-    async updateAvatar (id, avatar){
+    //check
+    async updateAvatar (id, avatar1){
         id = validation.checkString(id, "ID");
         const userCollection = await user();
         let userCheck = this.getUserById(id);
-        let updatePhoto = {};
-        updatePhoto.avatar =  avatar;
-        const updateUserInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $set: updatePhoto});
+        // let updatePhoto = {};
+        // updatePhoto.avatar =  avatar;
+        const updateUserInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $set: {avatar : avatar1}});
         if (updateUserInfo.lastErrorObject.n === 0) throw 'Error: Update failed';
 
         return await updateUserInfo.value;

@@ -84,6 +84,5 @@ router
         }
       );
   });
-// do i need another route for update avatar?
 
 export default router;

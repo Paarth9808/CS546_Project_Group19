@@ -29,7 +29,7 @@ const exportedMethods = {
         if(re.test(String(email).toLowerCase())){
         throw 'Invalid email';
         }
-        return email;
+        return email.toLowerCase();
    },
 
    checkAge(age){
@@ -38,6 +38,7 @@ const exportedMethods = {
         if(age < 13){
             throw "Does not agree the guidelines for age limit"
         }
+        return age;
    }
 };
 
