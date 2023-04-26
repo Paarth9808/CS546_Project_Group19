@@ -1,7 +1,7 @@
-import { comment } from "../config/mongoCollection";
+
 import { ObjectId } from "mongodb"
 import validation from '../validations/userValidation.js';
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 // npm i bcryptjs
 let exportedMethods = {
     async createUser (userName, age, email, hashedPassword, avatar) {

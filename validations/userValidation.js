@@ -1,4 +1,4 @@
-import { user } from "../config/mongoCollection";
+//import { user } from "../config/mongoCollection";
 import {ObjectId} from 'mongodb';
 
 const exportedMethods = {
