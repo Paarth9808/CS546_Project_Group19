@@ -99,7 +99,9 @@ let exportedMethods = {
         //     email = validation.checkMail(email);
         // }
 
-        
+        if(!hashedPassword){
+            hashedPassword = updateUser.hashedPassword;
+        }else{
             hashedPassword = validation.checkString(hashedPassword);
             let password1 = await bcrypt.hash(hashedPassword, 10);
         
@@ -118,6 +120,7 @@ let exportedMethods = {
         return await this.getUserById(id);
     },
     // check this too
+    // query this to 
     async addReviewsToUser(id, reviewId) {
         const userCollection = await user();
         // const userComment = await userCollection.findOne({ _id: ObjectId(id) });
