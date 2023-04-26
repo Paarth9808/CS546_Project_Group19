@@ -1,0 +1,19 @@
+<div class="profile">
+    <img src="/public/userimages/{{id}}.png" class="profile" alt="Avatar" width="100" height="100" />
+    <h2 class='profile-text'>{{userName}}</h2>
+    <h2 class='profile-text'>{{age}}</h2>
+    <h2 class='profile-text'>{{email}}</h2>
+    <section id="edit">
+        <button class='edit' type="button">Edit Profile</button>
+    </section>
+</div>
+
+<h2>Reviewed Posts</h2>
+{{#each posts}}
+<section class="reviews">
+    <h3><a href="/games/{{gameId}}">{{gameId}}</a></h3>
+    <p>{{rating}} {{userReviews}}</p>
+</section>
+{{/each}}
+
+{{!-- link to games comparison page --}}
