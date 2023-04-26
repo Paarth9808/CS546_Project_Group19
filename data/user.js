@@ -106,6 +106,7 @@ let exportedMethods = {
     },
 
     // check this too
+    // query this to 
     async addReviewsToUser(id, reviewId) {
         const userCollection = await user();
         // const userComment = await userCollection.findOne({ _id: ObjectId(id) });
