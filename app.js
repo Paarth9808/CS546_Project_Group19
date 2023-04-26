@@ -20,15 +20,6 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
   next();
 };
 
-app.use(
-  session({
-    name: 'AuthCookie',
-    secret: "This is a secret",
-    saveUninitialized: false,
-    resave: false
-  })
-);
-
 import fileUpload from 'express-fileupload';
 
 app.use(fileUpload());
