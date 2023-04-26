@@ -4,7 +4,7 @@ import validation from '../validations/userValidation.js';
 import bcrypt from "bcryptjs";
 // npm i bcryptjs
 let exportedMethods = {
-    async createUser (userName, age, email, hashedPassword, avatar) {
+    async createUser (userName, age, email, hashedPassword) {
         // check username , mail lowercase if exists(all should be unique)
         userName = validation.checkString(userName, "username");
         age = validation.checkAge(age);
@@ -68,8 +68,8 @@ let exportedMethods = {
 
         return await updateUserInfo.value;
     },
-
-    async updateUser (id, userName, age, email, hashedPassword, avatar){
+    // removed email
+    async updateUser (id, userName, age, hashedPassword){
         id = validation.checkId(id, "ID");
         let userCollection = await user();
         let updateUser =  this.getUserById(id);
@@ -85,11 +85,11 @@ let exportedMethods = {
             age = validation.checkAge(age);
         }
 
-        if(!email){
-            email = updateUser.email;
-        }else{
-            email = validation.checkMail(email);
-        }
+        // if(!email){
+        //     email = updateUser.email;
+        // }else{
+        //     email = validation.checkMail(email);
+        // }
 
         if(!hashedPassword){
             hashedPassword = updateUser.hashedPassword;
@@ -97,18 +97,12 @@ let exportedMethods = {
             hashedPassword = validation.checkString(hashedPassword);
             password1 = await bcrypt.hash(hashedPassword, 10);
         }
-        //check avatar
-        if(!avatar){
-            avatar = updateUser.avatar;
-        }else{
-            avatar = avatar;
-        }
+        
         const userUpdated = {
             userName : userName,
             age : age,
-            email : email,
-            hashedPassword : password,
-            avatar : avatar
+            // email : email,
+            hashedPassword : password
         };
 
         const updatedInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $set: userUpdated });
@@ -118,7 +112,8 @@ let exportedMethods = {
 
         return await this.getUserById(id);
     },
-    // WIP
+    // check this too
+    // query this to 
     async addReviewsToUser(id, reviewId) {
         const userCollection = await users();
         const userComment = await userCollection.findOne({ _id: ObjectId(id) });
