@@ -76,7 +76,7 @@ let exportedMethods = {
 
         return {updated : true};
     },
-    // removed email works but check if a value not given type thing
+    // removed email. This works but check if a value not given type thing
     async updateUser (id, userName, age, hashedPassword){
         id = validation.checkId(id, "ID");
         let userCollection = await user();
@@ -118,23 +118,24 @@ let exportedMethods = {
         return await this.getUserById(id);
     },
     // check this too
-    // query this to 
     async addReviewsToUser(id, reviewId) {
-        const userCollection = await users();
-        const userComment = await userCollection.findOne({ _id: ObjectId(id) });
-        if (userComment === null) throw 'No user with that ID';
-        const updateInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $addToSet: { reviewedIds: reviewId } });
+        const userCollection = await user();
+        // const userComment = await userCollection.findOne({ _id: ObjectId(id) });
+        // if (userComment === null) throw 'No user with that ID';
+        let userComment = this.getUserById(id);
+        const updateInfo = await userCollection.updateOne({_id: new ObjectId(id)}, { $addToSet: { reviewedIds: reviewId }});
         if (!updateInfo.matchedCount && !updateInfo.modifiedCount) 
             throw 'Update failed';
 
-        return await this.getUserById(id);
+        return userComment;
     },
     
     async addRatingsToUser(id, gameId) {
-        const userCollection = await users();
-        const userRating = await userCollection.findOne({ _id: ObjectId(id) });
-        if (userRating === null) throw 'No user with that ID';
-        const updateInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $addToSet: { ratedIds: gameId } });
+        const userCollection = await user();
+        // const userRating = await userCollection.findOne({ _id: ObjectId(id) });
+        // if (userRating === null) throw 'No user with that ID';
+        let userRating = this.getUserById(id);
+        const updateInfo = await userCollection.updateOne({_id: new ObjectId(id)}, { $addToSet: { ratedIds: gameId } });
         if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';
 
         return userRating;
