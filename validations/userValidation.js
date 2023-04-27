@@ -24,12 +24,12 @@ const exportedMethods = {
     },
 
     checkMail(email) {
-        if (this.checkString(email)) return false;
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if(re.test(String(email).toLowerCase())){
-        throw 'Invalid email';
-        }
-        return email.toLowerCase();
+      if(!email) throw 'email not supplied';
+      email = email.trim();
+      if(typeof email !== 'string') throw 'email should be of type String';
+      var re = /^\S+@\S+\.\S+$/;
+      if(!re.test(email)) throw 'Invalid Email';
+      return email;
    },
 
    checkAge(age){

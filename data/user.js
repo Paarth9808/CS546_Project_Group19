@@ -1,13 +1,14 @@
-
+import { user } from "../config/mongoCollection.js"
 import { ObjectId } from "mongodb"
 import validation from '../validations/userValidation.js';
 import bcrypt from "bcryptjs";
-// npm i bcryptjs
+
 let exportedMethods = {
     async createUser (userName, age, email, hashedPassword) {
         // check username , mail lowercase if exists(all should be unique)
         userName = validation.checkString(userName, "username");
         age = validation.checkAge(age);
+        email = email.toLowerCase();
         email = validation.checkMail(email);
         hashedPassword = validation.checkString(hashedPassword, "password");
         let password = await bcrypt.hash(hashedPassword, 10); //(password, rounds)
@@ -17,40 +18,47 @@ let exportedMethods = {
             age : age,
             email : email,
             hashedPassword : password,
-            avatar : avatar,
+            avatar : "",
             reviewedIds : [],
             ratedIds : []
         }
 
         const userCollection = await user();
-        const checkMailExist = await userCollection.findOne({email: email.toLowerCase()})
-        if(checkMailExist) throw "Email already exists";
+        const user0 = await userCollection.findOne({email : email});
+        if (user0 !== null) throw 'user already exists with that email';
 
         let insertUser = await userCollection.insertOne(newUser);
         if (!insertUser.insertedId) throw 'Insert failed!';
-        return {insertedUser : true};
+        const newId = insertUser.insertedId.toString();
+
+        const user_ret = await this.getUserById(newId);
+        return user_ret;
+        // return {insertedUser : true};
     },
 
     async getAllUsers (){
-        const userCollection = await users();
+        const userCollection = await user();
         const userList = await userCollection.find({}).toArray();
         return userList;
     },
 
     async getUserById (id){
-        id = validation.checkString(id, "ID");
+        validation.checkId(id);
         const userCollection = await user();
-        const user = await userCollection.findOne({_id: ObjectId(id)});
-        if (!user) throw 'Error: User not found';
-        return user;
+        let userId = await userCollection.findOne(
+            {_id : new ObjectId(id)}
+        );
+        if(userId === null){
+            throw "no user found with given ID";
+        }
+
+        return userId;
     },
 
     async deleteUser (id){
-        id = validation.checkString(id, "ID");
+        id = validation.checkId(id);
         const userCollection = await user();
-        const deleteInfo = await userCollection.findOneAndDelete({
-            _id: ObjectId(id)
-          });
+        const deleteInfo = await userCollection.findOneAndDelete({_id : new ObjectId(id)});
         if (deleteInfo.lastErrorObject.n === 0)
             throw `Error: Could not delete user with id of ${id}`;
       
@@ -58,17 +66,17 @@ let exportedMethods = {
     },
     //check
     async updateAvatar (id, avatar1){
-        id = validation.checkString(id, "ID");
+        id = validation.checkId(id);
         const userCollection = await user();
-        let userCheck = this.getUserById(id);
+        await this.getUserById(id);
         // let updatePhoto = {};
         // updatePhoto.avatar =  avatar;
-        const updateUserInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $set: {avatar : avatar1}});
-        if (updateUserInfo.lastErrorObject.n === 0) throw 'Error: Update failed';
+        const updateUserInfo = await userCollection.updateOne({ _id: new ObjectId(id) }, { $set: {avatar : avatar1}});
+        if (updateUserInfo.modifiedCount === 0) throw 'Error: Update failed';
 
-        return await updateUserInfo.value;
+        return {updated : true};
     },
-    // removed email
+    // removed email works but check if a value not given type thing
     async updateUser (id, userName, age, hashedPassword){
         id = validation.checkId(id, "ID");
         let userCollection = await user();
@@ -91,21 +99,18 @@ let exportedMethods = {
         //     email = validation.checkMail(email);
         // }
 
-        if(!hashedPassword){
-            hashedPassword = updateUser.hashedPassword;
-        }else{
+        
             hashedPassword = validation.checkString(hashedPassword);
-            password1 = await bcrypt.hash(hashedPassword, 10);
-        }
+            let password1 = await bcrypt.hash(hashedPassword, 10);
         
         const userUpdated = {
             userName : userName,
             age : age,
             // email : email,
-            hashedPassword : password
+            hashedPassword : password1
         };
 
-        const updatedInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $set: userUpdated });
+        const updatedInfo = await userCollection.updateOne({ _id: new ObjectId(id) }, { $set: userUpdated });
         if (updatedInfo.modifiedCount === 0) {
             throw 'could not update user successfully';
         }
