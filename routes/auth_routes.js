@@ -91,6 +91,7 @@ router
         try{
             const {emailAddressInput,passwordInput}=user;
             let userDetails= await authFunction.checkUser(emailAddressInput,passwordInput);
+            req.session.user=userDetails;
             if(userDetails){res.redirect('gamedetails')}
 
         }catch(e){
@@ -98,5 +99,11 @@ router
             res.status(400).render('login',{title:'Login page',errors:errors,hasErrors:true})
         }
     })
+
+    router.route('/logout').get(async (req, res) => {
+        //code here for GET
+        req.session.destroy();
+        res.render('logout',{title:'Logout'})
+      });
 
 export default router;
