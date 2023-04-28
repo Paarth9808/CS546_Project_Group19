@@ -12,7 +12,7 @@ Handlebars.registerHelper('concat', function(str1,str2) {
 const handlebarsInstance = exphbs.create({
   defaultLayout: 'main',
   // Specify helpers which are only registered on this instance.
-  partialsDir: ['views/partials/']
+  partialsDir: ['views/partials/','views']
 });
 
 const __filename = fileURLToPath(import.meta.url);
