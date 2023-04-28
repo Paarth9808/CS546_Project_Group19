@@ -16,7 +16,7 @@ router.route('/:id').get(async (req,res)=>{
 
 
         //Heng's comments loading
-        const tempcomments=await getpartComment(0,3);
+        const tempcomments=await getpartComment(req.params.id,0,3);
         for(var i=0;i<tempcomments.length;i++)
         {
             const userid=tempcomments[i].userID;
