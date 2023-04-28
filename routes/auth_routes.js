@@ -2,7 +2,6 @@ import {Router} from 'express';
 const router = Router();
 import validation from '../validations/authValidation.js'
 import userDataFunctions from '../data/user.js'
-import authFunction from '../data/auth.js'
 
 router
     .route('/register')
@@ -56,47 +55,13 @@ router
             const {userNameInput,ageInput,emailAddressInput,passwordInput,roleInput}=user
             //Role implementation pending
             const newUser=await userDataFunctions.createUser(userNameInput,ageInput,emailAddressInput,passwordInput);
-            if(newUser){res.redirect('login')}
+            if(newUser.insertedUser===true){res.redirect('login')}
         }catch(e){
             errors.push(e);
             res.status(400).render('register',{title:'Registration page',errors:errors,hasErrors:true})
             //res.status(500).json('Internal server error')
         }
 
-    });
-
-    router.route('/login')
-    .get(async (req,res)=>{
-        res.render('login',{title: 'Login page'})
-    })
-    .post(async (req,res)=>{
-        let user=req.body;
-        let errors=[];
-        try{
-            //user.emailAddressInput=validation.checkEmail(user.emailAddressInput);
-            if(!user.emailAddressInput){throw `Email not provided`}
-            if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(user.emailAddressInput.trim())){throw `Invalid email id`}
-        }catch(e){
-            errors.push(e);
-        }
-        try{
-            user.passwordInput=validation.checkPassword(user.passwordInput);
-        }catch(e){
-            errors.push(e);
-        }
-        if(errors.length>0){
-            return res.status(400).render('login',{title:'Login page',errors:errors,hasErrors:true})
-
-        }
-        try{
-            const {emailAddressInput,passwordInput}=user;
-            let userDetails= await authFunction.checkUser(emailAddressInput,passwordInput);
-            if(userDetails){res.redirect('gamedetails')}
-
-        }catch(e){
-            errors.push(e);
-            res.status(400).render('login',{title:'Login page',errors:errors,hasErrors:true})
-        }
     })
 
 export default router;

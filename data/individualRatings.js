@@ -2,7 +2,6 @@ import validation from '../validations/individualRatingValidation.js'
 //import { ObjectId } from "bson";
 import { ObjectId } from 'mongodb';
 import { games } from '../config/mongoCollection.js';
-import { userData } from "../data/index.js";
 import gameData from '../data/games.js'
 const addRating= async(
     gameId,
@@ -22,14 +21,11 @@ const addRating= async(
           throw `Error: Rating should be limited to one decimal place`
         }
     }
-    let userWhoRated=await userData.getUserById(userId)
-    let userName=userWhoRated.userName;
     let newRating={
         _id: new ObjectId(),
         userId: userId,
         review: review,
-        userRating: userRating,
-        userName: userName
+        userRating: userRating
     }
     const gameCollection= await games();
     const game=await gameCollection.findOne({_id: new ObjectId(gameId)})
@@ -110,14 +106,12 @@ const update=async(gameId,
               throw `Error: Rating should be limited to one decimal place`
             }
         }
-        let userWhoRated=userData.getUserById(userId)
-        let userName=userWhoRated.userName;
-        // let newRating={
-        //     _id: new ObjectId(),
-        //     userId: userId,
-        //     review: review,
-        //     userRating: userRating
-        // }
+        let newRating={
+            _id: new ObjectId(),
+            userId: userId,
+            review: review,
+            userRating: userRating
+        }
         const gameCollection= await games();
         const game=await gameCollection.findOne({_id: new ObjectId(gameId)})
         if(game===null){throw `Game with id: ${gameId} not found`}
@@ -128,7 +122,6 @@ const update=async(gameId,
                 if(indRating!==-1){
                     if(review){game.individualRatings[indRating].review=review}
                     if(userRating){game.individualRatings[indRating].userRating=userRating}
-                    if(userName){game.individualRatings[indRating].userName=userName}
                     
                 }else{
                     throw `No ratings exist for this user`
