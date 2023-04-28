@@ -1,6 +1,8 @@
 import { Router } from "express";
 const router=Router();
 import { gameData } from "../data/index.js";
+import { getpartComment } from "../data/comment.js";
+import userMethods from "../data/user.js";
 import validation from '../validations/gameValidation.js'
 
 router.route('/:id').get(async (req,res)=>{
@@ -11,8 +13,27 @@ router.route('/:id').get(async (req,res)=>{
     }
     try{
         const game=await gameData.getGame(req.params.id);
+
+
+        //Heng's comments loading
+        const tempcomments=await getpartComment(0,3);
+        for(var i=0;i<tempcomments.length;i++)
+        {
+            const userid=tempcomments[i].userID;
+            const user=await userMethods.getUserById(userid);
+            tempcomments[i].profilepath=user.avatar;
+            tempcomments[i].username=user.userName;
+            if(tempcomments[i]._id==req.session.user.userID)
+                tempcomments[i].deletable=true;
+            else
+                tempcomments[i].deletable=false;
+        }
+
+
+        
+        //console.log(tempcomments);
         //return res.status(200).json(game)
-        return res.render('gamedetails',{Titlename:'Game details',game:game})
+        return res.render('gamedetails',{Titlename:'Game details',game:game,commentlist:tempcomments})
         // res.json({'test':'test'})
     }catch(e){
         return res.status(404).json({error:e})

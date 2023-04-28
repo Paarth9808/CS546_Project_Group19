@@ -3,7 +3,6 @@ import { user } from "../config/mongoCollection.js";
 import { games } from "../config/mongoCollection.js";
 import { ObjectId } from "mongodb"
 import { checkuserID,checkgameID,checkcommentID,checkcontent,checkphoto } from "../validations/commentValidation.js";
-
 const createComment=async(
     userID,
     gameID,
@@ -31,9 +30,9 @@ const createComment=async(
         content:content,
         photo:photo,
         date:(now.getMonth()+1).toString().padStart(2,'0')+"/"+now.getDate()+"/"+now.getFullYear(),
-        date:now.getMonth().toString.padStart(2,'0')+"/"+now.getDay()+"/"+now.getFullYear(),
-        agree:0,
-        report:0
+        like:[],
+        dislike:[],
+        report:[]
     };
     const commentCollection=await comment();
     const insertInfo=await commentCollection.insertOne(tempcomment);
@@ -65,7 +64,7 @@ const deleteComment=async(
     const commentCollection=await comment();
     var gameupdatedInfo=await gameCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$pull:{commentIds:commentid}},{returnDocument: 'after'});
     var userupdatedInfo=await userCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$pull:{reviewedIds:commentid}},{returnDocument: 'after'});
-    var commentupdateInfo=await commentCollection.findOneAndDelete({_id:new Object(commentid)});
+    var commentupdateInfo=await commentCollection.findOneAndDelete({_id:new ObjectId(commentid)});
     if(gameupdatedInfo.lastErrorObject.n==0)
         throw "could not delete this comment in games db";
     if(userupdatedInfo.lastErrorObject.n==0)
@@ -101,34 +100,69 @@ const getCommentById=async(
     return tempcomment;
 }
 
-const agreeComment=async(
-    commentid
+
+const likeComment=async(
+    commentid,userid
 )=>{
+    //console.log(commentid);
     commentid=checkcommentID(commentid);
+    userid=checkuserID(userid);
     const commentCollection=await comment();
-    const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$inc:{agree:1}},{returnDocument: 'after'});
+    const tempcomment=await commentCollection.findOne({_id:new ObjectId(commentid)});
+    if(tempcomment==null)
+        throw "no comment is found";
+    for(var i=0;i<tempcomment.like.length;i++)
+    {
+        if(tempcomment.like[i]==userid)
+            return -1;
+    }
+    const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$push:{like:userid}},{returnDocument: 'after'});
     if(commentupdateInfo.lastErrorObject.n==0)
         throw "could not update this comment in comment db";
+    return commentupdateInfo.value.like.length;
 }
 
-const nonagreeComment=async(
-    commentid
+const dislikeComment=async(
+    commentid,userid
 )=>{
+    //console.log(commentid);
     commentid=checkcommentID(commentid);
+    userid=checkuserID(userid);
     const commentCollection=await comment();
-    const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$inc:{agree:-1}},{returnDocument: 'after'});
+    const tempcomment=await commentCollection.findOne({_id:new ObjectId(commentid)});
+    if(tempcomment==null)
+        throw "no comment is found";
+    for(var i=0;i<tempcomment.dislike.length;i++)
+    {
+        if(tempcomment.dislike[i]==userid)
+            return -1;
+    }
+    const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$push:{dislike:userid}},{returnDocument: 'after'});
     if(commentupdateInfo.lastErrorObject.n==0)
         throw "could not update this comment in comment db";
+    return commentupdateInfo.value.dislike.length;
 }
 
 const reportComment=async(
-    commentid
+    commentid,userid
 )=>{
+    //console.log(commentid);
     commentid=checkcommentID(commentid);
+    userid=checkuserID(userid);
     const commentCollection=await comment();
-    const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$inc:{report:1}},{returnDocument: 'after'});
+    const tempcomment=await commentCollection.findOne({_id:new ObjectId(commentid)});
+    if(tempcomment==null)
+        throw "no comment is found";
+    for(var i=0;i<tempcomment.report.length;i++)
+    {
+        if(tempcomment.report[i]==userid)
+            return -1;
+    }
+    const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$push:{report:userid}},{returnDocument: 'after'});
     if(commentupdateInfo.lastErrorObject.n==0)
         throw "could not update this comment in comment db";
+    return commentupdateInfo.value.report.length;
 }
 
-export{createComment,getpartComment,deleteComment,updateComment,getCommentById,agreeComment,nonagreeComment,reportComment};
+
+export{createComment,getpartComment,deleteComment,updateComment,getCommentById,likeComment,dislikeComment,reportComment};
