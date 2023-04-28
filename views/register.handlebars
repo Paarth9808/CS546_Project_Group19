@@ -1,0 +1,41 @@
+<h1>Registration page</h1>
+<form action="/register" method="POST" id="registration-form" class="registration-form">
+<label for="userNameInput">Username </label>
+<input type="text" name="userNameInput" id="userNameInput">
+<br>
+{{!-- <label for="lastNameInput">Last Name </label>
+<input type="text" name="lastNameInput"  id="lastNameInput">
+<br> --}}
+<label for="emailAddressInput">Email Address </label>
+<input type="email" name="emailAddressInput" id="emailAddressInput">
+<br>
+<label for="ageInput">Age</label>
+<input type="number" name="ageInput" id="ageInput">
+<br>
+<label for="passwordInput">Password</label>
+<input type="password" name="passwordInput" id="passwordInput">
+<br>
+<label for="confirmPasswordInput">Confirm Password</label>
+<input type="password" name="confirmPasswordInput" id="confirmPasswordInput">
+<br>
+<label for="roleInput">Role</label>
+<select name="roleInput" id="roleInput">
+    <option value="admin">Admin</option>
+    <option value="user">User</option>
+</select>
+<br>
+<button type="submit">Register</button>
+</form>
+<a href="/login">Already have an account? Click here to log-in</a>
+{{#if hasErrors}}
+  <ul class="error-list">
+    {{#each errors}}
+    <li>
+      {{this}}
+    </li>
+    {{/each}}
+  </ul>
+{{/if}}
+<div id="error-registration" class="error-registration" hidden>Errors
+<ul class="client-side-error-reg" id="client-side-error-reg"></ul>
+</div>
