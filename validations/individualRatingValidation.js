@@ -18,6 +18,7 @@ const exportedMethods={
         if(!numVal){throw `${numName} not provided`}
         if(isNaN(numVal)){throw `Error: ${numName} should be a valid number`}
         if(typeof(numVal)!=='number'){throw `Error: ${numName} should be a number`}
+        if(numVal<1||numVal>10){throw `Rating should be between 1 and 10`}
         return numVal
     }
 }
