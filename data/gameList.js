@@ -57,3 +57,5 @@ const sortGameByDate = async (sortWay) => {
     }
     return res;
 }
+
+export default {getGameByGerne, getGameByPlatform, sortGameByDate, sortGameByRate};
