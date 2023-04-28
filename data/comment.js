@@ -49,10 +49,10 @@ const createComment=async(
     }
 }
 
-const getpartComment=async(start,length)=>{
+const getpartComment=async(gameid,start,length)=>{
     const commentCollection=await comment();
-
-    const res=commentCollection.find({}).skip(start).limit(length).toArray();
+    gameid=checkgameID(gameid);
+    const res=commentCollection.find({gameID:gameid}).skip(start).limit(length).toArray();
     return res;
 }
 const deleteComment=async(
