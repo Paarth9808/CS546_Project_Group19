@@ -19,9 +19,8 @@ const createGame= async (
         genre: genre,
         description: description,
         rating: 0, 
+        individualRatings: [],
         systemRequirements: systemRequirements,
-        like: 0,
-        dislike: 0,
         ageRating: ageRating,
         commentIds: []
     }

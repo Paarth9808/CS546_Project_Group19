@@ -6,7 +6,7 @@ import path from 'path';
 import Handlebars from 'handlebars';
 import {createComment,getpartComment} from '../data/comment.js';
 const router = Router();
-const commentsource=fs.readFileSync('.\\views\\comment.handlebars');
+const commentsource=fs.readFileSync('./views/comment.handlebars');
 const mycomment=Handlebars.compile(commentsource+"");
 router.route('/commenttest').get(async (req, res) => {
     //code here for GET
