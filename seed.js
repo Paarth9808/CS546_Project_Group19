@@ -1,7 +1,6 @@
 import {closeConnection,dbConnection} from './config/mongoConnection.js'
 import {gameData} from './data/index.js'
 import ratingData from './data/individualRatings.js'
-import ratingData from './data/individualRatings.js'
 
 async function main(){
     const db = await dbConnection();
