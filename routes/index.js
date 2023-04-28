@@ -3,7 +3,6 @@ import CommentsRouter from './comment.js';
 import auth_routes from './auth_routes.js'
 //import userRouter from './user.js';
 import userRouter from './user.js';
-import auth_routes from './auth_routes.js'
 //import userRouter from './user.js';
 
 const constructor=(app)=>{
