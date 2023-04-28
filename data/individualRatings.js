@@ -12,7 +12,7 @@ const addRating= async(
     gameId=validation.checkId(gameId);
     userId=validation.checkId(userId);
     review=validation.checkReview(review);
-    userRating=validation.checkNumber(userRating,'Rating')
+    userRating=validation.checkNumber(userRating)
     if(userRating<1||userRating>10){
         throw `Error: Rating should be between 1 and 10`
     }
@@ -70,6 +70,8 @@ const addRating= async(
         {$set: {rating: updatedRating}}
     )
     const newReview=get(gameId,userId)
+
+
     return newReview;
 }
 
@@ -95,7 +97,7 @@ const update=async(gameId,
         gameId=validation.checkId(gameId);
         userId=validation.checkId(userId);
         review=validation.checkReview(review);
-        userRating=validation.checkNumber(userRating,'Rating')
+        userRating=validation.checkNumber(userRating)
         if(userRating<1||userRating>10){
             throw `Error: Rating should be between 1 and 10`
         }
@@ -165,14 +167,10 @@ const get = async(gameId, userId)=>{
     userId=validation.checkId(userId);
     const gameCollection= await games();
     let ratings=await getAll(gameId);
-    let rating=undefined;
-    if(ratings.length>0){
-        rating=ratings.find(element=>element.userId===userId)
-    }
+    let rating=ratings.find(element=>element.userId===userId)
     // let indRating=await gameCollection.findOne(
     //     {individualRatings.userId:}
     // )
-    if(!rating){throw `You haven't reviewed this game yet`}
     return rating;
 }
 
