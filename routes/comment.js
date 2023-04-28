@@ -3,9 +3,10 @@ import formidable from 'formidable';
 import {v4 as uuidv4} from 'uuid';
 import fs from 'fs';
 import Handlebars from 'handlebars';
+import path from 'path';
 import {createComment,deleteComment,getpartComment,likeComment,dislikeComment,reportComment} from '../data/comment.js';
 const router = Router();
-const commentsource=fs.readFileSync('.\\views\\partials\\commentT.handlebars');
+const commentsource=fs.readFileSync(path.join('./views', 'partials', 'commentT.handlebars'));
 const mycomment=Handlebars.compile(commentsource+"");
 
 router.route('/getmore/:index').get(async (req,res)=>{
@@ -77,7 +78,8 @@ router.route("/sendcomment").post(async (req, res)=> {
             console.log(filename);
             const file =files[filename];
             const picName = uuidv4() ;
-            fs.copyFile(file.filepath, '.\\public\\userfile\\comments\\' + picName+'.jpg', function (err) {
+            const imgpath=path.join('./public', 'userfile', 'comments',picName+'.jpg');
+            fs.copyFile(file.filepath, imgpath, function (err) {
                 if (err) {
                     console.log(err);
                   return res.send({ "error": 403, "message": "image save error！" });
