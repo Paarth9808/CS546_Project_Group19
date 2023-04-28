@@ -1,5 +1,5 @@
 <div>
-    <form id="commentForm" name={{gameid}}>
+    <form id="commentForm" class={{gameid}}>
         <input type="file" class="select-img" id="select-img" name="pic" multiple="multiple">
         <textarea name="text" rows="4" cols="50"></textarea>
         <button type="submit">submit</button>
@@ -16,7 +16,7 @@
             {{/each}}
         </ul>
     {{/if}}
-    <button id="loadingbtn">loading more</button>
+    <button id="loadingbtn" class={{gameid}}>loading more</button>
     <p id="lastcomment">No more comments</p>
     <script src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="

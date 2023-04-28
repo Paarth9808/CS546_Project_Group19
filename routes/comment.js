@@ -9,10 +9,11 @@ const router = Router();
 const commentsource=fs.readFileSync(path.join('./views', 'partials', 'commentT.handlebars'));
 const mycomment=Handlebars.compile(commentsource+"");
 
-router.route('/getmore/:index').get(async (req,res)=>{
+router.route('/getmore/:gameid/:index').get(async (req,res)=>{
   const start=req.params.index;
+  const gameid=re.params.gameid;
   console.log(start);
-  const newcomment=await getpartComment(Number(start),10);
+  const newcomment=await getpartComment(gameid,Number(start),10);
   console.log(newcomment);
   const htmllist=[];
   for(var i=0;i<newcomment.length;i++)

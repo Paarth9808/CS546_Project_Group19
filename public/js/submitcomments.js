@@ -49,6 +49,7 @@ addlistener(document);
 
 document.getElementById("loadingbtn").addEventListener("click",function(event){
     const length=document.getElementById("commentslist").childNodes.length;
+    const gameid=document.getElementById("loadingbtn").getAttribute("class");
     var commentsnum=0;
     for(var i=0;i<length;i++)
     {
@@ -57,7 +58,7 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
             commentsnum++;
     }
     $.ajax({
-        url:'/comment/getmore/'+commentsnum,
+        url:'/comment/getmore/'+gameid+'/'+commentsnum,
         method:'Get',
         success: function(response) {
             console.log(response);
@@ -85,7 +86,7 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
 
 document.getElementById("commentForm").addEventListener("submit",function(event){
     event.preventDefault();
-    const gameid=document.getElementById("commentForm").getAttribute("name");
+    const gameid=document.getElementById("commentForm").getAttribute("class");
     var form = new FormData(this);
     form.append("gameid",gameid);
     var obj = document.getElementById("select-img");
