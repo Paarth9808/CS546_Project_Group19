@@ -3,6 +3,29 @@ import { user } from "../config/mongoCollection.js";
 import { games } from "../config/mongoCollection.js";
 import { ObjectId } from "mongodb"
 import { checkuserID,checkgameID,checkcommentID,checkcontent,checkphoto } from "../validations/commentValidation.js";
+
+
+
+{/* <img class="profile"  src={{comment.profilepath}}/>
+</div>
+<div>
+    <span class="comment_name">{{comment.username}} </span>
+    <span>{{comment.date}}</span>     
+</div>
+<div class="attitude">
+    <div id={{concat comment._id "-like"}}>like {{like.length}}</div>
+    <div id={{concat comment._id "-dislike"}}>dislike {{dislike.length}}</div>
+    <div id={{concat comment._id "-report"}}>report {{report.length}}</div>
+    {{#if comment.deletable}}
+        <div id={{concat comment._id "-delete"}}>delete</div>
+    {{/if}}
+</div>
+<div class="comment_text" >{{comment.content}}</div>
+<div class="comment_pic">
+    {{#if comment.photo.length}}
+        {{#each comment.photo}} */}
+
+
 const createComment=async(
     userID,
     gameID,
@@ -26,6 +49,8 @@ const createComment=async(
     const now=new Date();
     const tempcomment={
         userID:userID,
+        username:tempuser.userName,
+        profilepath:tempuser.avatar,
         gameID:gameID,
         content:content,
         photo:photo,

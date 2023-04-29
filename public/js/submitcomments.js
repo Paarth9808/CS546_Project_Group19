@@ -19,7 +19,8 @@ function addlistener(element)
                     method:'Post',
                     data:{id:id},
                     success: function(response) {
-                        console.log(response);
+                        //console.log(form);
+                        //console.log(response);
                         if(response.data!=undefined&&response.data!="deleted"&&response.data!=-1)
                         {
                             var innerdata=temp.innerHTML;
@@ -59,6 +60,7 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
     }
     $.ajax({
         url:'/comment/getmore/'+gameid+'/'+commentsnum,
+        //url:'/comment/getmore/'+commentsnum,
         method:'Get',
         success: function(response) {
             console.log(response);
@@ -88,23 +90,28 @@ document.getElementById("commentForm").addEventListener("submit",function(event)
     event.preventDefault();
     const gameid=document.getElementById("commentForm").getAttribute("class");
     var form = new FormData(this);
-    form.append("gameid",gameid);
     var obj = document.getElementById("select-img");
     length = obj.files.length;
-    console.log(length);
     form.delete("pic");
+    console.log(obj.files)
     for(var i in obj.files)
     {
         form.append("pic"+i,obj.files[i]);
     }
+    form.append("gameid",gameid);
+    for (const [key, value] of form.entries()) {
+        console.log(key, value);
+        console.log(value.name);
+      }
     $.ajax({
     url: '/comment/sendcomment',
+    //url:'/commenttest/test',
     method: 'POST',
     processData: false,
     contentType: false,
     data: form,
     success: function(response) {
-        //console.log(form);
+        console.log(form);
         console.log(response);
         const thisform=document.getElementById("commentForm");
         thisform.reset();
@@ -147,7 +154,7 @@ document.getElementById("select-img").addEventListener("change",function(){
             divTk.setAttribute('class','tk');
             var spanDel=document.createElement('span');
             spanDel.setAttribute('class','del');
-            console.log(selector.files[i]);
+            //console.log(selector.files[i]);
             spanDel.setAttribute('id',selector.files[i].name)
             spanDel.innerText='x';
             divPic.appendChild(img);
@@ -171,7 +178,7 @@ document.getElementById("select-img").addEventListener("change",function(){
         }
         reader.onprogress=(e)=>{
             if(e.lengthComputable){
-                console.log("reading file")
+                //console.log("reading file")
             }
         }
         reader.readAsDataURL(this.files[i]);
