@@ -5,6 +5,16 @@ import {fileURLToPath} from 'url';
 import {dirname} from 'path';
 import exphbs from 'express-handlebars'
 import session from 'express-session';
+import Handlebars from 'handlebars';
+Handlebars.registerHelper('concat', function(str1,str2) {
+  return str1+str2;
+});
+const handlebarsInstance = exphbs.create({
+  defaultLayout: 'main',
+  // Specify helpers which are only registered on this instance.
+  partialsDir: ['views/partials/','views']
+});
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -38,7 +48,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(rewriteUnsupportedBrowserMethods);
 
-app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
+app.engine('handlebars', handlebarsInstance.engine);
 app.set('view engine', 'handlebars');
 
 configRoutes(app)

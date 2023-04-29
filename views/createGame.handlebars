@@ -1,0 +1,35 @@
+
+
+<form action="/createGame" method="POST" id="createGame-form" class="createGame-form">
+
+<label for="gameNameInput">game name </label>
+<input type="text" name="gameNameInput" id="gameNameInput">
+<br>
+
+<label for="releaseDateInput">release date </label>
+<input type="text" name="releaseDateInput" id="releaseDateInput">
+<br>
+<label for="ageInput">recommend age</label>
+<input type="number" name="ageInput" id="ageInput">
+<br>
+<label for="genreInput">genre</label>
+<input type="text" name="genreInput" id="genreInput">
+<br>
+<label for="descriptionInput">description</label>
+<input type="text" name="descriptionInput" id="descriptionInput">
+<br>
+<label for="platformInput">platform</label>
+<input type="text" name="platformInput" id="platformInput">
+
+<br>
+<button type="submit">create</button>
+</form>
+
+    {{#if showErrorMessage }}
+        <p>{{showErrorMessage}}</p>
+    {{/if}}
+
+
+        <div id="errorTextR" class="hidden">
+
+       </div>

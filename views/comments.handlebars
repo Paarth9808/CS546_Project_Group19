@@ -1,7 +1,5 @@
-
-
 <div>
-    <form id="commentForm" action="/commenttest/test" method="POST">
+    <form id="commentForm" class={{gameid}}>
         <input type="file" class="select-img" id="select-img" name="pic" multiple="multiple">
         <textarea name="text" rows="4" cols="50"></textarea>
         <button type="submit">submit</button>
@@ -13,33 +11,12 @@
         <ul id="commentslist">
             {{#each commentlist}}
                 <li class="listnode">
-                    <div class="comment">
-                        <div class="profilediv">
-                            <img class="profile"  src={{profilepath}}/>
-                        </div>
-                        <div>
-                            <span class="comment_name">{{username}} </span>
-                            <span>{{date}}</span>     
-                        </div>
-                        <div class="del">
-                            <div>like</div>
-                            <div>dislike</div>
-                            <div>report</div>
-                        </div>
-                        <div class="comment_text" >{{content}}</div>
-                        <div class="comment_pic">
-                            {{#if photo.length}}
-                                {{#each photo}}
-                                    <img class="commentimg" src={{this}}>
-                                {{/each}}
-                            {{/if}}
-                        </div>
-                    </div>
+                    {{>commentT comment=this}}
                 </li>
             {{/each}}
         </ul>
     {{/if}}
-    <button id="loadingbtn">loading more</button>
+    <button id="loadingbtn" class={{gameid}}>loading more</button>
     <p id="lastcomment">No more comments</p>
     <script src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
@@ -48,20 +25,3 @@
         crossorigin="anonymous"></script>
     <script src="/public/js/submitcomments.js"></script>
 </div>
-
-<main>
-    <div class="input-group ">
-        <span class="input-group-addon" id="sizing-addon1">选择图片:</span>
-        <input type="file" class="select-img" name="pic1" multiple="multiple" >
-    </div>
-    <div class="input-group ">
-        <img src="/public/images/1.png" alt="" class="show-img">
-    </div>
-</main>
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-    crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-    crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/10.15.0/js/jquery.fileupload.min.js"></script>
-<script src='/public/js/submitcomments.js'></script>

@@ -1,18 +1,25 @@
 <header><h1>{{game.name}}</h1></header>
 <div>
+<h2>Rating: {{game.rating}}</h2>
 {{#if game.description}}
     <p>{{game.description}}</p>
 {{else}}
     <p>No description</p>
 {{/if}}
-<h3>Rating: {{game.rating}}</h3>
 <h3>System requirements: </h3>
 <ul>
     {{#each game.systemRequirements}}
         <li>{{this}}</li>
     {{/each}}
 </ul>
-<h3>Likes: {{game.like}}</h3>
-<h3>Dislikes: {{game.dislike}}</h3>
+<h3>Reviews: </h3>
+{{#each reviews}}
+    <div>
+        <dl>Username: {{this.userName}}</dl>
+        <dl>Review: {{this.review}}</dl>
+        <dl>Rating: {{this.userRating}}</dl>
+    </div>
+{{/each}}
 
 </div>
+{{>comments commentlist=commentlist gameid=game._id}}

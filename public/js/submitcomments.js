@@ -1,6 +1,55 @@
 $('#lastcomment').hide();
+
+function addlistener(element)
+{
+    const attitudes=element.querySelectorAll(".attitude");
+    console.log(attitudes.length);
+    for(var i=0;i<attitudes.length;i++)
+    {
+        const attitude=attitudes[i];
+        const selection=attitude.querySelectorAll("*");
+        for(var j=0;j<selection.length;j++)
+        {
+            const temp=selection[j];
+            selection[j].addEventListener("click",function(event){
+                console.log(temp);
+                const id=temp.getAttribute("id");
+                $.ajax({
+                    url:'/comment/sendattitude/',
+                    method:'Post',
+                    data:{id:id},
+                    success: function(response) {
+                        console.log(response);
+                        if(response.data!=undefined&&response.data!="deleted"&&response.data!=-1)
+                        {
+                            var innerdata=temp.innerHTML;
+                            var innerdatas=innerdata.split(" ");
+                            innerdata=innerdatas[0]+" "+response.data;
+                            temp.innerHTML=innerdata;
+                        }
+                        else if(response.data=="deleted")
+                        {
+                            attitude.parentNode.parentNode.style.display="none";
+                        }
+                        else
+                        {
+                            console.log(response);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(error);
+                    }
+                })
+            })
+        }
+    }
+}
+
+addlistener(document);
+
 document.getElementById("loadingbtn").addEventListener("click",function(event){
     const length=document.getElementById("commentslist").childNodes.length;
+    const gameid=document.getElementById("loadingbtn").getAttribute("class");
     var commentsnum=0;
     for(var i=0;i<length;i++)
     {
@@ -9,7 +58,7 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
             commentsnum++;
     }
     $.ajax({
-        url:'/commenttest/getmore/'+commentsnum,
+        url:'/comment/getmore/'+gameid+'/'+commentsnum,
         method:'Get',
         success: function(response) {
             console.log(response);
@@ -24,6 +73,7 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
                     const newli=document.createElement('li');
                     newli.setAttribute('class','listnode');
                     newli.innerHTML=response[i];
+                    addlistener(newli);
                     document.getElementById("commentslist").append(newli);
                 }
             }
@@ -36,8 +86,9 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
 
 document.getElementById("commentForm").addEventListener("submit",function(event){
     event.preventDefault();
-
+    const gameid=document.getElementById("commentForm").getAttribute("class");
     var form = new FormData(this);
+    form.append("gameid",gameid);
     var obj = document.getElementById("select-img");
     length = obj.files.length;
     console.log(length);
@@ -47,7 +98,7 @@ document.getElementById("commentForm").addEventListener("submit",function(event)
         form.append("pic"+i,obj.files[i]);
     }
     $.ajax({
-    url: '/commenttest/test',
+    url: '/comment/sendcomment',
     method: 'POST',
     processData: false,
     contentType: false,
@@ -126,5 +177,6 @@ document.getElementById("select-img").addEventListener("change",function(){
         reader.readAsDataURL(this.files[i]);
     }
 })
+
 
 
