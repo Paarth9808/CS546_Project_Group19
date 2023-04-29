@@ -13,8 +13,6 @@ router.route('/:id').get(async (req,res)=>{
     }
     try{
         const game=await gameData.getGame(req.params.id);
-
-
         //Heng's comments loading
         const tempcomments=await getpartComment(req.params.id,0,3);
         for(var i=0;i<tempcomments.length;i++)
@@ -29,11 +27,12 @@ router.route('/:id').get(async (req,res)=>{
                 tempcomments[i].deletable=false;
         }
 
+        let reviews=game.individualRatings;
 
         
         //console.log(tempcomments);
         //return res.status(200).json(game)
-        return res.render('gamedetails',{Titlename:'Game details',game:game,commentlist:tempcomments})
+        return res.render('gamedetails',{Titlename:'Game details',game:game,commentlist:tempcomments,reviews: reviews})
         // res.json({'test':'test'})
     }catch(e){
         return res.status(404).json({error:e})
