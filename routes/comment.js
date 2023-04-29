@@ -5,11 +5,12 @@ import fs from 'fs';
 import Handlebars from 'handlebars';
 import path from 'path';
 import {createComment,deleteComment,getpartComment,likeComment,dislikeComment,reportComment} from '../data/comment.js';
+import { comment } from '../config/mongoCollection.js';
 const router = Router();
 const commentsource=fs.readFileSync(path.join('./views', 'partials', 'commentT.handlebars'));
 const mycomment=Handlebars.compile(commentsource+"");
 
-router.route('/getmore/:gameid/:index').get(async (req,res)=>{
+router.route('/comment/getmore/:gameid/:index').get(async (req,res)=>{
   const start=req.params.index;
   const gameid=re.params.gameid;
   console.log(start);
@@ -18,13 +19,17 @@ router.route('/getmore/:gameid/:index').get(async (req,res)=>{
   const htmllist=[];
   for(var i=0;i<newcomment.length;i++)
   {
+    if(req.session.user.userId==newcomment[i].userID)
+      newcomment[i].deletable=true;
+    else
+      newcomment[i].deletable=false;
     console.log(mycomment({comment:newcomment[i]}));
     htmllist.push(mycomment({comment:newcomment[i]}));
   }
   res.send(htmllist);
 })
 
-router.route('/sendattitude').post(async (req,res)=>{
+router.route('/comment/sendattitude').post(async (req,res)=>{
   console.log(req.body);
   var id=req.body.id;
   var id_split=id.split('-');
@@ -61,16 +66,17 @@ router.route('/sendattitude').post(async (req,res)=>{
     console.log(e);
   }
 })
-router.route("/sendcomment").post(async (req, res)=> {
-    console.log(req.body);
+router.route("/comment/sendcomment").post(async (req, res)=> {
+    //console.log(req.body);
     var form = new formidable.IncomingForm();
     form.encoding = 'utf-8';
     form.keepExtensions = true;
     form.maxFieldsSize = 8 * 1024 * 1024;
-    console.log(form)
+    //console.log(form)
     form.parse(req, async (err, fields, files)=> {
-        console.log(fields);
-        console.log(files);
+        //console.log(fields);
+        //console.log(files);
+        //console.log(...files);
         const text=fields.text;
         const gameid=fields.gameid;
         const pics=[];
@@ -80,6 +86,7 @@ router.route("/sendcomment").post(async (req, res)=> {
             const file =files[filename];
             const picName = uuidv4() ;
             const imgpath=path.join('./public', 'userfile', 'comments',picName+'.jpg');
+            console.log(imgpath);
             fs.copyFile(file.filepath, imgpath, function (err) {
                 if (err) {
                     console.log(err);
@@ -100,4 +107,7 @@ router.route("/sendcomment").post(async (req, res)=> {
         res.send(mycomment({comment:newcomment}));
     });
 });
+
+
+
 export default router;
