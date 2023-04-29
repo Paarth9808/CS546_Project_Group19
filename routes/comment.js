@@ -12,7 +12,7 @@ const mycomment=Handlebars.compile(commentsource+"");
 router.route('/getmore/:gameid/:index').get(async (req,res)=>{
   try{
     const start=req.params.index;
-    const gameid=re.params.gameid;
+    const gameid=req.params.gameid;
     console.log(start);
     const newcomment=await getpartComment(gameid,Number(start),10);
     console.log(newcomment);
@@ -32,6 +32,7 @@ router.route('/getmore/:gameid/:index').get(async (req,res)=>{
   {
     res.status(400);
     res.send(e);
+    console.log(e);
   }
 })
 
