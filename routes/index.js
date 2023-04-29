@@ -7,7 +7,7 @@ import userRouter from './user.js';
 
 const constructor=(app)=>{
     app.use('/games',gameRoutes);
-    app.use('/', CommentsRouter);
+    app.use('/comment', CommentsRouter);
     app.use('/', auth_routes)
     //app.use('/user', userRouter);
     app.use('/user', userRouter);

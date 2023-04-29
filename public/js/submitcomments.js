@@ -119,6 +119,7 @@ document.getElementById("commentForm").addEventListener("submit",function(event)
         const newli=document.createElement('li');
         newli.setAttribute('class','listnode');
         newli.innerHTML=response;
+        addlistener(newli);
         document.getElementById("commentslist").insertAdjacentElement("afterbegin",newli);
     },
     error: function(xhr, status, error) {

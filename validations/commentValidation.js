@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 const checkuserID=(userID)=>{
+    //console.log(userID);
     if(typeof userID!="string")
         throw "userID should be a string";
     userID=userID.trim();
