@@ -1,11 +1,15 @@
 
 <div class="comment">
     <div class="profilediv">
-        <img class="profile"  src={{comment.profilepath}}/>
+        <a href={{concat "/user/" comment.userID}}>
+            <img class="profile" src={{comment.profilepath}}/>
+        </a>
     </div>
     <div>
-        <span class="comment_name">{{comment.username}} </span>
-        <span>{{comment.date}}</span>     
+        <a href={{concat "/user/" comment.userID}}>
+            <span class="comment_name">{{comment.username}} </span>
+        </a>
+        <span class="comment_time">{{comment.date}}</span>     
     </div>
     <div class="attitude">
         <div id={{concat comment._id "-like"}}>like {{comment.like.length}}</div>
