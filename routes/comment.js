@@ -30,6 +30,7 @@ router.route('/getmore/:gameid/:index').get(async (req,res)=>{
   }
   catch(e)
   {
+    res.status(400);
     res.send(e);
   }
 })
@@ -68,6 +69,7 @@ router.route('/sendattitude').post(async (req,res)=>{
   }
   catch(e)
   {
+    res.status(400);
     res.send(e);
     console.log(e);
   }
@@ -111,14 +113,22 @@ router.route("/sendcomment").post(async (req, res)=> {
         }
         console.log(req.session.user);
         console.log(gameid);
-        const newcomment=await createComment(req.session.user.userId,gameid,text,pics);
-        //console.log(newcomment);
-        newcomment.deletable=true;
-        res.send(mycomment({comment:newcomment}));
+        try{
+          const newcomment=await createComment(req.session.user.userId,gameid,text,pics);
+          //console.log(newcomment);
+          newcomment.deletable=true;
+          res.send(mycomment({comment:newcomment}));
+        }
+        catch(e)
+        {
+          res.status(400);
+          res.send(e);
+        }
     });
   }
   catch(e)
   {
+    res.status(400);
     res.send(e);
   }
 });
