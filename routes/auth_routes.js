@@ -91,7 +91,8 @@ router
         try{
             const {emailAddressInput,passwordInput}=user;
             let userDetails= await authFunction.checkUser(emailAddressInput,passwordInput);
-            if(userDetails){res.redirect('gamedetails')}
+            req.session.user=userDetails;
+            if(userDetails){res.redirect('games/644c0f3145435cdf250e285c')}
 
         }catch(e){
             errors.push(e);

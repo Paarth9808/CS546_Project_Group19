@@ -8,9 +8,9 @@
         <span>{{comment.date}}</span>     
     </div>
     <div class="attitude">
-        <div id={{concat comment._id "-like"}}>like {{like.length}}</div>
-        <div id={{concat comment._id "-dislike"}}>dislike {{dislike.length}}</div>
-        <div id={{concat comment._id "-report"}}>report {{report.length}}</div>
+        <div id={{concat comment._id "-like"}}>like {{comment.like.length}}</div>
+        <div id={{concat comment._id "-dislike"}}>dislike {{comment.dislike.length}}</div>
+        <div id={{concat comment._id "-report"}}>report {{comment.report.length}}</div>
         {{#if comment.deletable}}
             <div id={{concat comment._id "-delete"}}>delete</div>
         {{/if}}
