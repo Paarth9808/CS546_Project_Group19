@@ -1,13 +1,14 @@
 <div class="profile">
     <img src="/public/userimages/{{id}}.png" class="profile" alt="Avatar" width="100" height="100" />
-    <h2 class='profile-text'>{{userName}}</h2>
-    <h2 class='profile-text'>{{age}}</h2>
-    <h2 class='profile-text'>{{email}}</h2>
-    <section id="edit">
-        <button class='edit' type="button">Edit Profile</button>
-    </section>
+    <h2>Username</h2>
+    <h3 class='profile-text'>{{username}}</h3>
+    <h2>Age</h2>
+    <h3 class='profile-text'>{{age}}</h3>
+    <h2>Email</h2>
+    <h3 class='profile-text'>{{email}}</h3>
 </div>
-
+<h3><a href="/user/:id/edit">Edit profile</h3>
+<h3><a href="/user/:id/edit/avatar">Change profile picture</a></h3>
 <h2>Reviewed Posts</h2>
 {{#each posts}}
 <section class="reviews">
