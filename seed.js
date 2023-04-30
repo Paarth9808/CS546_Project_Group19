@@ -17,6 +17,7 @@ async function main(){
         //console.log(game)
         //console.log(await gameData.removeGame('642a0fee30018dd939b48918'))
         //console.log(game);
+        
     }catch(e){
         console.log(e)
     }
