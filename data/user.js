@@ -4,21 +4,24 @@ import validation from '../validations/userValidation.js';
 import bcrypt from "bcryptjs";
 
 let exportedMethods = {
-    async createUser (userName, age, email, hashedPassword, avatar) {
+    async createUser (userName, age, email, hashedPassword, role) {
         // check username , mail lowercase if exists(all should be unique)
         userName = validation.checkString(userName, "username");
         age = validation.checkAge(age);
         email = email.toLowerCase();
         email = validation.checkMail(email);
-        hashedPassword = validation.checkString(hashedPassword, "password");
-        password = await bcrypt.hash(hashedPassword, 10); //(password, rounds)
+        hashedPassword = validation.checkPass(hashedPassword);
+        let password = await bcrypt.hash(hashedPassword, 10); //(password, rounds)
+
+        role = validation.checkRole(role);
 
         let newUser = {
             userName : userName,
             age : age,
             email : email,
             hashedPassword : password,
-            avatar : avatar,
+            role : role,
+            avatar : "",
             reviewedIds : [],
             ratedIds : []
         }
@@ -64,59 +67,43 @@ let exportedMethods = {
       
         return {deleted: true};
     },
-
-    async updateAvatar (id, avatar){
-        id = validation.checkString(id, "ID");
+    
+    async updateAvatar (id, avatar1){
+        id = validation.checkId(id);
         const userCollection = await user();
-        let userCheck = this.getUserById(id);
-        let updatePhoto = {};
-        updatePhoto.avatar =  avatar;
-        const updateUserInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $set: updatePhoto});
-        if (updateUserInfo.lastErrorObject.n === 0) throw 'Error: Update failed';
+        await this.getUserById(id);
+        
+        const updateUserInfo = await userCollection.updateOne({ _id: new ObjectId(id) }, { $set: {avatar : avatar1}});
+        if (updateUserInfo.modifiedCount === 0) throw 'Error: Update failed';
 
-        return await updateUserInfo.value;
+        return {updated : true};
+    },
+    
+    async updateRole (id, role){
+        id = validation.checkId(id);
+        const userCollection = await user();
+        await this.getUserById(id);
+
+        const updateUserInfo = await userCollection.updateOne({ _id: new ObjectId(id) }, { $set: {role : role}});
+        if (updateUserInfo.modifiedCount === 0) throw 'Error: Update failed';
+
+        return {updated : true};
     },
 
-    async updateUser (id, userName, age, email, hashedPassword, avatar){
+    async updateUser (id, userName, age, hashedPassword){
         id = validation.checkId(id, "ID");
         let userCollection = await user();
         let updateUser =  this.getUserById(id);
-        if(!userName){
-            userName = updateUser.userName;
-        }else{
-            userName = validation.checkString(userName, "username");
-        }
 
-        if(!age){
-            age = updateUser.age;
-        }else{
-            age = validation.checkAge(age);
-        }
+        userName = validation.checkString(userName, "username");
+        age = validation.checkAge(age);
+        hashedPassword = validation.checkPass(hashedPassword);
+        let password1 = await bcrypt.hash(hashedPassword, 10);
 
-        if(!email){
-            email = updateUser.email;
-        }else{
-            email = validation.checkMail(email);
-        }
-
-        if(!hashedPassword){
-            hashedPassword = updateUser.hashedPassword;
-        }else{
-            hashedPassword = validation.checkString(hashedPassword);
-            password1 = await bcrypt.hash(hashedPassword, 10);
-        }
-        //check avatar
-        if(!avatar){
-            avatar = updateUser.avatar;
-        }else{
-            avatar = avatar;
-        }
         const userUpdated = {
             userName : userName,
             age : age,
-            email : email,
-            hashedPassword : password,
-            avatar : avatar
+            hashedPassword : password1
         };
 
         const updatedInfo = await userCollection.updateOne({ _id: new ObjectId(id) }, { $set: userUpdated });
@@ -126,23 +113,22 @@ let exportedMethods = {
 
         return await this.getUserById(id);
     },
-    // WIP
-    async addReviewsToUser(id, reviewId) {
-        const userCollection = await users();
-        const userComment = await userCollection.findOne({ _id: ObjectId(id) });
-        if (userComment === null) throw 'No user with that ID';
-        const updateInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $addToSet: { reviewedIds: reviewId } });
+
+    // functions works fine
+    async addReviewsToUser(id, commentId) {
+        const userCollection = await user();
+        let userComment = this.getUserById(id);
+        const updateInfo = await userCollection.updateOne({_id: new ObjectId(id)}, { $addToSet: { reviewedIds: commentId}});
         if (!updateInfo.matchedCount && !updateInfo.modifiedCount) 
             throw 'Update failed';
 
-        return await this.getUserById(id);
+        return {addedRev : true};
     },
     
     async addRatingsToUser(id, gameId) {
-        const userCollection = await users();
-        const userRating = await userCollection.findOne({ _id: ObjectId(id) });
-        if (userRating === null) throw 'No user with that ID';
-        const updateInfo = await userCollection.updateOne({ _id: ObjectId(id) }, { $addToSet: { ratedIds: gameId } });
+        const userCollection = await user();
+        let userRating = this.getUserById(id);
+        const updateInfo = await userCollection.updateOne({_id: new ObjectId(id)}, { $addToSet: { ratedIds: gameId }});
         if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Update failed';
 
         return {addedRat : true};
