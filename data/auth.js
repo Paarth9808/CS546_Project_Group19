@@ -25,7 +25,7 @@ const checkUser = async (emailAddress, password) => {
     if(currentUser===null){throw `Either the email address or password is invalid`}
     let match= await bcrypt.compare(password,currentUser.hashedPassword);
     if(match){
-      return {userName:currentUser.userName,emailAddress:currentUser.email}//,role:user.role}
+      return {userId:currentUser._id.toString(),userName:currentUser.userName,emailAddress:currentUser.email,age:currentUser.age,role:currentUser.role}//,role:user.role}
     }else{ throw `Either the email address or password is invalid`}
   };
 

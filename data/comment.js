@@ -3,6 +3,29 @@ import { user } from "../config/mongoCollection.js";
 import { games } from "../config/mongoCollection.js";
 import { ObjectId } from "mongodb"
 import { checkuserID,checkgameID,checkcommentID,checkcontent,checkphoto } from "../validations/commentValidation.js";
+
+
+
+{/* <img class="profile"  src={{comment.profilepath}}/>
+</div>
+<div>
+    <span class="comment_name">{{comment.username}} </span>
+    <span>{{comment.date}}</span>     
+</div>
+<div class="attitude">
+    <div id={{concat comment._id "-like"}}>like {{like.length}}</div>
+    <div id={{concat comment._id "-dislike"}}>dislike {{dislike.length}}</div>
+    <div id={{concat comment._id "-report"}}>report {{report.length}}</div>
+    {{#if comment.deletable}}
+        <div id={{concat comment._id "-delete"}}>delete</div>
+    {{/if}}
+</div>
+<div class="comment_text" >{{comment.content}}</div>
+<div class="comment_pic">
+    {{#if comment.photo.length}}
+        {{#each comment.photo}} */}
+
+
 const createComment=async(
     userID,
     gameID,
@@ -16,16 +39,18 @@ const createComment=async(
     if(content==""&&photo.length==0)
         throw "comment should not be empty"
     const userCollection=await user();
-    const tempuser=await userCollection.findOne({_id:userID});
+    const tempuser=await userCollection.findOne({_id:new ObjectId(userID)});
     if(tempuser==null)
         throw "user does not exist";
     const gameCollection=await games();
-    const tempgame=await gameCollection.findOne({_id:gameID});
+    const tempgame=await gameCollection.findOne({_id:new ObjectId(gameID)});
     if(tempgame==null)
         throw "game does not exist"; 
     const now=new Date();
     const tempcomment={
         userID:userID,
+        username:tempuser.userName,
+        profilepath:tempuser.avatar,
         gameID:gameID,
         content:content,
         photo:photo,
@@ -36,8 +61,10 @@ const createComment=async(
     };
     const commentCollection=await comment();
     const insertInfo=await commentCollection.insertOne(tempcomment);
+    console.log(insertInfo);
     if(!insertInfo.acknowledged||!insertInfo.insertedId)
         throw "Could not add comment";
+    tempcomment._id=insertInfo.insertedId.toString();
     const newid=insertInfo.insertedId.toString();
     var userupdatedInfo=await userCollection.findOneAndUpdate({_id:new ObjectId(userID)},{$push:{reviewedIds:newid}},{ReturnDocument:'after'});
     if(userupdatedInfo.lastErrorObject.n === 0) {
@@ -47,12 +74,15 @@ const createComment=async(
     if(gameupdatedInfo.lastErrorObject.n === 0) {
         throw 'could not add reviewIDs successfully';
     }
+    return tempcomment;
 }
 
 const getpartComment=async(gameid,start,length)=>{
     const commentCollection=await comment();
     gameid=checkgameID(gameid);
     const res=commentCollection.find({gameID:gameid}).skip(start).limit(length).toArray();
+    for(var i=0;i<res.length;i++)
+        res[i]._id=res[i]._id.toString();
     return res;
 }
 const deleteComment=async(
@@ -62,8 +92,8 @@ const deleteComment=async(
     const gameCollection=await games();
     const userCollection=await user();
     const commentCollection=await comment();
-    var gameupdatedInfo=await gameCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$pull:{commentIds:commentid}},{returnDocument: 'after'});
-    var userupdatedInfo=await userCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$pull:{reviewedIds:commentid}},{returnDocument: 'after'});
+    var gameupdatedInfo=await gameCollection.findOneAndUpdate({commentIds:commentid},{$pull:{commentIds:commentid}},{returnDocument: 'after'});
+    var userupdatedInfo=await userCollection.findOneAndUpdate({reviewedIds:commentid},{$pull:{reviewedIds:commentid}},{returnDocument: 'after'});
     var commentupdateInfo=await commentCollection.findOneAndDelete({_id:new ObjectId(commentid)});
     if(gameupdatedInfo.lastErrorObject.n==0)
         throw "could not delete this comment in games db";
@@ -97,6 +127,7 @@ const getCommentById=async(
     const tempcomment=await commentCollection.findOne({_id:new ObjectId(commentid)});
     if(tempcomment==null)
         throw "no comment is found";
+    tempcomment._id=tempcomment._id.toString();
     return tempcomment;
 }
 
