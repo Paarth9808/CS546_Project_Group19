@@ -11,12 +11,6 @@ router
       req.params.id = validation.checkId(req.params.id);
     } catch (e) {
       return res.status(400).json({ error: e });
-    //   return res.render("userProfile", {
-    //     id: '123',
-    //     userName: 'user1.userName',
-    //     age: 12,
-    //     email: 'user1.email',
-    //   });
     }
     try {
       const user1 = await userData.getUserById(req.params.id);
@@ -29,18 +23,36 @@ router
     } catch (e) {
       return res.status(404).json({ error: e });
     }
+  }
+  // delete user
+  ).delete(async (req,res)=>{
+    try{
+        req.params.id=validation.checkId(req.params.id);
+    }catch(e){
+        return res.status(400).json({error:e});
+    }
+    try{
+        await userData.deleteUser(req.params.id);
+        return res.status(200).json({'userId':req.params.id,'deleted':true})
+    }catch(e){
+        return res.status(404).json({error:e})
+    }
   })
-  //to do
-//   .delete(async );
 
 // link to edit page
 router
   .route("/:id/edit")
   .get(async (req, res) => {
+    try {
+      req.params.id = validation.checkId(req.params.id);
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
     res.render("editProfile");
   })
   .post(async (req, res) => {
     console.log("!edit profile");
+    //age coming as a string so giving error have to see
     const { userName: userName, password: password, age: age } = req.body;
     console.log(req.body);
     if (userName && password && age) {
@@ -71,6 +83,7 @@ router
   })
   .post(async (req, res) => {
     console.log("!edit profile");
+    console.log(req.params.id);
     const { file: file } = req.body;
     if (req.files && req.files?.file.data)
       fs.writeFileSync(
@@ -84,5 +97,12 @@ router
         }
       );
   });
+
+//role
+router
+  .route("/:id/edit/role")
+  .get(async (req, res) =>{
+    res.render("") // make page for this
+  })
 
 export default router;
