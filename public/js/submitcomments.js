@@ -1,5 +1,8 @@
 $('#lastcomment').hide();
 
+
+var allfiles={};
+
 function addlistener(element)
 {
     const attitudes=element.querySelectorAll(".attitude");
@@ -90,14 +93,14 @@ document.getElementById("commentForm").addEventListener("submit",function(event)
     event.preventDefault();
     const gameid=document.getElementById("commentForm").getAttribute("class");
     var form = new FormData(this);
-    var obj = document.getElementById("select-img");
-    length = obj.files.length;
-    form.delete("pic");
-    console.log(obj.files)
-    for(var i in obj.files)
+    //var obj = document.getElementById("select-img");
+    //length = obj.files.length;
+    console.log(allfiles)
+    for(var i in allfiles)
     {
-        form.append("pic"+i,obj.files[i]);
+        form.append("pic"+i,allfiles[i]);
     }
+    allfiles={};
     form.append("gameid",gameid);
     for (const [key, value] of form.entries()) {
         console.log(key, value);
@@ -128,6 +131,7 @@ document.getElementById("commentForm").addEventListener("submit",function(event)
     });
 })
 
+var index=0;
 document.getElementById("select-img").addEventListener("change",function(){
     const selector=this;
     for(var i=0;i<selector.files.length;i++)
@@ -144,6 +148,7 @@ document.getElementById("select-img").addEventListener("change",function(){
         //IFFE
         ;(function(i){
         reader.onload=(e)=>{
+            allfiles[index]=selector.files[i];
             var divItem=document.createElement('div');
             divItem.setAttribute('class','picitem');
             var divPic=document.createElement('div');
@@ -153,10 +158,11 @@ document.getElementById("select-img").addEventListener("change",function(){
             img.setAttribute('src',e.target.result);
             var divTk=document.createElement('div');
             divTk.setAttribute('class','tk');
+            divTk.innerHTML = selector.files[i].name;
             var spanDel=document.createElement('span');
             spanDel.setAttribute('class','del');
-            //console.log(selector.files[i]);
-            spanDel.setAttribute('id',selector.files[i].name)
+            console.log(selector.files[i]);
+            spanDel.setAttribute('id',index++);
             spanDel.innerText='x';
             divPic.appendChild(img);
             divItem.appendChild(divPic);
@@ -165,10 +171,11 @@ document.getElementById("select-img").addEventListener("change",function(){
             var pics=document.getElementById('pics');
             pics.appendChild(divItem);
             spanDel.onclick=()=>{
-                var itemNode = spanDel.parentNode,
-                imgid = spanDel.getAttribute('id');
-                var flag = confirm("Do you want to delete image："+imgid+"?");
+                var itemNode = spanDel.parentNode;
+                const itemindex  = spanDel.getAttribute('id');
+                var flag = confirm("Do you want to delete this image?");
                 if(flag) {
+                    delete allfiles[itemindex];
                     itemNode.parentNode.removeChild(itemNode);
                     console.log('delete successfully!')
                 }
