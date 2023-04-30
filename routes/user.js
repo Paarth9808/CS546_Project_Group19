@@ -52,7 +52,7 @@ router
   })
   .post(async (req, res) => {
     console.log("!edit profile");
-    //age coming as a string so giving error have to see
+    //age coming as a string so giving error have to see (parseInt(age))
     const { userName: userName, password: password, age: age } = req.body;
     console.log(req.body);
     if (userName && password && age) {
