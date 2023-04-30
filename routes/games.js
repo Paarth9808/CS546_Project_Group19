@@ -15,6 +15,8 @@ router.route('/:id').get(async (req,res)=>{
     }
     try{
         const game=await gameData.getGame(req.params.id);
+        //if not logged in will be redirected to login page
+        if(!req.session.user){return res.redirect('/login')} 
         //Heng's comments loading
         const tempcomments=await getpartComment(req.params.id,0,3);
         for(var i=0;i<tempcomments.length;i++)
