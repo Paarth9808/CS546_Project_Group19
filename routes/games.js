@@ -19,11 +19,7 @@ router.route('/:id').get(async (req,res)=>{
         const tempcomments=await getpartComment(req.params.id,0,3);
         for(var i=0;i<tempcomments.length;i++)
         {
-            const userid=tempcomments[i].userID;
-            const user=await userMethods.getUserById(userid);
-            tempcomments[i].profilepath=user.avatar;
-            tempcomments[i].username=user.userName;
-            if(tempcomments[i]._id==req.session.user.userID)
+            if(tempcomments[i].userID==req.session.user.userId)
                 tempcomments[i].deletable=true;
             else
                 tempcomments[i].deletable=false;

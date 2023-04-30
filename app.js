@@ -9,26 +9,21 @@ import Handlebars from 'handlebars';
 Handlebars.registerHelper('concat', function(str1,str2) {
   return str1+str2;
 });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const staticDir = express.static(__dirname + '/public');
+const rewriteUnsupportedBrowserMethods = (req, res, next) => {
+  if (req.body && req.body._method) {
+    req.method = req.body._method;
+    delete req.body._method;
+  }
+  next();
+};
 const handlebarsInstance = exphbs.create({
   defaultLayout: 'main',
   // Specify helpers which are only registered on this instance.
   partialsDir: ['views/partials/','views']
 });
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const staticDir = express.static(__dirname + '/public');
-
-const rewriteUnsupportedBrowserMethods = (req, res, next) => {
-  
-  if (req.body && req.body._method) {
-    req.method = req.body._method;
-    delete req.body._method;
-  }
-
-  next();
-};
 
 app.use(
   session({
@@ -41,7 +36,7 @@ app.use(
 
 import fileUpload from 'express-fileupload';
 
-app.use(fileUpload());
+//app.use(fileUpload());
 
 app.use('/public', staticDir);
 app.use(express.json());
