@@ -12,15 +12,33 @@
         <li>{{this}}</li>
     {{/each}}
 </ul>
-<form action="{{game._id}}" method="POST" class="add-review-form">
+{{!-- <form action="{{game._id}}" method="POST" class="add-review-form">
     <label for="review">Review</label>
     <input id="review" type="text" placeholder="Type your review" name="reviewInput">
     <label for="rating">Rating</label>
     <input id="rating" type="number" placeholder="Enter your rating(1-10)"name="ratingInput">
     <button type="submit">Add review</button>
 </form>
+{{#if isAdded}}<p>{{status}}</p>{{/if}}
+{{#if hasErrors}}
+  <ul class="error-list">
+    {{#each errors}}
+    <li>
+      {{this}}
+    </li>
+    {{/each}}
+  </ul>
+{{/if}} --}}
 
-<a href="{{game._id}}/reviews">View all reviews</a>
+{{!-- <form action="{{game._id}}" method="POST" class="add-review-form">
+    <label for="review">Review</label>
+    <input id="review" type="text" placeholder="Type your review" name="reviewInput">
+    <label for="rating">Rating</label>
+    <input id="rating" type="number" placeholder="Enter your rating(1-10)"name="ratingInput">
+    <button type="submit">Add review</button>
+</form> --}}
+<a href="reviews/{{game._id}}/">Reviews</a>
+
 
 </div>
 {{>comments commentlist=commentlist gameid=game._id}}

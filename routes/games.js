@@ -78,32 +78,9 @@ router.route('/:id').get(async (req,res)=>{
     }catch(e){
         res.status(400).json({error: e});
     }
-}).post(async (req,res)=>{
-        //Add reviews
-        let errors=[];
-
-        let review=req.body.reviewInput;
-        try{
-            review=ratingValidation.checkReview(review);
-        }catch(e){
-            errors.push(e);
-        }
-        let rating=parseInt(req.body.ratingInput);
-        try{
-            rating=ratingValidation.checkNumber(rating)
-        }catch(e){
-            errors.push(e);
-        }
-        const game=await gameData.getGame(req.params.id);
-        let gameId=game._id;
-        let userId=req.session.user.userId;
-
-        let indReview=await ratingData.addRating(gameId,userId,review,rating)
-        if(indReview){return res.send('Review added successfully')}
-        
 })
 
-router.route('/:id/reviews').get(async (req,res)=>{
+router.route('/reviews/:id').get(async (req,res)=>{
     try{
         req.params.id=validation.checkId(req.params.id);
     }catch(e){
@@ -116,6 +93,64 @@ router.route('/:id/reviews').get(async (req,res)=>{
     }catch(e){
         res.status(400).json({error: e});
     }
+}).post(async (req,res)=>{
+    //Add reviews
+    let errors=[];
+    let isAdded=false;
+    let rating="";
+    let review=req.body.reviewInput;
+    let game=undefined;
+    let reviews=undefined
+    try{
+        review=ratingValidation.checkReview(review);
+    }catch(e){
+        errors.push(e);
+    }
+    try{
+        rating=parseInt(req.body.ratingInput);
+    }catch(e){
+        errors.push(e)
+    }
+    try{
+        rating=ratingValidation.checkNumber(rating,'Rating')
+    }catch(e){
+        errors.push(e);
+    }
+    if(errors.length>0){
+        try{
+        game=await gameData.getGame(req.params.id);
+        let reviews=game.individualRatings;
+        return res.status(400).render('gameReviews',{errors,hasErrors:true,game:game,reviews:reviews})
+        }catch(e){
+            return res.render(400).render('error',{Titlename:'Error page',errorMessage:e})
+        }
+        //return res.redirect('gameReviews')
+    }
+    try{
+        // game=await gameData.getGame(req.params.id);
+        // reviews=game.individualRatings;
+        //let gameId=game._id;
+        let gameId=req.params.id;
+        if(!req.session.user){return res.redirect('/login')}
+        let userId=req.session.user.userId;
+
+        
+
+        let indReview=await ratingData.addRating(gameId,userId,review,rating)
+        if(indReview){isAdded=true}
+        game=await gameData.getGame(req.params.id);
+        reviews=game.individualRatings;
+        //return res.redirect('gameReviews')
+        res.status(200).render('gameReviews',{status:'Review has been added',isAdded:isAdded,game:game,reviews:reviews})
+    }catch(e){
+        errors.push(e);
+        //return res.redirect('gameReviews')
+        game=await gameData.getGame(req.params.id);
+        reviews=game.individualRatings;
+        return res.status(400).render('gameReviews',{errors,hasErrors:true,game:game,reviews:reviews})
+        //return res.status(400).render('gameReviews',{Titlename:'Error page',errorMessage:e})
+    }
+
 })
 
 export default router;

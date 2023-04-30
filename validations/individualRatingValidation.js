@@ -11,6 +11,7 @@ const exportedMethods={
         return id;
     },
     checkReview(review){
+        if(!review){throw 'Review not provided'}
         if(!isNaN(review)){throw `Review cannot be just numbers`}
         return review.trim();
     },
