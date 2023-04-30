@@ -1,30 +1,34 @@
 
 <div class="comment">
-    <div class="profilediv">
-        <a href={{concat "/user/" comment.userID}}>
-            <img class="profile" src={{comment.profilepath}}/>
-        </a>
+    <div class="commentinfo">
+        <div class="profilediv">
+            <a href={{concat "/user/" comment.userID}}>
+                <img class="profile" src={{comment.profilepath}}/>
+            </a>
+        </div>
+        <div>
+            <a href={{concat "/user/" comment.userID}}>
+                <span class="comment_name">{{comment.username}} </span>
+            </a>
+            <span class="comment_time">{{comment.date}}</span>     
+        </div>
     </div>
-    <div>
-        <a href={{concat "/user/" comment.userID}}>
-            <span class="comment_name">{{comment.username}} </span>
-        </a>
-        <span class="comment_time">{{comment.date}}</span>     
-    </div>
-    <div class="attitude">
-        <div id={{concat comment._id "-like"}}>like {{comment.like.length}}</div>
-        <div id={{concat comment._id "-dislike"}}>dislike {{comment.dislike.length}}</div>
-        <div id={{concat comment._id "-report"}}>report {{comment.report.length}}</div>
-        {{#if comment.deletable}}
-            <div id={{concat comment._id "-delete"}}>delete</div>
-        {{/if}}
-    </div>
-    <div class="comment_text" >{{comment.content}}</div>
-    <div class="comment_pic">
-        {{#if comment.photo.length}}
-            {{#each comment.photo}}
-                <img class="commentimg" src={{this}}>
-            {{/each}}
-        {{/if}}
+    <div class="commentcontent">
+        <div class="attitude">
+            <div class="likelabel" id={{concat comment._id "-like"}}>like {{comment.like.length}}</div>
+            <div class="dislikelabel" id={{concat comment._id "-dislike"}}>dislike {{comment.dislike.length}}</div>
+            <div class="reportlabel" id={{concat comment._id "-report"}}>report {{comment.report.length}}</div>
+            {{#if comment.deletable}}
+                <div id={{concat comment._id "-delete"}}>delete</div>
+            {{/if}}
+        </div>
+        <div class="comment_text" >{{comment.content}}</div>
+        <div class="comment_pic">
+            {{#if comment.photo.length}}
+                {{#each comment.photo}}
+                    <img class="commentimg" src={{this}}>
+                {{/each}}
+            {{/if}}
+        </div>
     </div>
 </div>

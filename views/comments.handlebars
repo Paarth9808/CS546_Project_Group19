@@ -1,8 +1,15 @@
 <div>
     <form id="commentForm" class={{gameid}}>
-        <input type="file" class="select-img" id="select-img" name="pic" multiple="multiple">
-        <textarea name="text" rows="4" cols="50"></textarea>
-        <button type="submit">submit</button>
+        <div class="inputgroup">
+            <textarea name="text" rows="4" cols="50"></textarea>
+            <div class="btngroup">
+                <div id="uploadimage">
+                    <label id="filelabel" for="select-img">Upload Images</label>
+                    <input type="file" class="select-img" id="select-img" multiple="multiple">
+                </div>
+                <button class="submitbtn" type="submit">submit</button>
+            </div>
+        </div>
     </form>
     <div class="pics" id="pics"></div>
 </div>
