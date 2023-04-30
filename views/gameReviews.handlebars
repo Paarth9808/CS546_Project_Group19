@@ -1,0 +1,8 @@
+<h1>Reviews for {{game.name}}: </h1>
+{{#each reviews}}
+    <div>
+        <dl>Username: {{this.userName}}</dl>
+        <dl>Review: {{this.review}}</dl>
+        <dl>Rating: {{this.userRating}}</dl>
+    </div>
+{{/each}}
