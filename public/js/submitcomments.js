@@ -151,6 +151,11 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
 
 document.getElementById("commentForm").addEventListener("submit",function(event){
     event.preventDefault();
+    if(checked)
+    {
+        alert("Dear Admin, please complete the reported comments checking first");
+        return;
+    }
     const gameid=document.getElementById("commentForm").getAttribute("class");
     var form = new FormData(this);
     //var obj = document.getElementById("select-img");
