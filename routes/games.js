@@ -19,12 +19,18 @@ router.route('/:id').get(async (req,res)=>{
         if(!req.session.user){return res.redirect('/login')} 
         //Heng's comments loading
         const tempcomments=await getpartComment(req.params.id,0,3);
-        for(var i=0;i<tempcomments.length;i++)
+        var isAdmin=false;
+        if(req.session.user)
         {
-            if(tempcomments[i].userID==req.session.user.userId)
-                tempcomments[i].deletable=true;
-            else
-                tempcomments[i].deletable=false;
+            isAdmin=(req.session.user.userRole=="admin")
+            for(var i=0;i<tempcomments.length;i++)
+            {
+                console.log(req.session.user);
+                if(tempcomments[i].userID==req.session.user.userId||req.session.user.userRole=="admin")
+                    tempcomments[i].deletable=true;
+                else
+                    tempcomments[i].deletable=false;
+            }
         }
 
         let reviews=game.individualRatings;
@@ -32,7 +38,7 @@ router.route('/:id').get(async (req,res)=>{
         
         //console.log(tempcomments);
         //return res.status(200).json(game)
-        return res.render('gamedetails',{Titlename:'Game details',game:game,commentlist:tempcomments,reviews: reviews})
+        return res.render('gamedetails',{Titlename:'Game details',game:game,commentlist:tempcomments,reviews: reviews,isAdmin:isAdmin})
         // res.json({'test':'test'})
     }catch(e){
         return res.status(400).json({error:e})

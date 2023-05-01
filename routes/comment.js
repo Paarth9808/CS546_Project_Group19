@@ -4,12 +4,20 @@ import {v4 as uuidv4} from 'uuid';
 import fs from 'fs';
 import Handlebars from 'handlebars';
 import path from 'path';
-import {createComment,deleteComment,getpartComment,likeComment,dislikeComment,reportComment} from '../data/comment.js';
+import {createComment,deleteComment,getpartComment,getreportedComment,likeComment,dislikeComment,reportComment} from '../data/comment.js';
 const router = Router();
 const commentsource=fs.readFileSync(path.join('./views', 'partials', 'commentT.handlebars'));
 const mycomment=Handlebars.compile(commentsource+"");
 
 router.route('/getmore/:gameid/:index').get(async (req,res)=>{
+  try{
+    const userid=req.session.user.userId;
+  }
+  catch(e)
+  {
+    res.send("nologin");
+    return;
+  }
   try{
     const start=req.params.index;
     const gameid=req.params.gameid;
@@ -19,7 +27,7 @@ router.route('/getmore/:gameid/:index').get(async (req,res)=>{
     const htmllist=[];
     for(var i=0;i<newcomment.length;i++)
     {
-      if(req.session.user.userId==newcomment[i].userID)
+      if(req.session.user.userId==newcomment[i].userID||req.session.user.userRole=="admin")
         newcomment[i].deletable=true;
       else
         newcomment[i].deletable=false;
@@ -36,8 +44,40 @@ router.route('/getmore/:gameid/:index').get(async (req,res)=>{
   }
 })
 
+router.route('/getreported/:gameid').get(async (req,res)=>{
+  try{
+    const start=req.params.index;
+    const gameid=req.params.gameid;
+    console.log(start);
+    const newcomment=await getreportedComment(gameid);
+    console.log(newcomment);
+    const htmllist=[];
+    for(var i=0;i<newcomment.length;i++)
+    {
+      newcomment[i].deletable=true;
+      console.log(mycomment({comment:newcomment[i]}));
+      htmllist.push(mycomment({comment:newcomment[i]}));
+    }
+    res.send(htmllist);
+  }
+  catch(e)
+  {
+    res.status(400);
+    res.send(e);
+    console.log(e);
+  }
+})
+
 router.route('/sendattitude').post(async (req,res)=>{
   console.log(req.body);
+  try{
+    const userid=req.session.user.userId;
+  }
+  catch(e)
+  {
+    res.send({data:"nologin"});
+    return;
+  }
   try
   {
     var id=req.body.id;
@@ -48,19 +88,19 @@ router.route('/sendattitude').post(async (req,res)=>{
     console.log(id_split[1]);
     if(id_split[1]=='like')
     {
-      const like=await likeComment(id_split[0],userId);
-      res.send({data:like});
+      const result=await likeComment(id_split[0],userId);
+      res.send({data:result});
     }
     else if(id_split[1]=='dislike')
     {
-      const dislike=await dislikeComment(id_split[0],userId);
-      res.send({data:dislike});
+      const result=await dislikeComment(id_split[0],userId);
+      res.send({data:result});
     }
     else if(id_split[1]=='report')
     {
-      const report=await reportComment(id_split[0],userId);
-      console.log(report);
-      res.send({data:report});
+      const result=await reportComment(id_split[0],userId);
+      console.log(result);
+      res.send({data:result});
     }
     else if(id_split[1]=="delete")
     {
@@ -77,6 +117,14 @@ router.route('/sendattitude').post(async (req,res)=>{
 })
 router.route("/sendcomment").post(async (req, res)=> {
     //console.log(req.body);
+    try{
+      const userid=req.session.user.userId;
+    }
+    catch(e)
+    {
+      res.send("nologin");
+      return;
+    }
     try{
     var form = new formidable.IncomingForm();
     form.encoding = 'utf-8';
