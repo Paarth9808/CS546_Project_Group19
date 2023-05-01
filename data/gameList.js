@@ -67,4 +67,16 @@ const getGameByName = async (name) => {
     else return 'unexist';
 }
 
-export default {getGameByGerne, getGameByPlatform, sortGameByDate, sortGameByRate};
+const ageFilter = (age, games) => {
+    if (!age) throw 'none age';
+    if (!games) throw 'none games';
+    if (typeof(age) != 'number') throw 'wrong age format';
+    let filtered = [];
+    for (let i = 0; i < games.length; i++) {
+        if (age >= games[i].ageRating) filtered.add(games[i]);
+    }
+    return filtered;
+}
+
+
+export default {getGameByGerne, getGameByPlatform, sortGameByDate, sortGameByRate, getGameByName, ageFilter};
