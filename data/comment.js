@@ -77,6 +77,16 @@ const createComment=async(
     return tempcomment;
 }
 
+
+const getreportedComment=async(gameid)=>{
+    const commentCollection=await comment();
+    gameid=checkgameID(gameid);
+    const res=commentCollection.find({gameID:gameid,report:{ $exists: true, $ne: [] } }).toArray();
+    for(var i=0;i<res.length;i++)
+        res[i]._id=res[i]._id.toString();
+    return res;
+}
+
 const getpartComment=async(gameid,start,length)=>{
     const commentCollection=await comment();
     gameid=checkgameID(gameid);
@@ -248,4 +258,4 @@ const reportComment=async(
 }
 
 
-export{createComment,getpartComment,deleteComment,updateComment,getCommentById,likeComment,dislikeComment,reportComment};
+export{createComment,getpartComment,getreportedComment,deleteComment,updateComment,getCommentById,likeComment,dislikeComment,reportComment};

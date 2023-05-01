@@ -57,6 +57,55 @@ function addlistener(element)
 
 addlistener(document);
 
+const reportbtn=document.getElementById("checkreported");
+var checked=false;
+if(reportbtn)
+{
+    reportbtn.addEventListener("click",function(event){
+        const gameid=document.getElementById("loadingbtn").getAttribute("class");
+        $('#loadingbtn').hide()
+        if(!checked)
+        {
+            reportbtn.innerHTML="Complete";
+            checked=true;
+            document.getElementById("commentslist").innerHTML="";
+            $.ajax({
+                url:'/comment/getreported/'+gameid,
+                //url:'/comment/getmore/'+commentsnum,
+                method:'Get',
+                success: function(response) {
+                    console.log(response);
+                    if(response.length==0)
+                    {
+                        $('#lastcomment').show();
+                    }
+                    else
+                    {
+                        for(var i=0;i<response.length;i++)
+                        {
+                            const newli=document.createElement('li');
+                            newli.setAttribute('class','listnode');
+                            newli.innerHTML=response[i];
+                            addlistener(newli);
+                            document.getElementById("commentslist").append(newli);
+                        }
+                    }
+                  },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                  }
+            })
+        }
+        else
+        {
+            reportbtn.innerHTML="Check reported comments";
+            checked=false;
+            location.reload();
+        }
+    })
+}
+
+
 document.getElementById("loadingbtn").addEventListener("click",function(event){
     const length=document.getElementById("commentslist").childNodes.length;
     const gameid=document.getElementById("loadingbtn").getAttribute("class");
@@ -73,7 +122,12 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
         method:'Get',
         success: function(response) {
             console.log(response);
-            if(response.length==0)
+            if(response=="nologin")
+            {
+                alert("You didn't login");
+                return;
+            }
+            else if(response.length==0)
             {
                 $('#lastcomment').show();
             }
