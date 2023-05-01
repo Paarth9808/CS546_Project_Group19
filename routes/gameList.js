@@ -44,11 +44,11 @@ async (req, res)=>{
     }
     if (age) {
       if (age.trim() == '') throw 'age should be no empty spaces';
-      if (typeof(age) != 'string') throw 'sortWay type wrong';
+      if (typeof(age) != 'number') throw 'sortWay type wrong';
     }
     if (description) {
       if (description.trim() == '') throw 'description should be no empty spaces';
-      if (typeof(age) != 'string') throw 'sortWay type wrong';
+      if (typeof(description) != 'string') throw 'sortWay type wrong';
     }
 
     let testName = await gameListData.getGameByName(name);
