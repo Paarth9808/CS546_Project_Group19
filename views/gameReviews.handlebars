@@ -8,9 +8,13 @@
         {{#if (ifEqual this.userName  ../currentUser.userName) }}
             <a href="edit">Edit review</a>
         {{/if}}
+        {{#if (or (ifEqual this.userName  ../currentUser.userName) (ifEqual ../currentUser.role "admin"))}}
+            <a href="delete">Delete review</a>
+        {{/if}}
     </div>
 {{/each}}
 
+<h2>Add review:</h2>
 <form action="" method="POST" class="add-review-form">
     <label for="review">Review</label>
     <input id="review" type="text" placeholder="Type your review" name="reviewInput">
