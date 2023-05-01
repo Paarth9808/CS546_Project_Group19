@@ -1,3 +1,16 @@
+
+<h1>Reviews for {{game.name}}: </h1>
+{{#each reviews}}
+    <div>
+        <dl>Username: {{this.userName}}</dl>
+        <dl>Review: {{this.review}}</dl>
+        <dl>Rating: {{this.userRating}}</dl>
+        {{#if (ifEqual this.userName  ../currentUser.userName) }}
+            <a href="edit">Edit review</a>
+        {{/if}}
+    </div>
+{{/each}}
+
 <form action="" method="POST" class="add-review-form">
     <label for="review">Review</label>
     <input id="review" type="text" placeholder="Type your review" name="reviewInput">
@@ -15,13 +28,3 @@
     {{/each}}
   </ul>
 {{/if}}
-
-
-<h1>Reviews for {{game.name}}: </h1>
-{{#each reviews}}
-    <div>
-        <dl>Username: {{this.userName}}</dl>
-        <dl>Review: {{this.review}}</dl>
-        <dl>Rating: {{this.userRating}}</dl>
-    </div>
-{{/each}}

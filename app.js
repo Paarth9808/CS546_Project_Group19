@@ -9,6 +9,10 @@ import Handlebars from 'handlebars';
 Handlebars.registerHelper('concat', function(str1,str2) {
   return str1+str2;
 });
+
+Handlebars.registerHelper('ifEqual', function(str1, str2){
+  return str1 === str2;
+} )
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const staticDir = express.static(__dirname + '/public');
