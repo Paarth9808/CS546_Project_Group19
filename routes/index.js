@@ -2,9 +2,11 @@ import gameRoutes from './games.js'
 import CommentsRouter from './comment.js';
 import auth_routes from './auth_routes.js'
 import userRouter from './user.js';
+import gameListRoutes from './gameList.js';
 
 const constructor=(app)=>{
     app.use('/games',gameRoutes);
+    app.use('/gameList', gameListRoutes);
     app.use('/comment', CommentsRouter);
     app.use('/', auth_routes)
     app.use('/user', userRouter);
