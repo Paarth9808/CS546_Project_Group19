@@ -38,6 +38,14 @@ router.route('/getmore/:gameid/:index').get(async (req,res)=>{
 
 router.route('/sendattitude').post(async (req,res)=>{
   console.log(req.body);
+  try{
+    const userid=req.session.user.userId;
+  }
+  catch(e)
+  {
+    res.send({data:"nologin"});
+    return;
+  }
   try
   {
     var id=req.body.id;
@@ -48,19 +56,19 @@ router.route('/sendattitude').post(async (req,res)=>{
     console.log(id_split[1]);
     if(id_split[1]=='like')
     {
-      const like=await likeComment(id_split[0],userId);
-      res.send({data:like});
+      const result=await likeComment(id_split[0],userId);
+      res.send({data:result});
     }
     else if(id_split[1]=='dislike')
     {
-      const dislike=await dislikeComment(id_split[0],userId);
-      res.send({data:dislike});
+      const result=await dislikeComment(id_split[0],userId);
+      res.send({data:result});
     }
     else if(id_split[1]=='report')
     {
-      const report=await reportComment(id_split[0],userId);
-      console.log(report);
-      res.send({data:report});
+      const result=await reportComment(id_split[0],userId);
+      console.log(result);
+      res.send({data:result});
     }
     else if(id_split[1]=="delete")
     {
@@ -77,6 +85,14 @@ router.route('/sendattitude').post(async (req,res)=>{
 })
 router.route("/sendcomment").post(async (req, res)=> {
     //console.log(req.body);
+    try{
+      const userid=req.session.user.userId;
+    }
+    catch(e)
+    {
+      res.send("nologin");
+      return;
+    }
     try{
     var form = new formidable.IncomingForm();
     form.encoding = 'utf-8';

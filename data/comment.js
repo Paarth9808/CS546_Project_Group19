@@ -57,7 +57,7 @@ const createComment=async(
         date:(now.getMonth()+1).toString().padStart(2,'0')+"/"+now.getDate()+"/"+now.getFullYear(),
         like:[],
         dislike:[],
-        report:[]
+        report:[],
     };
     const commentCollection=await comment();
     const insertInfo=await commentCollection.insertOne(tempcomment);
@@ -145,12 +145,35 @@ const likeComment=async(
     for(var i=0;i<tempcomment.like.length;i++)
     {
         if(tempcomment.like[i]==userid)
-            return -1;
+        {
+            const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$pull:{like:userid}},{returnDocument: 'after'});
+            if(commentupdateInfo.lastErrorObject.n==0)
+                throw "could not update this comment in comment db";
+            return {
+                like:commentupdateInfo.value.like.length,
+                dislike:commentupdateInfo.value.dislike.length,
+                report:commentupdateInfo.value.report.length
+            };
+        }
+    }
+    for(var i=0;i<tempcomment.dislike.length;i++)
+    {
+        if(tempcomment.dislike[i]==userid)
+        {
+            const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$pull:{dislike:userid}},{returnDocument: 'after'});
+            if(commentupdateInfo.lastErrorObject.n==0)
+                throw "could not update this comment in comment db";
+            break;
+        }
     }
     const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$push:{like:userid}},{returnDocument: 'after'});
     if(commentupdateInfo.lastErrorObject.n==0)
         throw "could not update this comment in comment db";
-    return commentupdateInfo.value.like.length;
+    return {
+        like:commentupdateInfo.value.like.length,
+        dislike:commentupdateInfo.value.dislike.length,
+        report:commentupdateInfo.value.report.length
+    };
 }
 
 const dislikeComment=async(
@@ -166,12 +189,35 @@ const dislikeComment=async(
     for(var i=0;i<tempcomment.dislike.length;i++)
     {
         if(tempcomment.dislike[i]==userid)
-            return -1;
+        {
+            const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$pull:{dislike:userid}},{returnDocument: 'after'});
+            if(commentupdateInfo.lastErrorObject.n==0)
+                throw "could not update this comment in comment db";
+            return {
+                like:commentupdateInfo.value.like.length,
+                dislike:commentupdateInfo.value.dislike.length,
+                report:commentupdateInfo.value.report.length
+            };
+        }
+    }
+    for(var i=0;i<tempcomment.like.length;i++)
+    {
+        if(tempcomment.like[i]==userid)
+        {
+            const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$pull:{like:userid}},{returnDocument: 'after'});
+            if(commentupdateInfo.lastErrorObject.n==0)
+                throw "could not update this comment in comment db";
+            break;
+        }
     }
     const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$push:{dislike:userid}},{returnDocument: 'after'});
     if(commentupdateInfo.lastErrorObject.n==0)
         throw "could not update this comment in comment db";
-    return commentupdateInfo.value.dislike.length;
+    return {
+        like:commentupdateInfo.value.like.length,
+        dislike:commentupdateInfo.value.dislike.length,
+        report:commentupdateInfo.value.report.length
+    };
 }
 
 const reportComment=async(
@@ -187,12 +233,18 @@ const reportComment=async(
     for(var i=0;i<tempcomment.report.length;i++)
     {
         if(tempcomment.report[i]==userid)
+        {
             return -1;
+        }
     }
     const commentupdateInfo=await commentCollection.findOneAndUpdate({_id:new ObjectId(commentid)},{$push:{report:userid}},{returnDocument: 'after'});
     if(commentupdateInfo.lastErrorObject.n==0)
         throw "could not update this comment in comment db";
-    return commentupdateInfo.value.report.length;
+    return {
+        like:commentupdateInfo.value.like.length,
+        dislike:commentupdateInfo.value.dislike.length,
+        report:commentupdateInfo.value.report.length
+    };
 }
 
 

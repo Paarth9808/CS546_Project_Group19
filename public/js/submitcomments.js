@@ -14,6 +14,9 @@ function addlistener(element)
         for(var j=0;j<selection.length;j++)
         {
             const temp=selection[j];
+            const like=selection[0];
+            const dislike=selection[1];
+            const report=selection[2];
             selection[j].addEventListener("click",function(event){
                 console.log(temp);
                 const id=temp.getAttribute("id");
@@ -24,16 +27,19 @@ function addlistener(element)
                     success: function(response) {
                         //console.log(form);
                         //console.log(response);
-                        if(response.data!=undefined&&response.data!="deleted"&&response.data!=-1)
+                        if(response.data!=undefined&&response.data.like!=undefined&&response.data.dislike!=undefined&&response.data.report!=undefined)
                         {
-                            var innerdata=temp.innerHTML;
-                            var innerdatas=innerdata.split(" ");
-                            innerdata=innerdatas[0]+" "+response.data;
-                            temp.innerHTML=innerdata;
+                            like.innerHTML="like "+response.data.like;
+                            dislike.innerHTML="dislike "+response.data.dislike;
+                            report.innerHTML="report "+response.data.report;
                         }
                         else if(response.data=="deleted")
                         {
-                            attitude.parentNode.parentNode.style.display="none";
+                            attitude.parentNode.parentNode.parentNode.style.display="none";
+                        }
+                        else if(response.data=="nologin")
+                        {
+                            alert("You didn't login");
                         }
                         else
                         {
@@ -114,16 +120,22 @@ document.getElementById("commentForm").addEventListener("submit",function(event)
     contentType: false,
     data: form,
     success: function(response) {
-        console.log(form);
-        console.log(response);
-        const thisform=document.getElementById("commentForm");
-        thisform.reset();
-        document.getElementById('pics').innerHTML='';
-        const newli=document.createElement('li');
-        newli.setAttribute('class','listnode');
-        newli.innerHTML=response;
-        addlistener(newli);
-        document.getElementById("commentslist").insertAdjacentElement("afterbegin",newli);
+        if(response=="nologin")
+        {
+            alert("You didn't login");
+        }
+        else
+        {
+            console.log(response);
+            const thisform=document.getElementById("commentForm");
+            thisform.reset();
+            document.getElementById('pics').innerHTML='';
+            const newli=document.createElement('li');
+            newli.setAttribute('class','listnode');
+            newli.innerHTML=response;
+            addlistener(newli);
+            document.getElementById("commentslist").insertAdjacentElement("afterbegin",newli);
+        }
     },
     error: function(xhr, status, error) {
         console.log('Error: ' + error.message);
