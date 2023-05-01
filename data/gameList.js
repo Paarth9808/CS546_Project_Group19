@@ -58,4 +58,13 @@ const sortGameByDate = async (sortWay) => {
     return res;
 }
 
+const getGameByName = async (name) => {
+    if (name.trim() == '') throw 'no name exist';
+    if (typeof(name) != 'string') throw 'name type wrong';
+    const gameCollection = await games();
+    let res = await gameCollection.find({ name : name }).toArray();
+    if (res.length > 0) return 'exist';
+    else return 'unexist';
+}
+
 export default {getGameByGerne, getGameByPlatform, sortGameByDate, sortGameByRate};

@@ -41,6 +41,9 @@ router.route('/createGame').get(async (req, res)=>{
       if (typeof(age) != 'string') throw 'sortWay type wrong';
     }
 
+    let testName = await gameListData.getGameByName(name);
+    if (testName == 'exist') throw 'name exist';
+
     const newGame = await gameData.createGame(    
       releaseDate,
       name,
