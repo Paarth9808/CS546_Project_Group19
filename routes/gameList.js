@@ -3,15 +3,16 @@ const router = Router();
 import { gameListData } from "../data/index.js";
 import { gameData } from "../data/index.js";
 
-router.route('/createGame').get(async (req, res, next) => {
-  if (!req.session.user) {
-    return res.redirect('login');
-  }
-  let user = req.session.user;
-  if (user.role == 'user') {
-    return res.redirect('gameList');
-  }
-  next();
+
+router.route('/creategame').get(async (req, res, next) => {
+  // if (!req.session.user) {
+  //   return res.redirect('login');
+  // }
+  // let user = req.session.user;
+  // if (user.role == 'user') {
+  //   return res.redirect('gameList');
+  // }
+  // next();
 },
 async (req, res)=>{
   res.render('createGame', {title : 'createGame'});
@@ -71,11 +72,11 @@ async (req, res)=>{
 
 });
 
-router.route('/gameList').get(async (req, res, next) =>{
-  if (!req.session.user) {
-    return res.redirect('login');
-  }
-  next();
+router.route('/').get(async (req, res, next) =>{
+  // if (!req.session.user) {
+  //   return res.redirect('login');
+  // }
+  // next();
 },
 async (req,res)=>{
 

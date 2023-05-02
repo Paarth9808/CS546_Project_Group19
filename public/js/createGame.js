@@ -14,10 +14,10 @@
       vreleaseDate (releaseDate) {
         if (releaseDate.trim() == '') throw 'releaseDate should be no empty spaces';
         if (typeof(releaseDate) != 'string') throw 'sortWay type wrong';
-        let currentDate=new Date();
-        let finalYear=currentDate.getFullYear()
-        currentDate=currentDate.trim();
-        let dateElements=currentDate.split('/')
+        let currentDate = new Date();
+        let finalYear = currentDate.getFullYear()
+        releaseDate = releaseDate.trim();
+        let dateElements = releaseDate.split('/')
         if(dateElements.length!=3){throw `Error: Year should be in MM/DD/YYYY format`}
         let month=dateElements[0],day=dateElements[1],year=dateElements[2]
         if(month.length!=2||day.length!=2||year.length!=4){throw `Error: Year should be in MM/DD/YYYY format`}
@@ -31,7 +31,7 @@
         if([4, 6, 9, 11].includes(Number(month))&&Number(day)>30){
             throw `Error: Invalid date`
         }
-        return currentDate;
+        return releaseDate;
       },
 
       vage (age) {

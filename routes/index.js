@@ -6,7 +6,7 @@ import gameListRoutes from './gameList.js';
 
 const constructor=(app)=>{
     app.use('/games',gameRoutes);
-    app.use('/gameList', gameListRoutes);
+    app.use('/gamelist', gameListRoutes);
     app.use('/comment', CommentsRouter);
     app.use('/', auth_routes)
     app.use('/user', userRouter);

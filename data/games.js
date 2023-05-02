@@ -28,7 +28,7 @@ const createGame= async (
     name=validation.checkString(name,'Name')
     genre=validation.checkStringArray(genre,'Genre')
     description=validation.checkString(description,'Description')
-    systemRequirements=validation.checkString(systemRequirements,'Name')
+    if (systemRequirements != 'ps5' || systemRequirements != 'xbox' || systemRequirements != 'pc' || systemRequirements != 'switch') throw 'platform wrong';
     
     if (ageRating != 18 && ageRating != 15 && ageRating != 12) throw 'ageRating format wrong';
     const gameCollection= await games();
