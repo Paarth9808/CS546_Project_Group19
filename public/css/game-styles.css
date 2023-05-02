@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+  }
+  
+  .comparison-form {
+    margin-bottom: 20px;
+
+  }
+  
+  #game1div, #game2div {
+    padding: 20px;
+    background-color: rgb(182, 181, 181);
+    width: 45%;
+  }
+  
+  
+  
+  
+  
+  
+  
+  

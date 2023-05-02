@@ -225,7 +225,8 @@ const remove=async (gameId,userId)=>{
         {_id: new ObjectId(gameId)}
     )
 
-    return newGame
+    //return newGame
+    return info.modifiedCount;
 
 }
 export default {addRating,getAll,get,remove,update}

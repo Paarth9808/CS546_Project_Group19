@@ -58,6 +58,23 @@ const getAll = async () => {
     return allGames
 };
 
+const getGameByName= async (name)=>{
+  const gameCollection=await games();
+  const game= await gameCollection.findOne({name: name})
+  if(game === null){ throw `Game not found` }
+  game._id=game._id.toString();
+  return game;
+}
+
+const getAllGameNames= async ()=>{
+  const gameCollection=await games();
+  let allGames=await gameCollection.find({}).toArray();
+  allGames=allGames.map((element)=>{element._id=element._id.toString();
+  return element.name
+  })
+  return allGames
+}
+
 const updateGame=async(
   id,
   gameInfo
@@ -111,4 +128,4 @@ const removeGame=async(id)=>{
 
 }
 
-export default {createGame,getGame,getAll,updateGame,removeGame}
+export default {createGame,getGame,getAll,updateGame,removeGame,getGameByName,getAllGameNames}

@@ -17,6 +17,7 @@ router.route('/:id').get(async (req,res)=>{
         const game=await gameData.getGame(req.params.id);
         //if not logged in will be redirected to login page
         if(!req.session.user){return res.redirect('/login')} 
+        let currentUser=req.session.user;
         //Heng's comments loading
         const tempcomments=await getpartComment(req.params.id,0,3);
         var isAdmin=false;
@@ -38,10 +39,10 @@ router.route('/:id').get(async (req,res)=>{
         
         //console.log(tempcomments);
         //return res.status(200).json(game)
-        return res.render('gamedetails',{Titlename:'Game details',game:game,commentlist:tempcomments,reviews: reviews,isAdmin:isAdmin})
+        return res.render('gamedetails',{Titlename:'Game details',game:game,commentlist:tempcomments,reviews: reviews,isAdmin:isAdmin,currentUser:currentUser})
         // res.json({'test':'test'})
     }catch(e){
-        return res.status(400).json({error:e})
+        return res.status(400).render('error',{Titlename:'Error page',errorMessage:e})
     }
 }
 ).delete(async (req,res)=>{
@@ -52,7 +53,7 @@ router.route('/:id').get(async (req,res)=>{
     }
     try{
         await gameData.removeGame(req.params.id);
-        return res.status(200).json({'gameId':req.params.id,'deleted':true})
+        return res.status(200).render('gameDeleted',{Titlename:'Game deleted',message:'Game has been deleted successfully'})
     }catch(e){
         return res.status(400).json({error:e})
     }
@@ -182,7 +183,7 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
         res.status(400).json({error: e});
     }
 
-}).post(async (req,res)=>{
+}).put(async (req,res)=>{
     let errors=[];
     let isAdded=false;
     let rating="";
@@ -222,6 +223,43 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
         errors.push(e);
         return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating})
     }
+})
+
+router.route('/reviews/:id/delete').delete(async (req,res)=>{
+    let id=undefined;
+    let userId=undefined;
+    let isDeleted=undefined;
+    let errors=[]
+    let game=undefined;
+    let reviews=undefined
+    let currentUser=undefined;
+
+    try{
+        id=req.params.id;
+    }catch(e){
+        res.status(400).render('error',{Titlename:'Error page',errorMessage:e})
+    }
+    try{
+        if(!req.session.user){return res.redirect('/login')}
+        currentUser=req.session.user;
+        let userId=currentUser.userId;
+        let deletedCount=await ratingData.remove(id,userId);
+        if(deletedCount>0){isDeleted=true}
+        game=await gameData.getGame(req.params.id);
+        reviews=game.individualRatings;
+        res.status(200).render('gameReviews',{Titlename:'Game Reviews',status:'Your review has been deleted',isDeleted:isDeleted,game:game,reviews:reviews,currentUser:currentUser})
+
+    }catch(e){
+        errors.push(e);
+        game=await gameData.getGame(req.params.id);
+        if(!req.session.user){return res.redirect('/login')}
+        currentUser=req.session.user;
+        reviews=game.individualRatings;
+        return res.status(400).render('gameReviews',{Titlename:'Game Reviews',errors,hasErrors:true,game:game,reviews:reviews,currentUser:currentUser})
+    }
+
+    
+
 })
 
 export default router;

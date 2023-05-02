@@ -9,8 +9,8 @@ import ratingData from './data/individualRatings.js'
 async function main(){
     const db = await dbConnection();
     try{ 
-        let game=undefined;
-        game=await gameData.createGame('02/02/1970','COD4',['Shooter'],'Sample description',['Requirements'],'Teen');
+        //let game=undefined;
+        //game=await gameData.createGame('02/02/1970','COD4',['Shooter'],'Sample description',['Requirements'],'Teen');
         //console.log(await ratingData.addRating('644a21d77da3cea481dea2e6','63fed8db5fcdd3d13159a0f5','Best game ever',5))
         //console.log(await ratingData.update('644a21d77da3cea481dea2e6','63fed8db5fcdd3d13159a0f5','Worst game ever',1))
         //console.log(await ratingData.remove('644a21d77da3cea481dea2e6','63fed8db5fcdd3d13159a0f5'))
@@ -19,7 +19,8 @@ async function main(){
         //console.log(await gameData.updateGame('642a12913884b92cf5f2c801','COD',['Shooter'],'Sample description',['Requirements'],'Teen'))
         //console.log(game)
         //console.log(await gameData.removeGame('642a0fee30018dd939b48918'))
-        //console.log(game);
+        console.log(await gameData.getAllGameNames());
+        //console.log(await gameData.getGameByName('COD4'))
     }catch(e){
         console.log(e)
     }
