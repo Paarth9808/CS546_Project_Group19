@@ -1,8 +1,8 @@
 <header><h1>{{game.name}}</h1></header>
 <div>
     {{#if (ifEqual currentUser.role "admin")}}
-            <form action="{{game._id}}" method="POST" class="update-button">
-                <input type="hidden" name="_method" value="PATCH" >
+            <form action="{{game._id}}/edit" method="GET" class="update-button">
+                {{!-- <input type="hidden" name="_method" value="PATCH" > --}}
                 <input type="submit" value="Update game">
             </form>
             <form action="{{game._id}}" method="POST" class="delete-button">

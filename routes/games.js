@@ -11,7 +11,7 @@ router.route('/:id').get(async (req,res)=>{
     try{
         req.params.id=validation.checkId(req.params.id);
     }catch(e){
-        return res.status(400).json({error:e});
+        return res.status(400).render('error',{Titlename:'Error page',errorMessage:e})
     }
     try{
         const game=await gameData.getGame(req.params.id);
@@ -83,6 +83,10 @@ router.route('/:id').get(async (req,res)=>{
     }catch(e){
         res.status(400).json({error: e});
     }
+})
+
+router.route('/:id/edit').get(async (req,res)=>{
+    return res.render('editGame',{Titlename:'Edit game'})
 })
 
 router.route('/reviews/:id').get(async (req,res)=>{

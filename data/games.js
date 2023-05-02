@@ -28,9 +28,9 @@ const createGame= async (
     name=validation.checkString(name,'Name')
     genre=validation.checkStringArray(genre,'Genre')
     description=validation.checkString(description,'Description')
-    systemRequirements=validation.checkStringArray(systemRequirements,'System Requirements')
-    ageRating=validation.checkString(ageRating,'Age rating')
-    ageRating=validation.checkAgeRating(ageRating,'Age rating')
+    systemRequirements=validation.checkString(systemRequirements,'Name')
+    
+    if (ageRating != 18 && ageRating != 15 && ageRating != 12) throw 'ageRating format wrong';
     const gameCollection= await games();
     const insertInfo=await gameCollection.insertOne(newGame);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
