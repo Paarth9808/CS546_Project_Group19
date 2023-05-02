@@ -15,10 +15,11 @@ router
     try {
       const user1 = await userData.getUserById(req.params.id);
       return res.render("userProfile", {
+        id : req.params.id,
         avatar: user1.avatar,
         username: user1.userName,
         age: user1.age,
-        email: user1.email,
+        email: user1.email
       });
     } catch (e) {
       return res.status(404).json({ error: e });
@@ -48,11 +49,10 @@ router
     } catch (e) {
       return res.status(400).json({ error: e });
     }
-    res.render("editProfile");
+    res.render("editProfile", {id : req.params.id});
   })
   .post(async (req, res) => {
     console.log("!edit profile");
-    //age coming as a string so giving error have to see (parseInt(age))
     const { userName: userName, password: password, age: age } = req.body;
     console.log(req.body);
     if (userName && password && age) {
@@ -62,12 +62,12 @@ router
         let data = await userData.updateUser(
           req.params.id,
           userName,
-          age,
+          parseInt(age),
           password
-        ); // hash password
+        );
         if (data) {
-          console.log("!changing profile", data);
-          res.redirect("/" + req.params.id);
+          // console.log("!changing profile", data);
+          res.redirect("/user/" + req.params.id);
         }
       } catch (e) {
         console.log(e);
@@ -76,6 +76,7 @@ router
     }
   });
 
+  //check reload
 router
   .route("/:id/edit/avatar")
   .get(async (req, res) => {
@@ -83,7 +84,7 @@ router
   })
   .post(async (req, res) => {
     console.log("!edit profile");
-    console.log(req.params.id);
+    // console.log(req.params.id);
     const { file: file } = req.body;
     if (req.files && req.files?.file.data)
       fs.writeFileSync(
@@ -96,13 +97,15 @@ router
           flag: "w+",
         }
       );
+      // check data and then redirect
+      // res.redirect("/user/" + req.params.id);
   });
 
 //role
 router
   .route("/:id/edit/role")
   .get(async (req, res) =>{
-    res.render("") // make page for this
+    res.render("") // make page for this, should I?
   })
 
 export default router;
