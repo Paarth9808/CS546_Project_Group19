@@ -1,6 +1,16 @@
 <form id='editForm' method="POST" enctype="multipart/form-data">
     
-    <label>New profile picture:</label> 
-    <input type="file" name="file" id="file">
+    <label for = "avatar">New profile picture:</label> 
+    <input type="file" accept="image/png" name="avatar" id="avatar" >
     <button type="submit" id="editProfileButton">Submit</button>
 </form>
+{{!-- to do --}}
+{{#if hasErrors}}
+<ul class="error-list">
+    {{#each errors}}
+    <li>
+      {{this}}
+    </li>
+    {{/each}}
+  </ul>
+{{/if}}

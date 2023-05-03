@@ -1,8 +1,12 @@
+
+body {
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+}
 .dark-mode {
-  background-color: black;
+  /* gradient background color*/
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%) !important;
   color: white;
 }
-
 #uploadimage{ 
   width: 120px;  
   height: 30px;  
