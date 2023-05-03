@@ -4,17 +4,7 @@ import { gameListData } from "../data/index.js";
 import { gameData } from "../data/index.js";
 
 
-router.route('/creategame').get(async (req, res, next) => {
-  // if (!req.session.user) {
-  //   return res.redirect('login');
-  // }
-  // let user = req.session.user;
-  // if (user.role == 'user') {
-  //   return res.redirect('gameList');
-  // }
-  // next();
-},
-async (req, res)=>{
+router.route('/creategame').get(async (req, res)=>{
   res.render('createGame', {title : 'createGame'});
 
 })
@@ -23,72 +13,60 @@ async (req, res)=>{
   const platform = req.body.platformInput;
   const name = req.body.gameNameInput;
   const releaseDate = req.body.releaseDateInput;
-  const age = req.body.ageInput;
+  const age = Number(req.body.ageInput);
   const description = req.body.descriptionInput;
 
   try {
     if (genre) {
       if (genre.trim() == '') throw 'genre should be no empty spaces';
-      if (typeof(genre) != 'string') throw 'sortWay type wrong';
+      if (typeof(genre) != 'string') throw 'genre type wrong';
     }
     if (platform) {
       if (platform.trim() == '') throw 'platform should be no empty spaces';
-      if (typeof(platform) != 'string') throw 'sortWay type wrong';
+      if (typeof(platform) != 'string') throw 'platform type wrong';
   }
     if (name) {
       if (name.trim() == '') throw 'name should be no empty spaces';
-      if (typeof(name) != 'string') throw 'sortWay type wrong';
+      if (typeof(name) != 'string') throw 'name type wrong';
     }
     if (releaseDate) {
       if (releaseDate.trim() == '') throw 'releaseDate should be no empty spaces';
-      if (typeof(releaseDate) != 'string') throw 'sortWay type wrong';
+      if (typeof(releaseDate) != 'string') 'releaseDate type wrong';
     }
     if (age) {
-      if (age.trim() == '') throw 'age should be no empty spaces';
-      if (typeof(age) != 'number') throw 'sortWay type wrong';
+      if (typeof(age) != 'number') throw 'age type wrong';
     }
     if (description) {
       if (description.trim() == '') throw 'description should be no empty spaces';
-      if (typeof(description) != 'string') throw 'sortWay type wrong';
+      if (typeof(description) != 'string') throw 'description type wrong';
     }
 
     let testName = await gameListData.getGameByName(name);
     if (testName == 'exist') throw 'name exist';
 
-    const newGame = await gameData.createGame(    
-      releaseDate,
-      name,
-      genre,
-      description,
-      platform,
-      age);
-    if (newGame) res.redirect('gameList');
+    const newGame = await gameListData.createGame(releaseDate, name, genre, description, platform, age);
+    if (newGame) res.status(200).json(newBand);
     if (!newGame) throw 'not created';
 
 
   } catch (e) {
-    res.status(400).render('createGame', {title: "createGame", showErrorMessage : e});
+    return res.status(400).json({error: e});
+
   }
 
 });
 
-router.route('/').get(async (req, res, next) =>{
-  // if (!req.session.user) {
-  //   return res.redirect('login');
-  // }
-  // next();
-},
-async (req,res)=>{
+router.route('/').get(async (req,res)=>{
 
-  const user = req.session.user;
-  let userAge = user.age;
+  // const user = req.session.user;
+  // let userAge = user.age;
 
   
 
     try{
         const game = await gameData.getAll();
-        let filteredGame = gameListData.ageFilter(userAge, game);
-        res.render('gameList', {title: "gameList", sortTerm: filteredGame});
+        //let filteredGame = gameListData.ageFilter(userAge, game);
+        res.render('gameList', {title: "gameList", sortTerm: game});
         
     }catch(e){
         return res.status(404).json({error:e})
@@ -97,8 +75,8 @@ async (req,res)=>{
 .post(async (req, res) => {
     //code here for POST
 
-    const user = req.session.user;
-    let userAge = user.age;
+    // const user = req.session.user;
+    // let userAge = user.age;
 
     const genre = req.body.genreInput;
     const platform = req.body.platformInput;
@@ -111,26 +89,26 @@ async (req,res)=>{
 
     try {
         if (genre) {
-            if (genre.trim() == '') throw 'platform should be no empty spaces';
-            if (typeof(genre) != 'string') throw 'sortWay type wrong';
+            if (genre.trim() == '') throw 'genre should be no empty spaces';
+            if (typeof(genre) != 'string') throw 'genre type wrong';
         }
         if (platform) {
             if (platform.trim() == '') throw 'platform should be no empty spaces';
-            if (typeof(platform) != 'string') throw 'sortWay type wrong';
-            if (platform != 'xbox' || platform != 'switch' || platform != 'ps5' || platform != 'pc') throw 'sortWay input wrong';
+            if (typeof(platform) != 'string') throw 'platform type wrong';
+            if (platform != 'xbox' && platform != 'switch' && platform != 'ps5' && platform != 'pc') throw 'platform input wrong';
         }
         if (sortWay && sortBy) {
             if (sortWay.trim() == '') throw 'sortWay should be no empty spaces';
             if (typeof(sortWay) != 'string') throw 'sortWay type wrong';
-            if (sortWay != 'ascending' || sortWay != 'descending') throw 'sortWay input wrong';
+            if (sortWay != 'ascending' && sortWay != 'descending') throw 'sortWay input wrong';
             if (sortWay.trim() == '') throw 'sortWay should be no empty spaces';
             if (typeof(sortWay) != 'string') throw 'sortWay type wrong';
-            if (sortWay != 'ascending' || sortWay != 'descending') throw 'sortWay input wrong';
+            if (sortWay != 'ascending' && sortWay != 'descending') throw 'sortWay input wrong';
         }
 
 
     } catch (e) {
-      res.status(400).render('gameList', {title: "gameList", showErrorMessage : e});
+      return res.status(400).render('gameList', {title: "gameList", showErrorMessage : e});
     }
 
 
@@ -140,38 +118,38 @@ async (req,res)=>{
     try {
         if (genre) {
             let ans = await gameListData.getGameByGerne(genre);
-            let filteredGame = gameListData.ageFilter(userAge, ans);
+           // let filteredGame = gameListData.ageFilter(userAge, ans);
             
-            res.render('gameList', {title: "gameList", sortTerm: filteredGame});
+            res.render('gameList', {title: "gameList", sortTerm: ans});
         
 
       } else if (platform) {
 
         let ans = await gameListData.getGameByPlatform(platform);
-        let filteredGame = gameListData.ageFilter(userAge, ans);
+       // let filteredGame = gameListData.ageFilter(userAge, ans);
             
-        res.render('gameList', {title: "gameList", sortTerm: filteredGame});
+        res.render('gameList', {title: "gameList", sortTerm: ans});
 
       } else if (sortWay && sortBy) {
         if (sortBy == 'date') {
             let ans = await gameListData.sortGameByDate(sortWay);
-            let filteredGame = gameListData.ageFilter(userAge, ans);
+            //let filteredGame = gameListData.ageFilter(userAge, ans);
             
-            res.render('gameList', {title: "gameList", sortTerm: filteredGame});
+            res.render('gameList', {title: "gameList", sortTerm: ans});
 
         } else if (sortBy == 'rate') {
             let ans = await gameListData.sortGameByRate(sortWay);
-            let filteredGame = gameListData.ageFilter(userAge, ans);
+          //  let filteredGame = gameListData.ageFilter(userAge, ans);
             
-            res.render('gameList', {title: "gameList", sortTerm: filteredGame});
+            res.render('gameList', {title: "gameList", sortTerm: ans});
         }
 
       } else {
-        res.status(500).render('error', {title : "error", message: "Internal Server Error" });
+        res.status(500).render('gameList', {title : "error", message: "Internal Server Error" });
       }
 
     } catch (e) {
-      res.render('gameList', {title: "gameList", showErrorMessage : e});
+      return res.render('gameList', {title: "gameList", showErrorMessage : e});
     }
 
   });

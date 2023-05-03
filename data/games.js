@@ -40,6 +40,8 @@ const createGame= async (
     return game;
 }
 
+
+
 const getGame = async (id) => {
     //id=validation.checkId(id);
     const gameCollection=await games();

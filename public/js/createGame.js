@@ -36,23 +36,23 @@
 
       vage (age) {
         if (age.trim() == '') throw 'age should be no empty spaces';
-        if (typeof(age) != 'number') throw 'sortWay type wrong';
+        if (typeof(Number(age)) != 'number') throw 'age type wrong';
       },
 
       vgenre (genre) {
         if (genre.trim() == '') throw 'genre should be no empty spaces';
-        if (typeof(genre) != 'string') throw 'sortWay type wrong';
+        if (typeof(genre) != 'string') throw 'genre type wrong';
 
       },
 
       vdescription (description) {
         if (description.trim() == '') throw 'description should be no empty spaces';
-        if (typeof(description) != 'string') throw 'sortWay type wrong';
+        if (typeof(description) != 'string') throw 'description type wrong';
       },
 
       vplatformInput (platform) {
         if (platform.trim() == '') throw 'platform should be no empty spaces';
-        if (typeof(platform) != 'string') throw 'sortWay type wrong';
+        if (typeof(platform) != 'string') throw 'platform type wrong';
       }
 
 
