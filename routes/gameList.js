@@ -5,6 +5,15 @@ import { gameData } from "../data/index.js";
 
 
 router.route('/creategame').get(async (req, res)=>{
+  try{
+    const userRole =req.session.user.role;
+    if (userRole != 'admin') throw 'cannot access';
+  }
+  catch(e)
+  {
+    res.render('error', {errorMessage : 'you are not admin'});
+    return;
+  }
   res.render('createGame', {title : 'createGame'});
 
 })
@@ -61,12 +70,21 @@ router.route('/').get(async (req,res)=>{
   // const user = req.session.user;
   // let userAge = user.age;
 
-  
+  try{
+    const Age = req.session.user.age;
+  }
+  catch(e)
+  {
+    res.redirect('/login');
+    return;
+  }
+
+  const userAge = req.session.user.age;
 
     try{
         const game = await gameData.getAll();
-        //let filteredGame = gameListData.ageFilter(userAge, game);
-        res.render('gameList', {title: "gameList", sortTerm: game});
+        let filteredGame = gameListData.ageFilter(userAge, game);
+        res.render('gameList', {title: "gameList", sortTerm: filteredGame});
         
     }catch(e){
         return res.status(404).json({error:e})
@@ -75,8 +93,16 @@ router.route('/').get(async (req,res)=>{
 .post(async (req, res) => {
     //code here for POST
 
-    // const user = req.session.user;
-    // let userAge = user.age;
+    try{
+      const Age = req.session.user.age;
+    }
+    catch(e)
+    {
+      res.redirect('/login');
+      return;
+    }
+
+    const userAge = req.session.user.age;
 
     const genre = req.body.genreInput;
     const platform = req.body.platformInput;
@@ -118,30 +144,30 @@ router.route('/').get(async (req,res)=>{
     try {
         if (genre) {
             let ans = await gameListData.getGameByGerne(genre);
-           // let filteredGame = gameListData.ageFilter(userAge, ans);
+           let filteredGame = gameListData.ageFilter(userAge, ans);
             
-            res.render('gameList', {title: "gameList", sortTerm: ans});
+            res.render('gameList', {title: "gameList", sortTerm: filteredGame});
         
 
       } else if (platform) {
 
         let ans = await gameListData.getGameByPlatform(platform);
-       // let filteredGame = gameListData.ageFilter(userAge, ans);
+        let filteredGame = gameListData.ageFilter(userAge, ans);
             
-        res.render('gameList', {title: "gameList", sortTerm: ans});
+        res.render('gameList', {title: "gameList", sortTerm: filteredGame});
 
       } else if (sortWay && sortBy) {
         if (sortBy == 'date') {
             let ans = await gameListData.sortGameByDate(sortWay);
-            //let filteredGame = gameListData.ageFilter(userAge, ans);
+            let filteredGame = gameListData.ageFilter(userAge, ans);
             
-            res.render('gameList', {title: "gameList", sortTerm: ans});
+            res.render('gameList', {title: "gameList", sortTerm: filteredGame});
 
         } else if (sortBy == 'rate') {
             let ans = await gameListData.sortGameByRate(sortWay);
-          //  let filteredGame = gameListData.ageFilter(userAge, ans);
+           let filteredGame = gameListData.ageFilter(userAge, ans);
             
-            res.render('gameList', {title: "gameList", sortTerm: ans});
+            res.render('gameList', {title: "gameList", sortTerm: filteredGame});
         }
 
       } else {
