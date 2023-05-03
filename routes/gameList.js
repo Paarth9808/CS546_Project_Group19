@@ -45,12 +45,12 @@ router.route('/creategame').get(async (req, res)=>{
     if (testName == 'exist') throw 'name exist';
 
     const newGame = await gameListData.createGame(releaseDate, name, genre, description, platform, age);
-    if (newGame) res.status(200).json(newBand);
+    if (newGame) res.render('createGame', {title: "createGame", showErrorMessage : 'Game Added!'});
     if (!newGame) throw 'not created';
 
 
   } catch (e) {
-    return res.status(400).json({error: e});
+    res.render('createGame', {title: "createGame", showErrorMessage : e});
 
   }
 
