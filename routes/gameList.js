@@ -5,15 +5,15 @@ import { gameData } from "../data/index.js";
 
 
 router.route('/creategame').get(async (req, res)=>{
-  // try{
-  //   const userRole =req.session.user.role;
-  //   if (userRole != 'admin') throw 'cannot access';
-  // }
-  // catch(e)
-  // {
-  //   res.render('error', {errorMessage : 'you are not admin'});
-  //   return;
-  // }
+  try{
+    const userRole =req.session.user.role;
+    if (userRole != 'admin') throw 'cannot access';
+  }
+  catch(e)
+  {
+    res.render('error', {errorMessage : 'you are not admin'});
+    return;
+  }
   res.render('createGame', {title : 'createGame'});
 
 })
