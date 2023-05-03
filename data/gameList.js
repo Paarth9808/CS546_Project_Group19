@@ -1,4 +1,5 @@
 import { games } from "../config/mongoCollection.js";
+import { gameData } from "./index.js";
 import { ObjectId } from "mongodb";
 
 const validation = {
@@ -74,9 +75,17 @@ const getGameByGerne = async (genre) => {
 const getGameByPlatform = async (platform) => {
     if (platform.trim() == '') throw 'platform should be no empty spaces';
     if (typeof(platform) != 'string') throw 'sortWay type wrong';
-    if (platform != 'xbox' && platform != 'switch' && platform != 'ps5' && platform != 'pc') throw 'sortWay input wrong';
+    
+    
+
 
     const gameCollection = await games();
+
+    let all = await gameData.getAll()
+
+    if (platform == 'all') return all;
+    if (platform != 'xbox' && platform != 'switch' && platform != 'ps5' && platform != 'pc') throw 'sortWay input wrong';
+
     let res = await gameCollection.find({ systemRequirements : platform }).toArray();
     for (let i = 0; i < res.length; i++) {
         res[i]._id = res[i]._id.toString();
@@ -131,7 +140,7 @@ const ageFilter = (age, games) => {
     if (typeof(age) != 'number') throw 'wrong age format';
     let filtered = [];
     for (let i = 0; i < games.length; i++) {
-        if (age >= games[i].ageRating) filtered.add(games[i]);
+        if (age >= games[i].ageRating) filtered.push(games[i]);
     }
     return filtered;
 }
@@ -181,7 +190,7 @@ const createGame= async (
     
     return ' game created';
 }
-
-//console.log(await createGame('01/01/2022', 'eee', 'action', 'aaa', 'xbox', 18));
+// let test = await sortGameByDate('ascending');
+// console.log(ageFilter(13, test));
 
 export default {getGameByGerne, getGameByPlatform, sortGameByDate, sortGameByRate, getGameByName, ageFilter, createGame};
