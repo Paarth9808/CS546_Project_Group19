@@ -179,6 +179,11 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
 
 document.getElementById("commentForm").addEventListener("submit",function(event){
     event.preventDefault();
+    if(Object.keys(allfiles).length==0&&document.getElementById("text").value.toString().trim()=="")
+    {
+        alert("Your input is empty!");
+        return;
+    }
     if(checked)
     {
         alert("Dear Admin, please complete the reported comments checking first");
