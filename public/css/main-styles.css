@@ -1,5 +1,10 @@
+
+body {
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+}
 .dark-mode {
-  background-color: black;
+  /* gradient background color*/
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%) !important;
   color: white;
 }
 
@@ -140,10 +145,11 @@ ul {
   border-bottom: 3px solid #306b2f;
 }
 
-.profile{
+/* affects userprofile screen, breaks the layout */
+/* .profile{
   width: 80px;  
   height: 95px; 
-}
+} */
 
 .commentcontent{
   display: inline-block;

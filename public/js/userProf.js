@@ -1,13 +1,19 @@
 let editProfileButton = document.getElementById("editProfileButton");
-
-editProfileButton.onclick = () => {
+// do i have to do validation here also?
+editProfileButton.onclick = (e) => {
+  e.preventDefault();
   const name = document.getElementById("name").value;
-  // const email = document.getElementById('email').value
-  const password = document.getElementById("password").value;
+  const opassword = document.getElementById("oldpassword").value;
+  const npassword = document.getElementById("newpassword").value;
   const age = document.getElementById("age").value;
-  if(name === "" || password === "" || age === ""){
-    this.form.submit();
+  if (name === "" || opassword === "" || npassword === "" || age === "") {
+    // if(opassword === npassword) {
+    // } else {
+    //   window.alert('Passwords do not match'); // do whatever
+    // }
+    window.alert("Please fill all the fields"); // do whatever
   } else {
-    console.log(name, password, age);
+    editProfileButton.form.submit();
+    console.log(name, opassword, npassword, age);
   }
 };

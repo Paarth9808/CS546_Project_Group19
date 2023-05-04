@@ -3,10 +3,36 @@ const router = Router();
 import { userData } from "../data/index.js";
 import validation from "../validations/userValidation.js";
 import fs from "fs";
+// import multer from 'multer';
+// const upload = multer({ dest: './public/userimages/' , limits: { fileSize: 10 * 1024 * 1024 }});
 
-router
-  .route("/:id")
-  .get(async (req, res) => {
+router.route("/:id").get(async (req, res) => {
+  try {
+    req.params.id = validation.checkId(req.params.id);
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
+  try {
+    //if not logged in will be redirected to login page ??? how to do
+    const user1 = await userData.getUserById(req.params.id);
+    // const comments = await commentCollection.getMany({userId: req.params.id});
+    return res.render("userProfile", {
+      id: req.params.id,
+      avatar: user1.avatar,
+      username: user1.userName,
+      age: user1.age,
+      email: user1.email,
+      isLoggedInUser: req.session?.user?.userId === req.params.id, // if logged in user is the same as the user being viewed
+      // posts: comments // type array
+    });
+  } catch (e) {
+    return res.status(404).json({ error: e });
+  }
+});
+
+// delete user
+router.route("/:id/delete").get(async (req, res) => {
+  if (req.params.id === req.session?.user?.userId) {
     try {
       req.params.id = validation.checkId(req.params.id);
     } catch (e) {
@@ -15,94 +41,133 @@ router
     try {
       const user1 = await userData.getUserById(req.params.id);
       return res.render("userProfile", {
+        id : req.params.id,
         avatar: user1.avatar,
         username: user1.userName,
         age: user1.age,
-        email: user1.email,
+        email: user1.email
       });
+      await userData.deleteUser(req.params.id);
+      return res.status(200).json({ userId: req.params.id, deleted: true });
     } catch (e) {
       return res.status(404).json({ error: e });
     }
+  } else {
+    return res
+      .status(400)
+      .json({ error: "You are not logged in as this user" });
   }
-  // delete user
-  ).delete(async (req,res)=>{
-    try{
-        req.params.id=validation.checkId(req.params.id);
-    }catch(e){
-        return res.status(400).json({error:e});
-    }
-    try{
-        await userData.deleteUser(req.params.id);
-        return res.status(200).json({'userId':req.params.id,'deleted':true})
-    }catch(e){
-        return res.status(404).json({error:e})
-    }
-  })
-
+});
 // link to edit page
 router
   .route("/:id/edit")
   .get(async (req, res) => {
     try {
       req.params.id = validation.checkId(req.params.id);
+      let currUser = await userData.getUserById(req.params.id);
+      if(req.session?.user?.userId !== req.params.id) throw "You are not logged in as this user";
+      res.render("editProfile", { id: req.params.id, age: currUser.age, username: currUser.userName });
     } catch (e) {
-      return res.status(400).json({ error: e });
+      res.render('error', {errorMessage : JSON.stringify(e)});
     }
-    res.render("editProfile");
   })
   .post(async (req, res) => {
-    console.log("!edit profile");
-    //age coming as a string so giving error have to see (parseInt(age))
-    const { userName: userName, password: password, age: age } = req.body;
-    console.log(req.body);
-    if (userName && password && age) {
+    let { userName: userName, oldpassword, newpassword, age: age } = req.body;
+    let errors = [];
+    try {
+      userName = validation.checkString(userName, "userName");
+    } catch (e) {
+      errors.push(e);
+    }
+    try {
+      oldpassword = validation.checkPass(oldpassword);
+      newpassword = validation.checkPass(newpassword);
+    } catch (e) {
+      errors.push(e);
+    }
+    // try{
+    //   if(oldpassword !== bcrypt(newpassword)) throw "New password is not the same as old password";
+    //   // bcrypt
+    // }catch(e){
+    //   errors.push(e);
+    // }
+    try {
+      age = validation.checkAge(age);
+    } catch (e) {
+      errors.push(e);
+    }
+    if (errors.length > 0) {
+      return res
+        .status(400)
+        .render("editProfile", { errors: errors, hasErrors: true });
+    }
+    if (userName && oldpassword && newpassword && age) {
       try {
-        console.log("!changing profile");
         // check oldPassword is correct else return
+        //is parseInt ok?
+
         let data = await userData.updateUser(
           req.params.id,
           userName,
-          age,
-          password
-        ); // hash password
+          parseInt(age),
+          newpassword,
+          oldpassword
+        );
         if (data) {
-          console.log("!changing profile", data);
-          res.redirect("/" + req.params.id);
+          res.redirect("/user/" + req.params.id);
         }
       } catch (e) {
-        console.log(e);
-        res.status(404).json({ error: e });
+        errors.push(e);
+        res
+          .status(400)
+          .render("editProfile", { errors: errors, hasErrors: true });
       }
     }
   });
 
+  //check reload
 router
   .route("/:id/edit/avatar")
   .get(async (req, res) => {
+    try {
+      req.params.id = validation.checkId(req.params.id);
+      let currUser = await userData.getUserById(req.params.id);
+      if(req.session?.user?.userId !== req.params.id) throw "You are not logged in as this user";
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
     res.render("editAvatar");
   })
   .post(async (req, res) => {
-    console.log("!edit profile");
-    console.log(req.params.id);
-    const { file: file } = req.body;
-    if (req.files && req.files?.file.data)
-      fs.writeFileSync(
-        "./public/userimages/" +
-          req.params.id +
-          "." +
-          req.files.file.name.split(".")[1],
-        req.files.file.data,
-        {
-          flag: "w+",
-        }
-      );
+    let errors = [];
+    try {
+      const { file: file } = req.body;
+      // console.log(file, req.body, req.files);
+      // console.log(req.files.avatar);
+      if (!req.files && !req.files.avatar) throw "No avatar submitted";
+      if (req.files && req.files?.avatar.data) {
+        fs.writeFileSync(
+          "./public/userimages/" +
+            req.params.id +
+            "." +
+            req.files.avatar.name.split(".")[1],
+          req.files.avatar.data,
+          {
+            flag: "w+",
+          }
+        );
+        let data = await userData.updateAvatar(
+          req.params.id,
+          req.params.id + "." + req.files.avatar.name.split(".")[1]
+        );
+      }
+      // console.log("check");
+      res.redirect("/user/" + req.params.id);
+    } catch (e) {
+      errors.push(e);
+      res.status(400).render("editAvatar", { errors: errors, hasErrors: true });
+    }
   });
 
-//role
-router
-  .route("/:id/edit/role")
-  .get(async (req, res) =>{
-    res.render("") // make page for this
-  })
 
 export default router;
