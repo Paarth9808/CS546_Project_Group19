@@ -67,16 +67,16 @@ let exportedMethods = {
     return { deleted: true };
   },
 
-  async updateAvatar(id, avatar1) {
-    id = validation.checkId(id);
+  async updateAvatar(idp, avatar1) {
+    let id = validation.checkId(idp);
     const userCollection = await user();
-    await this.getUserById(id);
+    let res = await this.getUserById(id);
 
     const updateUserInfo = await userCollection.updateOne(
       { _id: new ObjectId(id) },
       { $set: { avatar: avatar1 } }
     );
-    if (updateUserInfo.modifiedCount === 0) throw "Error: Update failed";
+    if (updateUserInfo.matchedCount === 0) throw "Error: Update failed";
 
     return { updated: true };
   },
