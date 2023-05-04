@@ -99,6 +99,15 @@ router
             res.status(400).render('login',{title:'Login page',errors:errors,hasErrors:true})
         }
     })
+    
+    router.route('/').get(async (req,res)=>{
+        if (req.session.user) {
+            return res.redirect('/gameList');
+        }
+        else{
+            return res.render('mainpage');
+        }
+    })
 
     router.route('/logout').get(async (req, res) => {
         //code here for GET

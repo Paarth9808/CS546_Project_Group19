@@ -3,6 +3,20 @@ $('#lastcomment').hide();
 
 var allfiles={};
 
+function adderrorsolution(element)
+{
+    const images = element.querySelectorAll('.profile');
+    for(var i=0;i<images.length;i++)
+    {
+        const img=images[i]
+        img.addEventListener('error', function() {
+        img.src = '/public/userimages/default.jpg';
+        });
+    }
+}
+
+adderrorsolution(document)
+
 function addlistener(element)
 {
     const attitudes=element.querySelectorAll(".attitude");
@@ -20,6 +34,14 @@ function addlistener(element)
             selection[j].addEventListener("click",function(event){
                 console.log(temp);
                 const id=temp.getAttribute("id");
+                const att=temp.getAttribute("class");
+                if(att=="reportlabel")
+                {
+                    var flag = confirm("Are you sure to report this comment?");
+                    if(!flag) {
+                        return;
+                    }
+                }
                 $.ajax({
                     url:'/comment/sendattitude/',
                     method:'Post',
@@ -40,6 +62,10 @@ function addlistener(element)
                         else if(response.data=="nologin")
                         {
                             alert("You didn't login");
+                        }
+                        else if(response.data==-1)
+                        {
+                            alert("You have reported this comment, don't do again.");
                         }
                         else
                         {
@@ -87,6 +113,7 @@ if(reportbtn)
                             newli.setAttribute('class','listnode');
                             newli.innerHTML=response[i];
                             addlistener(newli);
+                            adderrorsolution(newli);
                             document.getElementById("commentslist").append(newli);
                         }
                     }
@@ -139,6 +166,7 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
                     newli.setAttribute('class','listnode');
                     newli.innerHTML=response[i];
                     addlistener(newli);
+                    adderrorsolution(newli);
                     document.getElementById("commentslist").append(newli);
                 }
             }
@@ -193,6 +221,7 @@ document.getElementById("commentForm").addEventListener("submit",function(event)
             newli.setAttribute('class','listnode');
             newli.innerHTML=response;
             addlistener(newli);
+            adderrorsolution(newli);
             document.getElementById("commentslist").insertAdjacentElement("afterbegin",newli);
         }
     },

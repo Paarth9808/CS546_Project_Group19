@@ -15,11 +15,11 @@
     </div>
     <div class="commentcontent">
         <div class="attitude">
-            <div class="likelabel" id={{concat comment._id "-like"}}>like {{comment.like.length}}</div>
-            <div class="dislikelabel" id={{concat comment._id "-dislike"}}>dislike {{comment.dislike.length}}</div>
-            <div class="reportlabel" id={{concat comment._id "-report"}}>report {{comment.report.length}}</div>
+            <button class="likelabel" id={{concat comment._id "-like"}}>like {{comment.like.length}}</button>
+            <button class="dislikelabel" id={{concat comment._id "-dislike"}}>dislike {{comment.dislike.length}}</button>
+            <button class="reportlabel" id={{concat comment._id "-report"}}>report {{comment.report.length}}</button>
             {{#if comment.deletable}}
-                <div id={{concat comment._id "-delete"}}>delete</div>
+                <button id={{concat comment._id "-delete"}}>delete</button>
             {{/if}}
         </div>
         <div class="comment_text" >{{comment.content}}</div>

@@ -24,6 +24,7 @@ router.route('/:id').get(async (req,res)=>{
         var isAdmin=false;
         if(req.session.user)
         {
+            console.log(req.session.user);
             isAdmin=(req.session.user.userRole=="admin")
             for(var i=0;i<tempcomments.length;i++)
             {
