@@ -1,7 +1,9 @@
 import { comment } from "../config/mongoCollection.js";
 import { user } from "../config/mongoCollection.js";
 import { games } from "../config/mongoCollection.js";
-import { ObjectId } from "mongodb"
+import { ObjectId } from "mongodb";
+import fs from 'fs';
+import path from 'path';
 import { checkuserID,checkgameID,checkcommentID,checkcontent,checkphoto } from "../validations/commentValidation.js";
 
 
@@ -24,6 +26,8 @@ import { checkuserID,checkgameID,checkcommentID,checkcontent,checkphoto } from "
 <div class="comment_pic">
     {{#if comment.photo.length}}
         {{#each comment.photo}} */}
+
+
 
 
 const createComment=async(
@@ -102,15 +106,29 @@ const deleteComment=async(
     const gameCollection=await games();
     const userCollection=await user();
     const commentCollection=await comment();
-    var gameupdatedInfo=await gameCollection.findOneAndUpdate({commentIds:commentid},{$pull:{commentIds:commentid}},{returnDocument: 'after'});
-    var userupdatedInfo=await userCollection.findOneAndUpdate({reviewedIds:commentid},{$pull:{reviewedIds:commentid}},{returnDocument: 'after'});
     var commentupdateInfo=await commentCollection.findOneAndDelete({_id:new ObjectId(commentid)});
+    if(commentupdateInfo.lastErrorObject.n==0)
+        throw "could not delete this comment in comment db";
+    const pics=commentupdateInfo.value.photo;
+    for(var i=0;i<pics.length;i++)
+    {
+        const dir=path.resolve();
+        try{
+        fs.unlinkSync(path.join(dir, pics[i]));
+        }catch(e)
+        {
+            console.log("We can not find the target picture, maybe you have deleted it from the disk");
+        }
+    }
+    const gameID=commentupdateInfo.value.gameID;
+    const userID=commentupdateInfo.value.userID;
+    console.log(gameID);
+    var gameupdatedInfo=await gameCollection.findOneAndUpdate({_id:new ObjectId(gameID)},{$pull:{commentIds:commentid}},{returnDocument: 'after'});
+    var userupdatedInfo=await userCollection.findOneAndUpdate({_id:new ObjectId(userID)},{$pull:{reviewedIds:commentid}},{returnDocument: 'after'});
     if(gameupdatedInfo.lastErrorObject.n==0)
         throw "could not delete this comment in games db";
     if(userupdatedInfo.lastErrorObject.n==0)
         throw "could not delete this review in user db";
-    if(commentupdateInfo.lastErrorObject.n==0)
-        throw "could not delete this comment in comment db";
 }
 
 const updateComment=async(
