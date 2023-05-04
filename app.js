@@ -9,12 +9,25 @@ import Handlebars from 'handlebars';
 Handlebars.registerHelper('concat', function(str1,str2) {
   return str1+str2;
 });
+
+Handlebars.registerHelper('ifEqual', function(str1, str2){
+  return str1 === str2;
+} )
+
+Handlebars.registerHelper('or', function(boo1, bool2){
+  if(boo1 || bool2){
+    return true
+  }else{
+    return false
+  }
+})
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const staticDir = express.static(__dirname + '/public');
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {
   if (req.body && req.body._method) {
     req.method = req.body._method;
+    console.log(req.body._method)
     delete req.body._method;
   }
   next();

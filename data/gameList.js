@@ -58,4 +58,25 @@ const sortGameByDate = async (sortWay) => {
     return res;
 }
 
-export default {getGameByGerne, getGameByPlatform, sortGameByDate, sortGameByRate};
+const getGameByName = async (name) => {
+    if (name.trim() == '') throw 'no name exist';
+    if (typeof(name) != 'string') throw 'name type wrong';
+    const gameCollection = await games();
+    let res = await gameCollection.find({ name : name }).toArray();
+    if (res.length > 0) return 'exist';
+    else return 'unexist';
+}
+
+const ageFilter = (age, games) => {
+    if (!age) throw 'none age';
+    if (!games) throw 'none games';
+    if (typeof(age) != 'number') throw 'wrong age format';
+    let filtered = [];
+    for (let i = 0; i < games.length; i++) {
+        if (age >= games[i].ageRating) filtered.add(games[i]);
+    }
+    return filtered;
+}
+
+
+export default {getGameByGerne, getGameByPlatform, sortGameByDate, sortGameByRate, getGameByName, ageFilter};

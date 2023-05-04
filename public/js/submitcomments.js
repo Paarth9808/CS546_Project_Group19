@@ -14,6 +14,9 @@ function addlistener(element)
         for(var j=0;j<selection.length;j++)
         {
             const temp=selection[j];
+            const like=selection[0];
+            const dislike=selection[1];
+            const report=selection[2];
             selection[j].addEventListener("click",function(event){
                 console.log(temp);
                 const id=temp.getAttribute("id");
@@ -24,16 +27,19 @@ function addlistener(element)
                     success: function(response) {
                         //console.log(form);
                         //console.log(response);
-                        if(response.data!=undefined&&response.data!="deleted"&&response.data!=-1)
+                        if(response.data!=undefined&&response.data.like!=undefined&&response.data.dislike!=undefined&&response.data.report!=undefined)
                         {
-                            var innerdata=temp.innerHTML;
-                            var innerdatas=innerdata.split(" ");
-                            innerdata=innerdatas[0]+" "+response.data;
-                            temp.innerHTML=innerdata;
+                            like.innerHTML="like "+response.data.like;
+                            dislike.innerHTML="dislike "+response.data.dislike;
+                            report.innerHTML="report "+response.data.report;
                         }
                         else if(response.data=="deleted")
                         {
-                            attitude.parentNode.parentNode.style.display="none";
+                            attitude.parentNode.parentNode.parentNode.style.display="none";
+                        }
+                        else if(response.data=="nologin")
+                        {
+                            alert("You didn't login");
                         }
                         else
                         {
@@ -51,6 +57,55 @@ function addlistener(element)
 
 addlistener(document);
 
+const reportbtn=document.getElementById("checkreported");
+var checked=false;
+if(reportbtn)
+{
+    reportbtn.addEventListener("click",function(event){
+        const gameid=document.getElementById("loadingbtn").getAttribute("class");
+        $('#loadingbtn').hide()
+        if(!checked)
+        {
+            reportbtn.innerHTML="Complete";
+            checked=true;
+            document.getElementById("commentslist").innerHTML="";
+            $.ajax({
+                url:'/comment/getreported/'+gameid,
+                //url:'/comment/getmore/'+commentsnum,
+                method:'Get',
+                success: function(response) {
+                    console.log(response);
+                    if(response.length==0)
+                    {
+                        $('#lastcomment').show();
+                    }
+                    else
+                    {
+                        for(var i=0;i<response.length;i++)
+                        {
+                            const newli=document.createElement('li');
+                            newli.setAttribute('class','listnode');
+                            newli.innerHTML=response[i];
+                            addlistener(newli);
+                            document.getElementById("commentslist").append(newli);
+                        }
+                    }
+                  },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                  }
+            })
+        }
+        else
+        {
+            reportbtn.innerHTML="Check reported comments";
+            checked=false;
+            location.reload();
+        }
+    })
+}
+
+
 document.getElementById("loadingbtn").addEventListener("click",function(event){
     const length=document.getElementById("commentslist").childNodes.length;
     const gameid=document.getElementById("loadingbtn").getAttribute("class");
@@ -67,7 +122,12 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
         method:'Get',
         success: function(response) {
             console.log(response);
-            if(response.length==0)
+            if(response=="nologin")
+            {
+                alert("You didn't login");
+                return;
+            }
+            else if(response.length==0)
             {
                 $('#lastcomment').show();
             }
@@ -91,6 +151,11 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
 
 document.getElementById("commentForm").addEventListener("submit",function(event){
     event.preventDefault();
+    if(checked)
+    {
+        alert("Dear Admin, please complete the reported comments checking first");
+        return;
+    }
     const gameid=document.getElementById("commentForm").getAttribute("class");
     var form = new FormData(this);
     //var obj = document.getElementById("select-img");
@@ -114,16 +179,22 @@ document.getElementById("commentForm").addEventListener("submit",function(event)
     contentType: false,
     data: form,
     success: function(response) {
-        console.log(form);
-        console.log(response);
-        const thisform=document.getElementById("commentForm");
-        thisform.reset();
-        document.getElementById('pics').innerHTML='';
-        const newli=document.createElement('li');
-        newli.setAttribute('class','listnode');
-        newli.innerHTML=response;
-        addlistener(newli);
-        document.getElementById("commentslist").insertAdjacentElement("afterbegin",newli);
+        if(response=="nologin")
+        {
+            alert("You didn't login");
+        }
+        else
+        {
+            console.log(response);
+            const thisform=document.getElementById("commentForm");
+            thisform.reset();
+            document.getElementById('pics').innerHTML='';
+            const newli=document.createElement('li');
+            newli.setAttribute('class','listnode');
+            newli.innerHTML=response;
+            addlistener(newli);
+            document.getElementById("commentslist").insertAdjacentElement("afterbegin",newli);
+        }
     },
     error: function(xhr, status, error) {
         console.log('Error: ' + error.message);

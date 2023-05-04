@@ -28,9 +28,9 @@ const createGame= async (
     name=validation.checkString(name,'Name')
     genre=validation.checkStringArray(genre,'Genre')
     description=validation.checkString(description,'Description')
-    systemRequirements=validation.checkStringArray(systemRequirements,'System Requirements')
-    ageRating=validation.checkString(ageRating,'Age rating')
-    ageRating=validation.checkAgeRating(ageRating,'Age rating')
+    systemRequirements=validation.checkString(systemRequirements,'Name')
+    
+    if (ageRating != 18 && ageRating != 15 && ageRating != 12) throw 'ageRating format wrong';
     const gameCollection= await games();
     const insertInfo=await gameCollection.insertOne(newGame);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
@@ -58,6 +58,23 @@ const getAll = async () => {
     return allGames
 };
 
+const getGameByName= async (name)=>{
+  const gameCollection=await games();
+  const game= await gameCollection.findOne({name: name})
+  if(game === null){ throw `Game not found` }
+  game._id=game._id.toString();
+  return game;
+}
+
+const getAllGameNames= async ()=>{
+  const gameCollection=await games();
+  let allGames=await gameCollection.find({}).toArray();
+  allGames=allGames.map((element)=>{element._id=element._id.toString();
+  return element.name
+  })
+  return allGames
+}
+
 const updateGame=async(
   id,
   gameInfo
@@ -69,7 +86,7 @@ const updateGame=async(
     if(gameInfo.description){gameInfo.description=validation.checkString(gameInfo.description,'Description')}
     if(gameInfo.systemRequirements){gameInfo.systemRequirements=validation.checkStringArray(gameInfo.systemRequirements,'System Requirements')}
     if(gameInfo.ageRating){
-      gameInfo.ageRating=validation.checkString(gameInfo.ageRating,'Age rating')
+      gameInfo.ageRating=validation.checkNumber(gameInfo.ageRating,'Age rating')
       gameInfo.ageRating=validation.checkAgeRating(gameInfo.ageRating,'Age rating')
     }
     // const updateGame={
@@ -111,4 +128,4 @@ const removeGame=async(id)=>{
 
 }
 
-export default {createGame,getGame,getAll,updateGame,removeGame}
+export default {createGame,getGame,getAll,updateGame,removeGame,getGameByName,getAllGameNames}

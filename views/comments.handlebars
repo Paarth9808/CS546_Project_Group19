@@ -14,6 +14,9 @@
     <div class="pics" id="pics"></div>
 </div>
 <div>
+    {{#if isAdmin}}
+        <button id="checkreported">Check reported comments</button>
+    {{/if}}
     <ul id="commentslist">
         {{#each commentlist}}
             <li class="listnode">

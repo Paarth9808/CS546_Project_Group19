@@ -1,3 +1,4 @@
+<h2>Add review:</h2>
 <form action="" method="POST" class="add-review-form">
     <label for="review">Review</label>
     <input id="review" type="text" placeholder="Type your review" name="reviewInput">
@@ -6,6 +7,7 @@
     <button type="submit">Add review</button>
 </form>
 {{#if isAdded}}<p>{{status}}</p>{{/if}}
+{{#if isDeleted}}<p>{{status}}</p>{{/if}}
 {{#if hasErrors}}
   <ul class="error-list">
     {{#each errors}}
@@ -16,12 +18,25 @@
   </ul>
 {{/if}}
 
-
 <h1>Reviews for {{game.name}}: </h1>
 {{#each reviews}}
     <div>
         <dl>Username: {{this.userName}}</dl>
         <dl>Review: {{this.review}}</dl>
         <dl>Rating: {{this.userRating}}</dl>
+        {{#if (ifEqual this.userName  ../currentUser.userName) }}
+            {{!-- <a href="edit">Edit review</a> --}}
+            <form action="edit" method="GET" class="update-button">
+                <input type="submit" value="Edit">
+            </form>
+        {{/if}}
+        {{#if (or (ifEqual this.userName  ../currentUser.userName) (ifEqual ../currentUser.role "admin"))}}
+            {{!-- <a href="delete">Delete review</a> --}}
+            <form action="delete" method="POST" class="update-button">
+                <input type="hidden" name="_method" value="DELETE" >
+                <input type="submit" value="Delete">
+            </form>
+        {{/if}}
     </div>
 {{/each}}
+

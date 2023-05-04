@@ -51,7 +51,7 @@
 
 
 
-        <div id="errorTextR" class="hidden">
+        <div id="errorText" class="hidden">
 
        </div>
 
@@ -65,8 +65,10 @@
         <ol>
             {{#each sortTerm}}
             <li>
-                <a href="/gameDetails/{{id}}">{{name}}</a>
+                <a href="/games/{{id}}">{{name}}</a>
             </li>
             {{/each}}
 
         </ol>
+
+<script src="/public/js/gameList.js"></script>
