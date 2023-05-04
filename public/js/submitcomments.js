@@ -3,6 +3,20 @@ $('#lastcomment').hide();
 
 var allfiles={};
 
+function adderrorsolution(element)
+{
+    const images = element.querySelectorAll('.profile');
+    for(var i=0;i<images.length;i++)
+    {
+        const img=images[i]
+        img.addEventListener('error', function() {
+        img.src = '/public/userimages/default.jpg';
+        });
+    }
+}
+
+adderrorsolution(document)
+
 function addlistener(element)
 {
     const attitudes=element.querySelectorAll(".attitude");
@@ -87,6 +101,7 @@ if(reportbtn)
                             newli.setAttribute('class','listnode');
                             newli.innerHTML=response[i];
                             addlistener(newli);
+                            adderrorsolution(newli);
                             document.getElementById("commentslist").append(newli);
                         }
                     }
@@ -139,6 +154,7 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
                     newli.setAttribute('class','listnode');
                     newli.innerHTML=response[i];
                     addlistener(newli);
+                    adderrorsolution(newli);
                     document.getElementById("commentslist").append(newli);
                 }
             }
@@ -193,6 +209,7 @@ document.getElementById("commentForm").addEventListener("submit",function(event)
             newli.setAttribute('class','listnode');
             newli.innerHTML=response;
             addlistener(newli);
+            adderrorsolution(newli);
             document.getElementById("commentslist").insertAdjacentElement("afterbegin",newli);
         }
     },

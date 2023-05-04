@@ -3,6 +3,14 @@
   color: white;
 }
 
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
 #uploadimage{ 
   width: 120px;  
   height: 30px;  
@@ -85,7 +93,9 @@
   top: -10px; 
 }
 
-.submitbtn{
+
+
+.submitbtn,#loadingbtn,#checkreported{
   border: none;
   background-color: #44b549; 
   width: 120px;  
@@ -106,6 +116,7 @@
 .likelabel,.dislikelabel,.reportlabel{
   width: 80px;  
   height: 20px;  
+  cursor: pointer; 
 }
 
 .comment,.attitude{
@@ -115,15 +126,34 @@
   align-items: flex-start;
 }
 
+.comment{
+  border-top: 3px solid rgb(191, 244, 0);
+  margin-top: 20px;
+  width: 800px;  
+  background-color: #c4f9d5;
+}
+
 .commentinfo{
   display: inline-block;
   width: 120px;  
   height: 120px; 
-  border: 3px solid #797979;
+  border-bottom: 3px solid #306b2f;
+}
+
+.profile{
+  width: 80px;  
+  height: 95px; 
 }
 
 .commentcontent{
   display: inline-block;
+  margin-left: 20px;
+}
+
+.commentimg{
+  max-width: 500px;
+  height: auto;
+  display: block;
 }
 
 .attitude{
