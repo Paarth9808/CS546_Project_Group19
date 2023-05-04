@@ -163,6 +163,8 @@ router.route("/sendcomment").post(async (req, res)=> {
         console.log(req.session.user);
         console.log(gameid);
         try{
+          if(text.trim()==0&&pics.length==0)
+            throw "empty content";
           const newcomment=await createComment(req.session.user.userId,gameid,text,pics);
           //console.log(newcomment);
           newcomment.deletable=true;
