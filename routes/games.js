@@ -6,6 +6,7 @@ import userMethods from "../data/user.js";
 import validation from '../validations/gameValidation.js'
 import ratingValidation from '../validations/individualRatingValidation.js'
 import ratingData from '../data/individualRatings.js'
+import xss from 'xss';
 
 router.route('/:id').get(async (req,res)=>{
     try{
@@ -87,6 +88,100 @@ router.route('/:id').get(async (req,res)=>{
 
 router.route('/:id/edit').get(async (req,res)=>{
     return res.render('editGame',{Titlename:'Edit game'})
+}).patch(async (req,res)=>{
+    let errors=[];
+    let isAdded=false;
+    const updatedData=req.body;
+    if(!updatedData|| Object.keys(updatedData).length === 0){
+        return res.status(400).json({error:'There are no fields in the request body'})
+    }
+    try{
+        req.params.id = validation.checkId(req.params.id);
+    }catch(e){
+        return res.status(400).render('error',{Titlename:'Error page',errorMessage:e})
+    }
+    try{
+        if(updatedData.releaseDate){
+            updatedData.releaseDate=xss(updatedData.releaseDate)
+            updatedData.releaseDate=validation.checkDate(updatedData.releaseDate);
+        }
+    }catch(e){
+        errors.push(e);
+    }
+    try{
+        if(updatedData.name){
+            updatedData.name=xss(updatedData.name);
+            updatedData.name=validation.checkString(updatedData.name,'Name')
+        }
+    }catch(e){
+        errors.push(e);
+    }
+    try{
+        if(updatedData.genre){
+            updatedData.genre=xss(updatedData.genre)
+            updatedData.genre=validation.checkStringArray(updatedData.genre,'Genre')
+        }
+    }catch(e){
+        errors.push(e);
+    }
+    try{
+        if(updatedData.description){
+            updatedData.description=xss(updatedData.description)
+            updatedData.description=validation.checkString(updatedData.description,'Description')}
+    }catch(e){
+        errors.push(e);
+    }
+    try{
+        updatedData.systemRequirements=xss(updatedData.systemRequirements);
+        if(updatedData.systemRequirements){updatedData.systemRequirements=validation.checkStringArray(updatedData.systemRequirements,'System Requirements')}
+    }catch(e){
+        errors.push(e);
+    }
+    try{
+        if(updatedData.ageRating){
+            updatedData.ageRating=xss(updatedData.ageRating)
+            updatedData.ageRating=parseInt(updatedData.ageRating)
+            updatedData.ageRating=validation.checkNumber(updatedData.ageRating,'Age rating')
+            updatedData.ageRating=validation.checkAgeRating(updatedData.ageRating,'Age rating')
+        }
+    }catch(e){
+        errors.push(e);
+    }
+    if(errors.length>0){
+        return res.status(400).render('editGame',{Titlename:'Edit game',errors,hasErrors:true})
+    }
+    try{
+        const updatedGame=await gameData.updateGame(req.params.id,updatedData)
+        if(updatedGame){return res.redirect(`/games/${req.params.id}`)}
+    }catch(e){
+        errors.push(e);
+        return res.status(400).render('editGame',{Titlename:'Edit game',errors,hasErrors:true})
+    }
+
+
+
+
+    // try{
+    //     req.params.id = validation.checkId(req.params.id);
+    //     if(updatedData.releaseDate){updatedData.releaseDate=validation.checkDate(updatedData.releaseDate)}
+    //     if(updatedData.name){updatedData.name=validation.checkString(updatedData.name,'Name')}
+    //     if(updatedData.genre){updatedData.genre=validation.checkStringArray(updatedData.genre,'Genre')}
+    //     if(updatedData.description){updatedData.description=validation.checkString(updatedData.description,'Description')}
+    //     if(updatedData.systemRequirements){updatedData.systemRequirements=validation.checkStringArray(updatedData.systemRequirements,'System Requirements')}
+    //     if(updatedData.ageRating){
+    //         updatedData.ageRating=validation.checkString(updatedData.ageRating,'Age rating')
+    //         updatedData.ageRating=validation.checkAgeRating(updatedData.ageRating,'Age rating')
+    //     }
+    // }catch(e){
+    //     return res.status(400).json({error: e});
+    // }
+    // try{
+    //     //const {releaseDate,name,genre,description,systemRequirements,ageRating}=updatedData;
+    //     const updatedGame=await gameData.updateGame(req.params.id,updatedData)
+    //     res.status(200).json(updatedGame);
+    // }catch(e){
+    //     res.status(400).json({error: e});
+    // }
 })
 
 router.route('/reviews/:id').get(async (req,res)=>{

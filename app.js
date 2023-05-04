@@ -27,6 +27,7 @@ const staticDir = express.static(__dirname + '/public');
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {
   if (req.body && req.body._method) {
     req.method = req.body._method;
+    console.log(req.body._method)
     delete req.body._method;
   }
   next();

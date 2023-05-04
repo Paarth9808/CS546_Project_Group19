@@ -86,7 +86,7 @@ const updateGame=async(
     if(gameInfo.description){gameInfo.description=validation.checkString(gameInfo.description,'Description')}
     if(gameInfo.systemRequirements){gameInfo.systemRequirements=validation.checkStringArray(gameInfo.systemRequirements,'System Requirements')}
     if(gameInfo.ageRating){
-      gameInfo.ageRating=validation.checkString(gameInfo.ageRating,'Age rating')
+      gameInfo.ageRating=validation.checkNumber(gameInfo.ageRating,'Age rating')
       gameInfo.ageRating=validation.checkAgeRating(gameInfo.ageRating,'Age rating')
     }
     // const updateGame={

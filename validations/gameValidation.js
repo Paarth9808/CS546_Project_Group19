@@ -56,10 +56,8 @@ const exportedMethods={
     },
     checkAgeRating(rating,ratingName){
         if(!rating){throw `${ratingName} not provided`}
-        let ratingArray=['Everyone','10+','Teen','17+','18+']
-        if(!ratingArray.includes(rating)){
-            throw `Error: Invalid age rating(Valid ratings: 'Everyone','10+','Teen','17+','18+')`
-        }
+        if(rating<13){throw `${ratingName} should be 13 or above`}
+        if(rating>125){throw `${ratingName} should be 125 or below`}
         return rating;
     },
     checkDate(dateVal){

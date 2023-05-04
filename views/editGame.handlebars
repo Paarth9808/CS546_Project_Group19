@@ -1,7 +1,6 @@
 <h1>{{Titlename}}</h1>
 
-<form action="" method="POST" id="update-game-form" class="update-game-form">
-    <input type="hidden" name="_method" value="DELETE" >
+<form action="edit" method="POST" id="update-game-form" class="update-game-form">
     <label for="name">Name </label>
     <input type="text" name="name" id="name" placeholder="Eg: Call of Duty">
 
@@ -14,7 +13,7 @@
         <option value= 12>12+</option>
     </select>
     <label for="genre">Genre</label>
-    <input type="text" name="genre" id="genre">    
+    <input type="text" name="genre[]" id="genre">    
     <label for="description">Description</label>
     <input type="text" name="description" id="description">
 
@@ -22,3 +21,13 @@
     <input type="submit" value="Update">    
 
 </form>
+{{#if isAdded}}<p>{{status}}</p>{{/if}}
+{{#if hasErrors}}
+  <ul class="error-list">
+    {{#each errors}}
+    <li>
+      {{this}}
+    </li>
+    {{/each}}
+  </ul>
+{{/if}}
