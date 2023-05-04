@@ -24,11 +24,12 @@ router.route('/:id').get(async (req,res)=>{
         var isAdmin=false;
         if(req.session.user)
         {
-            isAdmin=(req.session.user.userRole=="admin")
+            console.log(req.session.user);
+            isAdmin=(req.session.user.role=="admin")
             for(var i=0;i<tempcomments.length;i++)
             {
                 console.log(req.session.user);
-                if(tempcomments[i].userID==req.session.user.userId||req.session.user.userRole=="admin")
+                if(tempcomments[i].userID==req.session.user.userId||req.session.user.role=="admin")
                     tempcomments[i].deletable=true;
                 else
                     tempcomments[i].deletable=false;

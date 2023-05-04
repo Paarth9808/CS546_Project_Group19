@@ -1,11 +1,12 @@
     <h1>Game List</h1>
 
-    <a href="/createGame/">create a new game</a>
+    <a href="/gamelist/creategame/">create a new game</a>
 
     <form method="POST" id="getGameForm">
 
     <label for="platformInput">platform</label>
     <select name= "platformInput" id="platformInput">
+        <option value="all">all</option>
         <option value="xbox">xbox</option>
         <option value="switch">switch</option>
         <option value="ps5">ps5</option>
@@ -13,22 +14,22 @@
 
     </select>
 
-    <button type="submit">get</button>
+    <button type="submit">get games by</button>
 
 
     </form>
 
 
     <form id="gerneForm" method="post">
-            <label for="genreInput">genre Input:</label>
+            <label for="genreInput">genre you want to get:</label>
             <textarea name="genreInput" id="genreInput"></textarea>
-            <button type="submit">submit</button>
+            <button type="submit">get games by genre</button>
 
     </form>
 
 
     <form id="sortForm" method="post">
-        <label for="sortWayInput">order</label>
+        <label for="sortWayInput">select order</label>
         <select name= "sortWayInput" id="sortWayInput">
             <option value="-">--</option>
             <option value="ascending">ascending</option>
@@ -36,7 +37,7 @@
 
         </select>
 
-        <label for="sortByInput">order</label>
+        <label for="sortByInput">select sort way</label>
         <select name= "sortByInput" id="sortByInput">
             <option value="-">--</option>
             <option value="rate">Rate</option>
@@ -60,12 +61,11 @@
     {{/if}}
 
 
-    <h2>{{sortTerm}}</h2>
 
         <ol>
             {{#each sortTerm}}
             <li>
-                <a href="/games/{{id}}">{{name}}</a>
+                <a href="/games/{{_id}}">{{name}}</a>
             </li>
             {{/each}}
 

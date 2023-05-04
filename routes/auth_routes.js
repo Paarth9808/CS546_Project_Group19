@@ -92,11 +92,20 @@ router
             const {emailAddressInput,passwordInput}=user;
             let userDetails= await authFunction.checkUser(emailAddressInput,passwordInput);
             req.session.user=userDetails;
-            if(userDetails){res.redirect('games/644a2141c7e2da4817a80bcf')}
+            if(userDetails){res.redirect('games/644c0f3145435cdf250e285c')}
 
         }catch(e){
             errors.push(e);
             res.status(400).render('login',{title:'Login page',errors:errors,hasErrors:true})
+        }
+    })
+    
+    router.route('/').get(async (req,res)=>{
+        if (req.session.user) {
+            return res.redirect('/gameList');
+        }
+        else{
+            return res.render('mainpage');
         }
     })
 

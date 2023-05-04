@@ -14,10 +14,10 @@
       vreleaseDate (releaseDate) {
         if (releaseDate.trim() == '') throw 'releaseDate should be no empty spaces';
         if (typeof(releaseDate) != 'string') throw 'sortWay type wrong';
-        let currentDate=new Date();
-        let finalYear=currentDate.getFullYear()
-        currentDate=currentDate.trim();
-        let dateElements=currentDate.split('/')
+        let currentDate = new Date();
+        let finalYear = currentDate.getFullYear()
+        releaseDate = releaseDate.trim();
+        let dateElements = releaseDate.split('/')
         if(dateElements.length!=3){throw `Error: Year should be in MM/DD/YYYY format`}
         let month=dateElements[0],day=dateElements[1],year=dateElements[2]
         if(month.length!=2||day.length!=2||year.length!=4){throw `Error: Year should be in MM/DD/YYYY format`}
@@ -31,28 +31,28 @@
         if([4, 6, 9, 11].includes(Number(month))&&Number(day)>30){
             throw `Error: Invalid date`
         }
-        return currentDate;
+        return releaseDate;
       },
 
       vage (age) {
         if (age.trim() == '') throw 'age should be no empty spaces';
-        if (typeof(age) != 'number') throw 'sortWay type wrong';
+        if (typeof(Number(age)) != 'number') throw 'age type wrong';
       },
 
       vgenre (genre) {
         if (genre.trim() == '') throw 'genre should be no empty spaces';
-        if (typeof(genre) != 'string') throw 'sortWay type wrong';
+        if (typeof(genre) != 'string') throw 'genre type wrong';
 
       },
 
       vdescription (description) {
         if (description.trim() == '') throw 'description should be no empty spaces';
-        if (typeof(description) != 'string') throw 'sortWay type wrong';
+        if (typeof(description) != 'string') throw 'description type wrong';
       },
 
       vplatformInput (platform) {
         if (platform.trim() == '') throw 'platform should be no empty spaces';
-        if (typeof(platform) != 'string') throw 'sortWay type wrong';
+        if (typeof(platform) != 'string') throw 'platform type wrong';
       }
 
 

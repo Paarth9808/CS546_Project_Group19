@@ -27,7 +27,7 @@ router.route('/getmore/:gameid/:index').get(async (req,res)=>{
     const htmllist=[];
     for(var i=0;i<newcomment.length;i++)
     {
-      if(req.session.user.userId==newcomment[i].userID||req.session.user.userRole=="admin")
+      if(req.session.user.userId==newcomment[i].userID||req.session.user.role=="admin")
         newcomment[i].deletable=true;
       else
         newcomment[i].deletable=false;

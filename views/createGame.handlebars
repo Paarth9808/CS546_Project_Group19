@@ -1,6 +1,8 @@
+<h1>Add A New Game</h1>
 
+<a href="/gamelist/">return to game list</a>
 
-<form action="/createGame" method="POST" id="createGame-form" class="createGame-form">
+<form method="POST" id="createGame-form" class="createGame-form">
 
 <label for="gameNameInput">game name </label>
 <input type="text" name="gameNameInput" id="gameNameInput">
@@ -11,9 +13,9 @@
 <br>
 <label for="ageInput">recommend age</label>
         <select name= "ageInput" id="ageInput">
-            <option value= 18 >18+</option>
-            <option value= 15>15+</option>
-            <option value= 12>12+</option>
+            <option value= '18' >18+</option>
+            <option value= '15'>15+</option>
+            <option value= '12'>12+</option>
         </select>
 <br>
 <label for="genreInput">genre</label>
@@ -23,7 +25,12 @@
 <input type="text" name="descriptionInput" id="descriptionInput">
 <br>
 <label for="platformInput">platform</label>
-<input type="text" name="platformInput" id="platformInput">
+        <select name= "platformInput" id="platformInput">
+            <option value= 'switch' >switch</option>
+            <option value= 'ps5'>ps5</option>
+            <option value= 'pc' >pc</option>
+            <option value= 'xbox'>xbox</option>
+        </select>
 
 <br>
 <button type="submit">create</button>
