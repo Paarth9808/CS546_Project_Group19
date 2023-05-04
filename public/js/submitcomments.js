@@ -63,6 +63,10 @@ function addlistener(element)
                         {
                             alert("You didn't login");
                         }
+                        else if(response.data==-1)
+                        {
+                            alert("You have reported this comment, don't do again.");
+                        }
                         else
                         {
                             console.log(response);
