@@ -34,6 +34,14 @@ function addlistener(element)
             selection[j].addEventListener("click",function(event){
                 console.log(temp);
                 const id=temp.getAttribute("id");
+                const att=temp.getAttribute("class");
+                if(att=="reportlabel")
+                {
+                    var flag = confirm("Are you sure to report this comment?");
+                    if(!flag) {
+                        return;
+                    }
+                }
                 $.ajax({
                     url:'/comment/sendattitude/',
                     method:'Post',
