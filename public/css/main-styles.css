@@ -145,10 +145,11 @@ ul {
   border-bottom: 3px solid #306b2f;
 }
 
-.profile{
+/* affects userprofile screen, breaks the layout */
+/* .profile{
   width: 80px;  
   height: 95px; 
-}
+} */
 
 .commentcontent{
   display: inline-block;

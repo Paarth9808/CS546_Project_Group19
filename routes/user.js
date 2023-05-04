@@ -64,14 +64,14 @@ router
   .get(async (req, res) => {
     try {
       req.params.id = validation.checkId(req.params.id);
+      let currUser = await userData.getUserById(req.params.id);
+      if(req.session?.user?.userId !== req.params.id) throw "You are not logged in as this user";
+      res.render("editProfile", { id: req.params.id, age: currUser.age, username: currUser.userName });
     } catch (e) {
-      return res.status(400).json({ error: e });
+      res.render('error', {errorMessage : JSON.stringify(e)});
     }
-    res.render("editProfile", {id : req.params.id});
-    res.render("editProfile", { id: req.params.id });
   })
   .post(async (req, res) => {
-    //get 2 passwords?
     let { userName: userName, oldpassword, newpassword, age: age } = req.body;
     let errors = [];
     try {
@@ -131,6 +131,8 @@ router
   .get(async (req, res) => {
     try {
       req.params.id = validation.checkId(req.params.id);
+      let currUser = await userData.getUserById(req.params.id);
+      if(req.session?.user?.userId !== req.params.id) throw "You are not logged in as this user";
     } catch (e) {
       return res.status(400).json({ error: e });
     }
