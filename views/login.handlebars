@@ -1,9 +1,9 @@
 <h1>Login Page</h1>
 <form action="/login" method="POST" id="login-form" class="login-form">
 <label for="emailAddressInput">Email id: </label>
-<input type="email" name="emailAddressInput" id="emailAddressInput">
+<input type="email" name="emailAddressInput" id="emailAddressInput" value="{{user.emailAddressInput}}">
 <label for="passwordInput">Password: </label>
-<input type="password" name="passwordInput" id="passwordInput">
+<input type="password" name="passwordInput" id="passwordInput" value="{{user.passwordInput}}">
 <button type="submit">Log in</button>
 </form>
 <a href="/register">Click here to register!</a>

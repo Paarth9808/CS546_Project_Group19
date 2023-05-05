@@ -2,22 +2,24 @@
 
 <form action="edit" method="POST" id="update-game-form" class="update-game-form">
     <label for="name">Name </label>
-    <input type="text" name="name" id="name" placeholder="Eg: Call of Duty">
+    <input type="text" name="name" id="name" placeholder="Eg: Call of Duty" value="{{game.name}}">
 
     <label for="releaseDate">Release date </label>
-    <input type="text" name="releaseDate" id="releaseDate" placeholder="MM/DD/YYYY">
+    <input type="text" name="releaseDate" id="releaseDate" placeholder="MM/DD/YYYY" value="{{game.releaseDate}}">
     <label for="ageRating">Recommended age</label>
-    <select name= "ageRating" id="ageRating">
+    <select name= "ageRating" id="ageRating" >
         <option value= 18>18+</option>
         <option value= 15>15+</option>
         <option value= 12>12+</option>
     </select>
     <label for="genre">Genre</label>
-    <input type="text" name="genre[]" id="genre">    
+    <input type="text" name="genre" id="genre" value="{{game.genre}}">    
     <label for="description">Description</label>
-    <input type="text" name="description" id="description">
+    <input type="text" name="description" id="description" value="{{game.description}}">
+    <label for="systemRequirements">System requirements</label>
+    <input type="text" name="systemRequirements" id="systemRequirements" placeholder="Eg: RAM: 512gb, HDD: 246GB" value="{{game.systemRequirements}}">
 
-    <input type="hidden" name="_method" value="PATCH" >
+    <input type="hidden" name="_method" value="PUT" >
     <input type="submit" value="Update">    
 
 </form>
@@ -31,3 +33,4 @@
     {{/each}}
   </ul>
 {{/if}}
+<a href="/games/{{game._id}}">Go back to Game details page</a>
