@@ -74,7 +74,7 @@ router
       res.render('error', {errorMessage : JSON.stringify(e)});
     }
   })
-  .post(async (req, res) => {
+  .post(fileUpload(),async (req, res) => {
     let { userName: userName, oldpassword, newpassword, age: age } = req.body;
     let errors = [];
     try {
@@ -141,7 +141,7 @@ router
     }
     res.render("editAvatar");
   })
-  .post(async (req, res) => {
+  .post(fileUpload(),async (req, res) => {
     let errors = [];
     try {
       const { file: file } = req.body;
@@ -150,15 +150,12 @@ router
       if (!req.files && !req.files.avatar) throw "No avatar submitted";
       if (req.files && req.files?.avatar.data) {
         fs.writeFileSync(
-          "./public/userimages/" +
-            req.params.id +
-            "." +
-            req.files.avatar.name.split(".")[1],
+          path.join('./public', 'userimages', req.params.id+"."+req.files.avatar.name.split(".")[1]),
           req.files.avatar.data,
           {
             flag: "w+",
           }
-        );
+        );//You must use path.join to keep your code working in all kinds of platform!
         let data = await userData.updateAvatar(
           req.params.id,
           req.params.id + "." + req.files.avatar.name.split(".")[1]

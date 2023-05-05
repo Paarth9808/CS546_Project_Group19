@@ -47,9 +47,6 @@ app.use(
   })
 );
 
-import fileUpload from 'express-fileupload'; // this is used for profile picture upload
-
-app.use(fileUpload()); // this is used for profile picture upload
 
 app.use('/public', staticDir);
 app.use(express.json());
