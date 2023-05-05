@@ -74,6 +74,7 @@ const createComment=async(
     if(userupdatedInfo.lastErrorObject.n === 0) {
         throw 'could not add reviewedIds successfully';
     }
+    console.log(userupdatedInfo.value.reviewedIds);
     var gameupdatedInfo=await gameCollection.findOneAndUpdate({_id:new ObjectId(gameID)},{$push:{commentIds:newid}},{ReturnDocument:'after'});
     if(gameupdatedInfo.lastErrorObject.n === 0) {
         throw 'could not add reviewIDs successfully';

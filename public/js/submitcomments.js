@@ -17,8 +17,9 @@ function adderrorsolution(element)
 
 adderrorsolution(document)
 
-function addlistener(element)
-{
+var offset=0;
+
+function addlistener(element,callback){
     const attitudes=element.querySelectorAll(".attitude");
     console.log(attitudes.length);
     for(var i=0;i<attitudes.length;i++)
@@ -41,6 +42,10 @@ function addlistener(element)
                     if(!flag) {
                         return;
                     }
+                }
+                else if(att=="deletelabel")
+                {
+                    callback();
                 }
                 $.ajax({
                     url:'/comment/sendattitude/',
@@ -81,7 +86,7 @@ function addlistener(element)
     }
 }
 
-addlistener(document);
+addlistener(document,()=>{});
 
 const reportbtn=document.getElementById("checkreported");
 var checked=false;
@@ -112,7 +117,7 @@ if(reportbtn)
                             const newli=document.createElement('li');
                             newli.setAttribute('class','listnode');
                             newli.innerHTML=response[i];
-                            addlistener(newli);
+                            addlistener(newli,()=>{offset--;});
                             adderrorsolution(newli);
                             document.getElementById("commentslist").append(newli);
                         }
@@ -144,7 +149,7 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
             commentsnum++;
     }
     $.ajax({
-        url:'/comment/getmore/'+gameid+'/'+commentsnum,
+        url:'/comment/getmore/'+gameid+'/'+(commentsnum-offset),
         //url:'/comment/getmore/'+commentsnum,
         method:'Get',
         success: function(response) {
@@ -160,15 +165,25 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
             }
             else
             {
+                var islast=true;
                 for(var i=0;i<response.length;i++)
                 {
                     const newli=document.createElement('li');
                     newli.setAttribute('class','listnode');
                     newli.innerHTML=response[i];
+                    const tempcomment = newli.getElementsByClassName("comment");
+                    if(tempcomment!=undefined&&tempcomment.length==0)
+                        continue;
+                    const likeElement = document.getElementById(tempcomment[0].getAttribute("id"));
+                    if(likeElement)
+                        continue;
                     addlistener(newli);
                     adderrorsolution(newli);
                     document.getElementById("commentslist").append(newli);
+                    islast=false;
                 }
+                if(islast)
+                    $('#lastcomment').show();
             }
           },
         error: function(xhr, status, error) {
@@ -228,6 +243,7 @@ document.getElementById("commentForm").addEventListener("submit",function(event)
             addlistener(newli);
             adderrorsolution(newli);
             document.getElementById("commentslist").insertAdjacentElement("afterbegin",newli);
+            offset++;
         }
     },
     error: function(xhr, status, error) {
