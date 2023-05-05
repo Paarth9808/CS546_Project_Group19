@@ -145,11 +145,12 @@ ul {
   border-bottom: 3px solid #306b2f;
 }
 
-/* affects userprofile screen, breaks the layout */
-/* .profile{
+/* I have changed the class name and will not cause conflict */
+
+.commentprofile{
   width: 80px;  
   height: 95px; 
-} */
+}
 
 .commentcontent{
   display: inline-block;

@@ -5,7 +5,7 @@ var allfiles={};
 
 function adderrorsolution(element)
 {
-    const images = element.querySelectorAll('.profile');
+    const images = element.querySelectorAll('.commentprofile');
     for(var i=0;i<images.length;i++)
     {
         const img=images[i]
