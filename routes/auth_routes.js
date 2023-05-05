@@ -85,14 +85,14 @@ router
             errors.push(e);
         }
         if(errors.length>0){
-            return res.status(400).render('login',{title:'Login page',errors:errors,hasErrors:true})
+            return res.status(400).render('login',{title:'Login page',errors:errors,hasErrors:true,user:user})
 
         }
         try{
             const {emailAddressInput,passwordInput}=user;
             let userDetails= await authFunction.checkUser(emailAddressInput,passwordInput);
             req.session.user=userDetails;
-            if(userDetails){res.redirect('games/644c0f3145435cdf250e285c')}
+            if(userDetails){res.redirect('gamelist')}
 
         }catch(e){
             errors.push(e);

@@ -53,6 +53,11 @@
       vplatformInput (platform) {
         if (platform.trim() == '') throw 'platform should be no empty spaces';
         if (typeof(platform) != 'string') throw 'platform type wrong';
+      },
+
+      vsystemRequirements (description) {
+        if (description.trim() == '') throw 'systemRequirements should be no empty spaces';
+        if (typeof(description) != 'string') throw 'systemRequirements type wrong';
       }
 
 
@@ -72,6 +77,7 @@
       const genreInput = document.getElementById('genreInput');
       const descriptionInput = document.getElementById('descriptionInput');
       const platformInput = document.getElementById('platformInput');
+      const systemRequirementsInput = document.getElementById('systemRequirementsInput');
 
 
 
@@ -85,6 +91,7 @@
           const text4 = genreInput.value;
           const text5 = descriptionInput.value;
           const text6 = platformInput.value;
+          const text7 = systemRequirementsInput.value;
 
           let v1 = validation.vname(text1);
           let v2 = validation.vreleaseDate(text2);
@@ -92,6 +99,7 @@
           let v4 = validation.vgenre(text4);
           let v5 = validation.vdescription(text5);
           let v6 = validation.vplatformInput(text6);
+          let v7 = validation.vsystemRequirements(text7);
 
           errorTextElement.innerHTML = '';
           errorTextElement.hidden = true;

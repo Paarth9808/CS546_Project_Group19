@@ -47,9 +47,6 @@ app.use(
   })
 );
 
-import fileUpload from 'express-fileupload';
-
-//app.use(fileUpload());
 
 app.use('/public', staticDir);
 app.use(express.json());

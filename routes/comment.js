@@ -21,9 +21,9 @@ router.route('/getmore/:gameid/:index').get(async (req,res)=>{
   try{
     const start=req.params.index;
     const gameid=req.params.gameid;
-    console.log(start);
+    //console.log(start);
     const newcomment=await getpartComment(gameid,Number(start),10);
-    console.log(newcomment);
+    //console.log(newcomment);
     const htmllist=[];
     for(var i=0;i<newcomment.length;i++)
     {
@@ -31,7 +31,7 @@ router.route('/getmore/:gameid/:index').get(async (req,res)=>{
         newcomment[i].deletable=true;
       else
         newcomment[i].deletable=false;
-      console.log(mycomment({comment:newcomment[i]}));
+      //console.log(mycomment({comment:newcomment[i]}));
       htmllist.push(mycomment({comment:newcomment[i]}));
     }
     res.send(htmllist);
@@ -48,14 +48,14 @@ router.route('/getreported/:gameid').get(async (req,res)=>{
   try{
     const start=req.params.index;
     const gameid=req.params.gameid;
-    console.log(start);
+    //console.log(start);
     const newcomment=await getreportedComment(gameid);
-    console.log(newcomment);
+    //console.log(newcomment);
     const htmllist=[];
     for(var i=0;i<newcomment.length;i++)
     {
       newcomment[i].deletable=true;
-      console.log(mycomment({comment:newcomment[i]}));
+      //console.log(mycomment({comment:newcomment[i]}));
       htmllist.push(mycomment({comment:newcomment[i]}));
     }
     res.send(htmllist);
@@ -99,7 +99,7 @@ router.route('/sendattitude').post(async (req,res)=>{
     else if(id_split[1]=='report')
     {
       const result=await reportComment(id_split[0],userId);
-      console.log(result);
+      //console.log(result);
       res.send({data:result});
     }
     else if(id_split[1]=="delete")
@@ -140,7 +140,7 @@ router.route("/sendcomment").post(async (req, res)=> {
         const pics=[];
         var picCount=0;
         for(var filename in files){
-            console.log(filename);
+            //console.log(filename);
             const file =files[filename];
             const picName = uuidv4() ;
             const imgpath=path.join('./public', 'userfile', 'comments',picName+'.jpg');
@@ -160,9 +160,11 @@ router.route("/sendcomment").post(async (req, res)=> {
             console.log("text:"+text+",pict:"+picCount);  
             console.log(pics);
         }
-        console.log(req.session.user);
-        console.log(gameid);
+        //console.log(req.session.user);
+        //console.log(gameid);
         try{
+          if(text.trim()==0&&pics.length==0)
+            throw "empty content";
           const newcomment=await createComment(req.session.user.userId,gameid,text,pics);
           //console.log(newcomment);
           newcomment.deletable=true;
