@@ -86,7 +86,7 @@ const getGameByPlatform = async (platform) => {
     if (platform == 'all') return all;
     if (platform != 'xbox' && platform != 'switch' && platform != 'ps5' && platform != 'pc') throw 'sortWay input wrong';
 
-    let res = await gameCollection.find({ systemRequirements : platform }).toArray();
+    let res = await gameCollection.find({ platform : platform }).toArray();
     for (let i = 0; i < res.length; i++) {
         res[i]._id = res[i]._id.toString();
     }
@@ -151,7 +151,8 @@ const createGame= async (
     genre,
     description,
     systemRequirements,
-    ageRating
+    ageRating,
+    platform
 
 )=>{
 
@@ -162,6 +163,7 @@ const createGame= async (
         let v4 = validation.vgenre(genre);
         let v5 = validation.vdescription(description);
         let v6 = validation.vplatformInput(systemRequirements);
+        let v7 = validation.vplatformInput(platform);
     } catch (e) {
 
         throw e;
@@ -177,10 +179,11 @@ const createGame= async (
         individualRatings: [],
         systemRequirements: systemRequirements,
         ageRating: ageRating,
-        commentIds: []
+        commentIds: [],
+        platform : platform
     }
 
-    if (systemRequirements != 'ps5' && systemRequirements != 'xbox' && systemRequirements != 'pc' && systemRequirements != 'switch') throw 'platform wrong';
+    if (platform != 'ps5' && platform != 'xbox' && platform != 'pc' && platform != 'switch') throw 'platform wrong';
     
     if (ageRating != 18 && ageRating != 15 && ageRating != 12) throw 'ageRating format wrong';
 

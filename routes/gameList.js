@@ -20,6 +20,7 @@ router.route('/creategame').get(async (req, res)=>{
 .post(async (req, res) =>{
   const genre = req.body.genreInput;
   const platform = req.body.platformInput;
+  const systemRequirements = req.body.systemRequirementsInput;
   const name = req.body.gameNameInput;
   const releaseDate = req.body.releaseDateInput;
   const age = Number(req.body.ageInput);
@@ -29,6 +30,10 @@ router.route('/creategame').get(async (req, res)=>{
     if (genre) {
       if (genre.trim() == '') throw 'genre should be no empty spaces';
       if (typeof(genre) != 'string') throw 'genre type wrong';
+    }
+    if (systemRequirements) {
+      if (systemRequirements.trim() == '') throw 'genre should be no empty spaces';
+      if (typeof(systemRequirements) != 'string') throw 'genre type wrong';
     }
     if (platform) {
       if (platform.trim() == '') throw 'platform should be no empty spaces';
@@ -53,7 +58,7 @@ router.route('/creategame').get(async (req, res)=>{
     let testName = await gameListData.getGameByName(name);
     if (testName == 'exist') throw 'name exist';
 
-    const newGame = await gameListData.createGame(releaseDate, name, genre, description, platform, age);
+    const newGame = await gameListData.createGame(releaseDate, name, genre, description, systemRequirements, age, platform);
     if (newGame) res.render('createGame', {title: "createGame", showErrorMessage : 'Game Added!'});
     if (!newGame) throw 'not created';
 
