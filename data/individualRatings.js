@@ -3,6 +3,7 @@ import validation from '../validations/individualRatingValidation.js'
 import { ObjectId } from 'mongodb';
 import { games } from '../config/mongoCollection.js';
 import { userData } from "../data/index.js";
+import { user } from '../config/mongoCollection.js';
 import gameData from '../data/games.js'
 const addRating= async(
     gameId,
@@ -73,6 +74,11 @@ const addRating= async(
         {_id: new ObjectId(gameId)},
         {$set: {rating: updatedRating}}
     )
+    const userCollection = await user();
+    let updatedUser=await userCollection.findOneAndUpdate({_id: new ObjectId(newRating.userId)},
+    {$push:{ratedIds:newRating._id}},
+    {ReturnDocument:'after'})
+    if(updatedUser.lastErrorObject.n ===0){throw `RatedIds not updated successfully`}
     const newReview=get(gameId,userId)
     return newReview;
 }
@@ -220,6 +226,11 @@ const remove=async (gameId,userId)=>{
         {_id: new ObjectId(gameId)},
         {$set: {rating: newRating}}
     )
+    const userCollection = await user();
+    let updatedUser=await userCollection.findOneAndUpdate({_id: new ObjectId(userId)},
+    {$pull:{ratedIds: new ObjectId(reviewId)}},
+    {ReturnDocument:'after'})
+    if(updatedUser.lastErrorObject.n ===0){throw `RatedIds not updated successfully`}
 
     newGame=await gameCollection.findOne(
         {_id: new ObjectId(gameId)}

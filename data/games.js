@@ -82,15 +82,26 @@ const updateGame=async(
   gameInfo
 )=>{
     id=validation.checkId(id);
-    if(gameInfo.releaseDate){gameInfo.releaseDate=validation.checkDate(gameInfo.releaseDate)}
-    if(gameInfo.name){gameInfo.name=validation.checkString(gameInfo.name,'Name')}
-    if(gameInfo.genre){gameInfo.genre=validation.checkStringArray(gameInfo.genre,'Genre')}
-    if(gameInfo.description){gameInfo.description=validation.checkString(gameInfo.description,'Description')}
-    if(gameInfo.systemRequirements){gameInfo.systemRequirements=validation.checkStringArray(gameInfo.systemRequirements,'System Requirements')}
-    if(gameInfo.ageRating){
-      gameInfo.ageRating=validation.checkNumber(gameInfo.ageRating,'Age rating')
-      gameInfo.ageRating=validation.checkAgeRating(gameInfo.ageRating,'Age rating')
-    }
+    // if(gameInfo.releaseDate){gameInfo.releaseDate=validation.checkDate(gameInfo.releaseDate)}
+    // if(gameInfo.name){gameInfo.name=validation.checkString(gameInfo.name,'Name')}
+    // if(gameInfo.genre){gameInfo.genre=validation.checkStringArray(gameInfo.genre,'Genre')}
+    // if(gameInfo.description){gameInfo.description=validation.checkString(gameInfo.description,'Description')}
+    // if(gameInfo.systemRequirements){gameInfo.systemRequirements=validation.checkStringArray(gameInfo.systemRequirements,'System Requirements')}
+    // if(gameInfo.ageRating){
+    //   gameInfo.ageRating=validation.checkNumber(gameInfo.ageRating,'Age rating')
+    //   gameInfo.ageRating=validation.checkAgeRating(gameInfo.ageRating,'Age rating')
+    // }
+    gameInfo.releaseDate=validation.checkDate(gameInfo.releaseDate)
+    gameInfo.name=validation.checkString(gameInfo.name,'Name')
+    gameInfo.genre=validation.checkString(gameInfo.genre,'Genre')
+    gameInfo.description=validation.checkString(gameInfo.description,'Description')
+    gameInfo.systemRequirements=validation.checkString(gameInfo.systemRequirements,'System Requirements')
+    gameInfo.ageRating=validation.checkNumber(gameInfo.ageRating,'Age rating')
+    gameInfo.ageRating=validation.checkAgeRating(gameInfo.ageRating,'Age rating')
+
+
+
+
     // const updateGame={
     //   releaseDate:releaseDate,
     //   name:name,
