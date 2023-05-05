@@ -1,0 +1,91 @@
+<form action="" method="POST" id="comparison-form" class="comparison-form">
+    <label for="game1">Game 1</label>
+    <select name="game1" id="game1">
+        {{#each games}}
+        <option value="{{this}}">{{this}}</option>
+    {{/each}}
+    </select>
+    
+    <label for="game2">Game 2</label>
+    <select name="game2" id="game2">
+        {{#each games}}
+        <option value="{{this}}">{{this}}</option>
+    {{/each}}
+    </select>
+    <button type="submit">Compare</button>
+</form>
+<div class="container">
+{{#if game1}}
+<div id="game1div">
+    <h1>{{game1.name}}</h1>
+    <h2>Rating: {{game1.rating}}</h2>
+    {{#if game1.description}}
+    <p>{{game1.description}}</p>
+    {{/if}}
+    <h3>System requirements</h3>
+    <ul>
+    {{#each game1.systemRequirements}}
+        <li>{{this}}</li>
+    {{/each}}
+    </ul>
+    <h3>Genre</h3>
+    <ul>
+        {{#each game1.genre}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+    <h1>Reviews for {{game1.name}}: </h1>
+    {{#each game1Reviews}}
+        <div>
+            <dl>Username: {{this.userName}}</dl>
+            <dl>Review: {{this.review}}</dl>
+            <dl>Rating: {{this.userRating}}</dl>
+            {{#if (ifEqual this.userName  ../currentUser.userName) }}
+                <a href="edit">Edit review</a>
+            {{/if}}
+            {{#if (or (ifEqual this.userName  ../currentUser.userName) (ifEqual ../currentUser.role "admin"))}}
+                <a href="delete">Delete review</a>
+            {{/if}}
+        </div>
+    {{/each}}
+{{/if}}
+
+{{#if game2}}
+</div>
+<div id="game2div">
+    <h1>{{game2.name}}</h1>
+    <h2>Rating: {{game2.rating}}</h2>
+    {{#if game2.description}}
+    <p>{{game2.description}}</p>
+    {{else}}
+        <p>No description</p>
+    {{/if}}
+    <h3>System requirements</h3>
+    <ul>
+    {{#each game2.systemRequirements}}
+        <li>{{this}}</li>
+    {{/each}}
+    </ul>
+    <h3>Genre</h3>
+    <ul>
+        {{#each game2.genre}}
+        <li>{{this}}</li>
+        {{/each}}
+    </ul>
+    <h1>Reviews for {{game2.name}}: </h1>
+    {{#each game2Reviews}}
+        <div>
+            <dl>Username: {{this.userName}}</dl>
+            <dl>Review: {{this.review}}</dl>
+            <dl>Rating: {{this.userRating}}</dl>
+            {{#if (ifEqual this.userName  ../currentUser.userName) }}
+                <a href="edit">Edit review</a>
+            {{/if}}
+            {{#if (or (ifEqual this.userName  ../currentUser.userName) (ifEqual ../currentUser.role "admin"))}}
+                <a href="delete">Delete review</a>
+            {{/if}}
+        </div>
+    {{/each}}
+</div>
+{{/if}}
+</div>

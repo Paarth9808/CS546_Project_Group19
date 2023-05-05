@@ -1,0 +1,51 @@
+<h1>Add A New Game</h1>
+
+<a href="/gamelist/">return to game list</a>
+
+<form method="POST" id="createGame-form" class="createGame-form">
+
+<label for="gameNameInput">game name </label>
+<input type="text" name="gameNameInput" id="gameNameInput">
+<br>
+
+<label for="releaseDateInput">release date </label>
+<input type="text" name="releaseDateInput" id="releaseDateInput">
+<br>
+<label for="ageInput">recommend age</label>
+        <select name= "ageInput" id="ageInput">
+            <option value= '18' >18+</option>
+            <option value= '15'>15+</option>
+            <option value= '13'>13+</option>
+        </select>
+<br>
+<label for="genreInput">genre</label>
+<input type="text" name="genreInput" id="genreInput" placeholder="eg. action">
+<br>
+<label for="descriptionInput">description</label>
+<input type="text" name="descriptionInput" id="descriptionInput" placeholder="eg. a game of love">
+<br>
+<label for="systemRequirementsInput">systemRequirements</label>
+<input type="text" name="systemRequirementsInput" id="systemRequirementsInput" placeholder="eg. ram: 16g">
+<br>
+<label for="platformInput">platform</label>
+        <select name= "platformInput" id="platformInput">
+            <option value= 'switch' >switch</option>
+            <option value= 'ps5'>ps5</option>
+            <option value= 'pc' >pc</option>
+            <option value= 'xbox'>xbox</option>
+        </select>
+
+<br>
+<button type="submit">create</button>
+</form>
+
+    {{#if showErrorMessage }}
+        <p>{{showErrorMessage}}</p>
+    {{/if}}
+
+
+        <div id="errorText" class="hidden">
+
+       </div>
+
+<script src="/public/js/createGame.js"></script>

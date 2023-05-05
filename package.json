@@ -1,0 +1,33 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Paarth9808/CS546_Project_Group19.git"
+  },
+  "author": "Rohit Saji",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Paarth9808/CS546_Project_Group19/issues"
+  },
+  "homepage": "https://github.com/Paarth9808/CS546_Project_Group19#readme",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "express-handlebars": "^7.0.7",
+    "express-session": "^1.17.3",
+    "formidable": "^2.1.1",
+    "mongodb": "^5.2.0",
+    "uuid": "^9.0.0",
+    "xss": "^1.0.14"
+  }
+}

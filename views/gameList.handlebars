@@ -1,0 +1,74 @@
+    <h1>Game List</h1>
+
+    <a href="/gamelist/creategame/">create a new game</a>
+
+    <form method="POST" id="getGameForm">
+
+    <label for="platformInput">platform</label>
+    <select name= "platformInput" id="platformInput">
+        <option value="all">all</option>
+        <option value="xbox">xbox</option>
+        <option value="switch">switch</option>
+        <option value="ps5">ps5</option>
+        <option value="pc">pc</option>
+
+    </select>
+
+    <button type="submit">get games by</button>
+
+
+    </form>
+
+
+    <form id="gerneForm" method="post">
+            <label for="genreInput">genre you want to get:</label>
+            <textarea name="genreInput" id="genreInput"></textarea>
+            <button type="submit">get games by genre</button>
+
+    </form>
+
+
+    <form id="sortForm" method="post">
+        <label for="sortWayInput">select order</label>
+        <select name= "sortWayInput" id="sortWayInput">
+            <option value="-">--</option>
+            <option value="ascending">ascending</option>
+            <option value="descending">descending</option>
+
+        </select>
+
+        <label for="sortByInput">select sort way</label>
+        <select name= "sortByInput" id="sortByInput">
+            <option value="-">--</option>
+            <option value="rate">Rate</option>
+            <option value="date">Date</option>
+        </select>
+
+        <button type="submit">sort</button>
+
+    </form>
+
+
+
+
+
+        <div id="errorText" class="hidden">
+
+       </div>
+
+    {{#if showErrorMessage }}
+        <p>{{showErrorMessage}}</p>
+    {{/if}}
+
+
+
+        <ol>
+            {{#each sortTerm}}
+            <li>
+                <a href="/games/{{_id}}">{{name}}</a>
+            </li>
+            {{/each}}
+
+        </ol>
+
+<script src="/public/js/gameList.js"></script>

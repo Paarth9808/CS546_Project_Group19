@@ -1,0 +1,63 @@
+<header><h1>{{game.name}}</h1></header>
+<div>
+    {{#if (ifEqual currentUser.role "admin")}}
+            <form action="{{game._id}}/edit" method="GET" class="update-button">
+                {{!-- <input type="hidden" name="_method" value="PATCH" > --}}
+                <input type="submit" value="Update game">
+            </form>
+            <form action="{{game._id}}" method="POST" class="delete-button">
+                <input type="hidden" name="_method" value="DELETE" >
+                <input type="submit" value="Delete">
+            </form>
+    {{/if}}
+</div>
+<div>
+{{#if game.rating}}
+    <h2>Rating: {{game.rating}}</h2>
+{{else}}
+    <h2>Rating: N/A</h2>
+{{/if}}
+{{#if game.description}}
+    <p>{{game.description}}</p>
+{{else}}
+    <p>No description</p>
+{{/if}}
+<h3>System requirements: </h3>
+<p>{{game.systemRequirements}}</p>
+<h3>Platform: </h3>
+<p>{{game.platform}}</p>
+{{!-- <ul>
+    {{#each game.systemRequirements}}
+        <li>{{this}}</li>
+    {{/each}}
+</ul> --}}
+{{!-- <form action="{{game._id}}" method="POST" class="add-review-form">
+    <label for="review">Review</label>
+    <input id="review" type="text" placeholder="Type your review" name="reviewInput">
+    <label for="rating">Rating</label>
+    <input id="rating" type="number" placeholder="Enter your rating(1-10)"name="ratingInput">
+    <button type="submit">Add review</button>
+</form>
+{{#if isAdded}}<p>{{status}}</p>{{/if}}
+{{#if hasErrors}}
+  <ul class="error-list">
+    {{#each errors}}
+    <li>
+      {{this}}
+    </li>
+    {{/each}}
+  </ul>
+{{/if}} --}}
+
+{{!-- <form action="{{game._id}}" method="POST" class="add-review-form">
+    <label for="review">Review</label>
+    <input id="review" type="text" placeholder="Type your review" name="reviewInput">
+    <label for="rating">Rating</label>
+    <input id="rating" type="number" placeholder="Enter your rating(1-10)"name="ratingInput">
+    <button type="submit">Add review</button>
+</form> --}}
+<a href="reviews/{{game._id}}/">Reviews</a>
+
+
+</div>
+{{>comments commentlist=commentlist gameid=game._id isAdmin=isAdmin}}
