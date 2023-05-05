@@ -10,7 +10,7 @@
     <select name= "ageRating" id="ageRating" >
         <option value= 18>18+</option>
         <option value= 15>15+</option>
-        <option value= 12>12+</option>
+        <option value= 13>13+</option>
     </select>
     <label for="genre">Genre</label>
     <input type="text" name="genre" id="genre" value="{{game.genre}}">    
@@ -18,7 +18,13 @@
     <input type="text" name="description" id="description" value="{{game.description}}">
     <label for="systemRequirements">System requirements</label>
     <input type="text" name="systemRequirements" id="systemRequirements" placeholder="Eg: RAM: 512gb, HDD: 246GB" value="{{game.systemRequirements}}">
-
+    <label for="platform">Platform</label>
+    <select name= "platform" id="platform">
+        <option value= 'switch' >Switch</option>
+        <option value= 'ps5'>PS5</option>
+        <option value= 'pc' >PC</option>
+        <option value= 'xbox'>Xbox</option>
+    </select>
     <input type="hidden" name="_method" value="PUT" >
     <input type="submit" value="Update">    
 

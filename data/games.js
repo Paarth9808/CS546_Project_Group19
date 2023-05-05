@@ -96,6 +96,7 @@ const updateGame=async(
     gameInfo.genre=validation.checkString(gameInfo.genre,'Genre')
     gameInfo.description=validation.checkString(gameInfo.description,'Description')
     gameInfo.systemRequirements=validation.checkString(gameInfo.systemRequirements,'System Requirements')
+    gameInfo.platform=validation.checkPlatform(gameInfo.platform,'Platform')
     gameInfo.ageRating=validation.checkNumber(gameInfo.ageRating,'Age rating')
     gameInfo.ageRating=validation.checkAgeRating(gameInfo.ageRating,'Age rating')
 
@@ -112,10 +113,13 @@ const updateGame=async(
     // }
     const gameCollection=await games();
     let currentGame=await getGame(id);
-    if(currentGame.name===gameInfo.name&&validation.checkArraysEqual(currentGame.genre,gameInfo.genre)&&currentGame.description===gameInfo.description&&validation.checkArraysEqual(currentGame.systemRequirements,gameInfo.systemRequirements)&&currentGame.ageRating===gameInfo.ageRating){
+    // if(currentGame.name===gameInfo.name&&validation.checkArraysEqual(currentGame.genre,gameInfo.genre)&&currentGame.description===gameInfo.description&&validation.checkArraysEqual(currentGame.systemRequirements,gameInfo.systemRequirements)&&currentGame.ageRating===gameInfo.ageRating){
+    //   throw `New game and current game are the same`
+    // }
+    if(currentGame.name===gameInfo.name&&currentGame.genre===gameInfo.genre&&currentGame.description===gameInfo.description&&currentGame.systemRequirements===gameInfo.systemRequirements&&currentGame.ageRating===gameInfo.ageRating&&currentGame.platform===gameInfo.platform){
       throw `New game and current game are the same`
     }
-    if(currentGame===null){throw `Game with id: ${id} not found`}
+    if(currentGame===null){throw `Game not found`}
     const updatedInfo= await gameCollection.findOneAndUpdate(
       {_id: new ObjectId(id)},
       {$set: gameInfo},

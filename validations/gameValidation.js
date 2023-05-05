@@ -34,6 +34,17 @@ const exportedMethods={
         if (!isNaN(strVal)){throw `Error: ${strVal} is not a valid value for ${strName} as it only contains digits`;}
         return strVal;
     },
+    checkPlatform(strVal,strName){
+        if(!strVal){ throw `${strName} not provided`}
+        if (typeof(strVal)!== 'string'){ throw `Error: ${strName} must be a string!`; }
+        strVal = strVal.trim();
+        if (strVal.length === 0){throw `Error: ${strName} cannot be an empty string or string with just spaces`;}
+        if (!isNaN(strVal)){throw `Error: ${strVal} is not a valid value for ${strName} as it only contains digits`;}
+        if(!['xbox','pc','switch','ps5'].includes(strVal.toLowerCase())){
+            throw `Error: invalid platform`
+        }
+        return strVal
+    },
     checkStringArray(arrayVal,arrayName){
         if(!arrayVal){ throw `${arrayName} not provided`}
         //if(!arrayVal.trim()){ throw `All fields need to have valid values`}
