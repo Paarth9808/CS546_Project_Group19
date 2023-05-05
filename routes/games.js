@@ -99,6 +99,7 @@ router.route('/:id/edit').get(async (req,res)=>{
     let isAdded=false;
     const updatedData=req.body;
     let game=undefined
+    if(!req.session.user){return res.redirect('/login')}
     try{
         game=await gameData.getGame(req.params.id)
     }catch(e){
@@ -156,9 +157,15 @@ router.route('/:id/edit').get(async (req,res)=>{
         //if(updatedData.ageRating){
             updatedData.ageRating=xss(updatedData.ageRating)
             updatedData.ageRating=parseInt(updatedData.ageRating)
-            updatedData.ageRating=validation.checkNumber(updatedData.ageRating,'Age rating')
-            updatedData.ageRating=validation.checkAgeRating(updatedData.ageRating,'Age rating')
+            updatedData.ageRating=validation.checkNumber(updatedData.ageRating,'Recommended age')
+            updatedData.ageRating=validation.checkAgeRating(updatedData.ageRating,'Recommended age')
         //}
+    }catch(e){
+        errors.push(e);
+    }
+    try{
+            updatedData.platform=xss(updatedData.platform)
+            updatedData.platform=validation.checkPlatform(updatedData.platform,'Platform')
     }catch(e){
         errors.push(e);
     }

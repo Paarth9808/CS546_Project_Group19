@@ -12,18 +12,25 @@
     {{/if}}
 </div>
 <div>
-<h2>Rating: {{game.rating}}</h2>
+{{#if game.rating}}
+    <h2>Rating: {{game.rating}}</h2>
+{{else}}
+    <h2>Rating: N/A</h2>
+{{/if}}
 {{#if game.description}}
     <p>{{game.description}}</p>
 {{else}}
     <p>No description</p>
 {{/if}}
 <h3>System requirements: </h3>
-<ul>
+<p>{{game.systemRequirements}}</p>
+<h3>Platform: </h3>
+<p>{{game.platform}}</p>
+{{!-- <ul>
     {{#each game.systemRequirements}}
         <li>{{this}}</li>
     {{/each}}
-</ul>
+</ul> --}}
 {{!-- <form action="{{game._id}}" method="POST" class="add-review-form">
     <label for="review">Review</label>
     <input id="review" type="text" placeholder="Type your review" name="reviewInput">
