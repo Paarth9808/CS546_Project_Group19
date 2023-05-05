@@ -62,7 +62,7 @@ function addlistener(element,callback){
                         }
                         else if(response.data=="deleted")
                         {
-                            attitude.parentNode.parentNode.parentNode.style.display="none";
+                            attitude.parentNode.parentNode.parentNode.parentNode.removeChild(attitude.parentNode.parentNode.parentNode);
                         }
                         else if(response.data=="nologin")
                         {
@@ -117,7 +117,7 @@ if(reportbtn)
                             const newli=document.createElement('li');
                             newli.setAttribute('class','listnode');
                             newli.innerHTML=response[i];
-                            addlistener(newli,()=>{offset--;});
+                            addlistener(newli,()=>{});
                             adderrorsolution(newli);
                             document.getElementById("commentslist").append(newli);
                         }
@@ -148,6 +148,7 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
         if(name=='listnode')
             commentsnum++;
     }
+    console.log("commentsnum:"+commentsnum+",offset:"+offset);
     $.ajax({
         url:'/comment/getmore/'+gameid+'/'+(commentsnum-offset),
         //url:'/comment/getmore/'+commentsnum,
@@ -177,7 +178,7 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
                     const likeElement = document.getElementById(tempcomment[0].getAttribute("id"));
                     if(likeElement)
                         continue;
-                    addlistener(newli);
+                    addlistener(newli,()=>{});
                     adderrorsolution(newli);
                     document.getElementById("commentslist").append(newli);
                     islast=false;
@@ -240,7 +241,7 @@ document.getElementById("commentForm").addEventListener("submit",function(event)
             const newli=document.createElement('li');
             newli.setAttribute('class','listnode');
             newli.innerHTML=response;
-            addlistener(newli);
+            addlistener(newli,()=>{offset--;});
             adderrorsolution(newli);
             document.getElementById("commentslist").insertAdjacentElement("afterbegin",newli);
             offset++;
