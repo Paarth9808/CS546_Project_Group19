@@ -25,6 +25,13 @@ router.route('/creategame').get(async (req, res)=>{
   let releaseDate = req.body.releaseDateInput;
   let age = Number(req.body.ageInput);
   let description = req.body.descriptionInput;
+  let genre = req.body.genreInput;
+  let platform = req.body.platformInput;
+  let systemRequirements = req.body.systemRequirementsInput;
+  let name = req.body.gameNameInput;
+  let releaseDate = req.body.releaseDateInput;
+  let age = Number(req.body.ageInput);
+  let description = req.body.descriptionInput;
 
   try {
     if (genre) {
@@ -52,6 +59,13 @@ router.route('/creategame').get(async (req, res)=>{
     if (systemRequirements) {
       if (systemRequirements.trim() == '') throw 'genre should be no empty spaces';
       if (typeof(systemRequirements) != 'string') throw 'genre type wrong';
+      systemRequirements = systemRequirements.trim()
+      let dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      let res = 0;
+      for (let i = 0; i < systemRequirements.length; i++) {
+        if (dict.indexOf(systemRequirements.charAt(i)) < 0) res++;
+      }
+      if (res == systemRequirements.length) throw 'invalid systemRequirements input';
     }
     if (platform) {
       if (platform.trim() == '') throw 'platform should be no empty spaces';
