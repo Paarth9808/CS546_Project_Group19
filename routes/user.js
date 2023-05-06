@@ -3,6 +3,7 @@ const router = Router();
 import { userData } from "../data/index.js";
 import validation from "../validations/userValidation.js";
 import fs from "fs";
+import session from "express-session";
 // import multer from 'multer';
 // const upload = multer({ dest: './public/userimages/' , limits: { fileSize: 10 * 1024 * 1024 }});
 
@@ -15,6 +16,7 @@ router.route("/:id").get(async (req, res) => {
   try {
     //if not logged in will be redirected to login page ??? how to do
     const user1 = await userData.getUserById(req.params.id);
+    const revPost = await comm
     // const comments = await commentCollection.getMany({userId: req.params.id});
     return res.render("userProfile", {
       id: req.params.id,
@@ -22,7 +24,8 @@ router.route("/:id").get(async (req, res) => {
       username: user1.userName,
       age: user1.age,
       email: user1.email,
-      isLoggedInUser: req.session?.user?.userId === req.params.id, // if logged in user is the same as the user being viewed
+      // change1
+      isLoggedInUser: (req.session?.user?.role === 'admin' || req.session?.user?.userId === req.params.id), // if logged in user is the same as the user being viewed
       // posts: comments // type array
     });
   } catch (e) {
@@ -40,7 +43,7 @@ router.route("/:id/delete").get(async (req, res) => {
     }
     try {
       const user1 = await userData.getUserById(req.params.id);
-      return res.render("userProfile", {
+      res.render("userProfile", {
         id : req.params.id,
         avatar: user1.avatar,
         username: user1.userName,
@@ -65,7 +68,7 @@ router
     try {
       req.params.id = validation.checkId(req.params.id);
       let currUser = await userData.getUserById(req.params.id);
-      if(req.session?.user?.userId !== req.params.id) throw "You are not logged in as this user";
+      if(req.session?.user?.userId !== req.params.id ) throw "You are not logged in as this user";
       res.render("editProfile", { id: req.params.id, age: currUser.age, username: currUser.userName });
     } catch (e) {
       res.render('error', {errorMessage : JSON.stringify(e)});
