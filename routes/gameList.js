@@ -18,22 +18,36 @@ router.route('/creategame').get(async (req, res)=>{
 
 })
 .post(async (req, res) =>{
-  const genre = req.body.genreInput;
-  const platform = req.body.platformInput;
-  const systemRequirements = req.body.systemRequirementsInput;
-  const name = req.body.gameNameInput;
-  const releaseDate = req.body.releaseDateInput;
-  const age = Number(req.body.ageInput);
-  const description = req.body.descriptionInput;
+  let genre = req.body.genreInput;
+  let platform = req.body.platformInput;
+  let systemRequirements = req.body.systemRequirementsInput;
+  let name = req.body.gameNameInput;
+  let releaseDate = req.body.releaseDateInput;
+  let age = Number(req.body.ageInput);
+  let description = req.body.descriptionInput;
 
   try {
     if (genre) {
       if (genre.trim() == '') throw 'genre should be no empty spaces';
       if (typeof(genre) != 'string') throw 'genre type wrong';
+      genre = genre.trim();
+      let dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      let res = 0;
+      for (let i = 0; i < genre.length; i++) {
+        if (dict.indexOf(genre.charAt(i)) < 0) res++;
+      }
+      if (res > 0) throw 'invalid genre input';
     }
     if (systemRequirements) {
       if (systemRequirements.trim() == '') throw 'genre should be no empty spaces';
       if (typeof(systemRequirements) != 'string') throw 'genre type wrong';
+      systemRequirements = systemRequirements.trim()
+      let dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      let res = 0;
+      for (let i = 0; i < systemRequirements.length; i++) {
+        if (dict.indexOf(systemRequirements.charAt(i)) < 0) res++;
+      }
+      if (res == systemRequirements.length) throw 'invalid systemRequirements input';
     }
     if (platform) {
       if (platform.trim() == '') throw 'platform should be no empty spaces';
@@ -53,6 +67,13 @@ router.route('/creategame').get(async (req, res)=>{
     if (description) {
       if (description.trim() == '') throw 'description should be no empty spaces';
       if (typeof(description) != 'string') throw 'description type wrong';
+      description = description.trim();
+      let dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      let res = 0;
+      for (let i = 0; i < description.length; i++) {
+        if (dict.indexOf(description.charAt(i)) < 0) res++;
+      }
+      if (res == description.length) throw 'invalid description input';
     }
 
     let testName = await gameListData.getGameByName(name);
@@ -117,10 +138,10 @@ router.route('/').get(async (req,res)=>{
     // }
 
 
-    const genre = req.body.genreInput;
-    const platform = req.body.platformInput;
-    const sortWay = req.body.sortWayInput;
-    const sortBy = req.body.sortByInput;
+    let genre = req.body.genreInput;
+    let platform = req.body.platformInput;
+    let sortWay = req.body.sortWayInput;
+    let sortBy = req.body.sortByInput;
 
     if (!genre && !platform && !sortWay && !sortBy) res.status(400).render('gameList', {title: "gameList", showErrorMessage : 'Sort/Filter missing'});
 
@@ -159,7 +180,11 @@ router.route('/').get(async (req,res)=>{
             let ans = await gameListData.getGameByGerne(genre);
            let filteredGame = gameListData.ageFilter(userAge, ans);
             
-            res.render('gameList', {title: "gameList", sortTerm: filteredGame});
+           let nogame;
+
+           if (filteredGame.length == 0) nogame = 'no games found';
+            
+           res.render('gameList', {title: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
         
 
       } else if (platform) {
@@ -167,24 +192,37 @@ router.route('/').get(async (req,res)=>{
         let ans = await gameListData.getGameByPlatform(platform);
         let filteredGame = gameListData.ageFilter(userAge, ans);
             
-        res.render('gameList', {title: "gameList", sortTerm: filteredGame});
+        let nogame;
+
+        if (filteredGame.length == 0) nogame = 'no games found';
+         
+        res.render('gameList', {title: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
 
       } else if (sortWay && sortBy) {
         if (sortBy == 'date') {
             let ans = await gameListData.sortGameByDate(sortWay);
             let filteredGame = gameListData.ageFilter(userAge, ans);
             
-            res.render('gameList', {title: "gameList", sortTerm: filteredGame});
+            let nogame;
+
+            if (filteredGame.length == 0) nogame = 'no games found';
+             
+            res.render('gameList', {title: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
 
         } else if (sortBy == 'rate') {
-            let ans = await gameListData.sortGameByRate(sortWay);
-           let filteredGame = gameListData.ageFilter(userAge, ans);
+
+          let ans = await gameListData.sortGameByRate(sortWay);
+          let filteredGame = gameListData.ageFilter(userAge, ans);
+
+           let nogame;
+
+           if (filteredGame.length == 0) nogame = 'no games found';
             
-            res.render('gameList', {title: "gameList", sortTerm: filteredGame});
+          res.render('gameList', {title: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
         }
 
       } else {
-        res.status(500).render('gameList', {title : "error", message: "Internal Server Error" });
+        res.status(500).render('gameList', {title : "error", showErrorMessage: "Internal Server Error" });
       }
 
     } catch (e) {
