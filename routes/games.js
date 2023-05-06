@@ -219,7 +219,7 @@ router.route('/reviews/:id').get(async (req,res)=>{
         let currentUser=req.session.user;
         return res.render('gameReviews',{Titlename:'Game Reviews',game:game,reviews: reviews,currentUser:currentUser})
     }catch(e){
-        res.status(400).json({error: e});
+        res.status(400).render('error',{Titlename:'Error page', errorMessage: e});
     }
 }).post(async (req,res)=>{
     //Add reviews
@@ -295,13 +295,15 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
     }
     try{
         const game=await gameData.getGame(req.params.id);
-        let reviews=game.individualRatings;
-        return res.render('editReview',{Titlename:'Edit Review',game: game})
+        //let reviews=game.individualRatings;
+        let currentUserId=req.session.user.userId;
+        let review= await ratingData.get(req.params.id,currentUserId)
+        return res.render('editReview',{Titlename:'Edit Review',game: game,prevReview:review})
         // if(!req.session.user){return res.redirect('/login')}
         // let currentUser=req.session.user;
         // return res.render('gameReviews',{Titlename:'Game Reviews',game:game,reviews: reviews,currentUser:currentUser})
     }catch(e){
-        res.status(400).json({error: e});
+        res.status(400).render('error',{Titlename:'Error page', errorMessage: e});
     }
 
 }).put(async (req,res)=>{
@@ -312,6 +314,16 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
     let game=undefined;
     let reviews=undefined
     let currentUser=undefined;
+    let userId=undefined
+    let prevReview=undefined;
+
+    try{
+        currentUser=req.session.user;
+        userId=currentUser.userId;
+        prevReview=await ratingData.get(req.params.id,userId)
+    }catch(e){
+        errors.push(e);
+    }
     try{
         review=ratingValidation.checkReview(review);
     }catch(e){
@@ -328,7 +340,7 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
         errors.push(e);
     }
     if(errors.length>0){
-        return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating})
+        return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating,prevReview:prevReview})
     }
     try{
         let gameId=req.params.id;
@@ -339,10 +351,10 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
         if(indReview){isAdded=true}
         game=await gameData.getGame(req.params.id);
         reviews=game.individualRatings;
-        res.status(200).render('gameReviews',{Titlename:'Game Reviews',status:'Your review has been updated',isAdded:isAdded,game:game,reviews:reviews,currentUser:currentUser})
+        res.status(200).render('gameReviews',{Titlename:'Game Reviews',status:'Your review has been updated',isAdded:isAdded,game:game,reviews:reviews,currentUser:currentUser,prevReview:prevReview})
     }catch(e){
         errors.push(e);
-        return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating})
+        return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating,prevReview:prevReview})
     }
 })
 
@@ -362,8 +374,8 @@ router.route('/reviews/:id/delete').delete(async (req,res)=>{
     }
     try{
         if(!req.session.user){return res.redirect('/login')}
-        currentUser=req.session.user;
-        let userId=currentUser.userId;
+        //currentUser=req.session.user;
+        //let userId=currentUser.userId;
         let deletedCount=await ratingData.remove(id,userId);
         if(deletedCount>0){isDeleted=true}
         game=await gameData.getGame(req.params.id);

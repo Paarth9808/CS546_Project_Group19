@@ -1,5 +1,5 @@
 <h2>Add review:</h2>
-<form action="" method="POST" class="add-review-form">
+<form action="" method="POST" id="add-review-form" class="add-review-form">
     <label for="review">Review</label>
     <input id="review" type="text" placeholder="Type your review" name="reviewInput">
     <label for="rating">Rating</label>
@@ -17,7 +17,9 @@
     {{/each}}
   </ul>
 {{/if}}
-
+<div id="addRatingError" class="error" hidden>Errors: 
+<ul class="client-side-error-add-review" id="client-side-error-add-review"></ul>
+</div>
 <h1>Reviews for {{game.name}}: </h1>
 {{#each reviews}}
     <div>
