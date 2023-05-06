@@ -18,7 +18,11 @@
 {{#if game1}}
 <div id="game1div">
     <h1>{{game1.name}}</h1>
-    <h2>Rating: {{game1.rating}}</h2>
+    {{#if game1.rating}}
+        <h2>Rating: {{game1.rating}}</h2>
+    {{else}}
+        <h2>Rating: N/A</h2>
+    {{/if}}
     {{#if game1.description}}
     <p>{{game1.description}}</p>
     {{/if}}
@@ -42,12 +46,12 @@
             <dl>Username: {{this.userName}}</dl>
             <dl>Review: {{this.review}}</dl>
             <dl>Rating: {{this.userRating}}</dl>
-            {{#if (ifEqual this.userName  ../currentUser.userName) }}
+            {{!-- {{#if (ifEqual this.userName  ../currentUser.userName) }}
                 <a href="edit">Edit review</a>
             {{/if}}
             {{#if (or (ifEqual this.userName  ../currentUser.userName) (ifEqual ../currentUser.role "admin"))}}
                 <a href="delete">Delete review</a>
-            {{/if}}
+            {{/if}} --}}
         </div>
     {{/each}}
 {{/if}}
@@ -56,7 +60,11 @@
 </div>
 <div id="game2div">
     <h1>{{game2.name}}</h1>
-    <h2>Rating: {{game2.rating}}</h2>
+    {{#if game2.rating}}
+        <h2>Rating: {{game2.rating}}</h2>
+    {{else}}
+        <h2>Rating: N/A</h2>
+    {{/if}}
     {{#if game2.description}}
     <p>{{game2.description}}</p>
     {{else}}
@@ -82,12 +90,12 @@
             <dl>Username: {{this.userName}}</dl>
             <dl>Review: {{this.review}}</dl>
             <dl>Rating: {{this.userRating}}</dl>
-            {{#if (ifEqual this.userName  ../currentUser.userName) }}
+            {{!-- {{#if (ifEqual this.userName  ../currentUser.userName) }}
                 <a href="edit">Edit review</a>
             {{/if}}
             {{#if (or (ifEqual this.userName  ../currentUser.userName) (ifEqual ../currentUser.role "admin"))}}
                 <a href="delete">Delete review</a>
-            {{/if}}
+            {{/if}} --}}
         </div>
     {{/each}}
 </div>
