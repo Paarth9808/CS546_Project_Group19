@@ -5,6 +5,7 @@ import { gameData } from "../data/index.js";
 import { getAllCommentsByUserId } from "../data/comment.js";
 import validation from "../validations/userValidation.js";
 import fs from "fs";
+import xss from 'xss';
 import path from "path";
 import session from "express-session";
 import fileUpload from 'express-fileupload'; // this is used for profile picture upload
@@ -18,7 +19,7 @@ router.route("/:id").get(async (req, res) => {
   try {
     req.params.id = validation.checkId(req.params.id);
   } catch (e) {
-    return res.status(400).json({ error: e });
+    res.render('error', {errorMessage : JSON.stringify(e)});
   }
   try {
     //if not logged in will be redirected to login page ??? how to do
@@ -73,9 +74,7 @@ router.route("/:id/delete").get(async (req, res) => {
       return res.render('error', {errorMessage: e})
     }
   } else {
-    return res
-      .status(400)
-      .json({ error: "You are not logged in as this user" });
+    res.render('error', {errorMessage : JSON.stringify(e)});
   }
 });
 // link to edit page
@@ -95,13 +94,17 @@ router
     let { userName: userName, oldpassword, newpassword, age: age } = req.body;
     let errors = [];
     try {
+      userName = xss(userName);
       userName = validation.checkString(userName, "userName");
     } catch (e) {
       errors.push(e);
     }
     try {
+      oldpassword = xss(oldpassword);
       oldpassword = validation.checkPass(oldpassword);
+      newpassword = xss(newpassword);
       newpassword = validation.checkPass(newpassword);
+      
     } catch (e) {
       errors.push(e);
     }
@@ -112,6 +115,7 @@ router
     //   errors.push(e);
     // }
     try {
+      age = xss(age);
       age = validation.checkAge(age);
     } catch (e) {
       errors.push(e);
