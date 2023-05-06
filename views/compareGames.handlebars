@@ -23,17 +23,19 @@
     <p>{{game1.description}}</p>
     {{/if}}
     <h3>System requirements</h3>
-    <ul>
+    {{!-- <ul>
     {{#each game1.systemRequirements}}
         <li>{{this}}</li>
     {{/each}}
-    </ul>
+    </ul> --}}
+    {{game1.systemRequirements}}
     <h3>Genre</h3>
-    <ul>
+    {{game1.genre}}
+    {{!-- <ul>
         {{#each game1.genre}}
         <li>{{this}}</li>
         {{/each}}
-    </ul>
+    </ul> --}}
     <h1>Reviews for {{game1.name}}: </h1>
     {{#each game1Reviews}}
         <div>
@@ -61,17 +63,19 @@
         <p>No description</p>
     {{/if}}
     <h3>System requirements</h3>
-    <ul>
+    {{!-- <ul>
     {{#each game2.systemRequirements}}
         <li>{{this}}</li>
     {{/each}}
-    </ul>
+    </ul> --}}
+    {{game2.systemRequirements}}
     <h3>Genre</h3>
-    <ul>
+    {{game2.genre}}
+    {{!-- <ul>
         {{#each game2.genre}}
         <li>{{this}}</li>
         {{/each}}
-    </ul>
+    </ul> --}}
     <h1>Reviews for {{game2.name}}: </h1>
     {{#each game2Reviews}}
         <div>
