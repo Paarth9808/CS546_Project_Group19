@@ -147,7 +147,7 @@ const update=async(gameId,
             {$set: {individualRatings: game.individualRatings}}
         )
         if(updatedInfo.modifiedCount===0){
-            throw `Could not add review/rating`
+            throw `Please change either the review or rating`
         }
     
         const newGame=await gameCollection.findOne(

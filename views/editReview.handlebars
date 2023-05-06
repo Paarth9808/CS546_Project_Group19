@@ -1,8 +1,8 @@
-<form action="edit" method="POST" class="edit-review-form">
+<form action="edit" method="POST" id="edit-review-form" class="edit-review-form">
     <label for="review">Review</label>
-    <input id="review" type="text" placeholder="Type your review" name="reviewInput" value="{{review}}">
+    <input id="review" type="text" placeholder="Type your review" name="reviewInput" value="{{prevReview.review}}">
     <label for="rating">Rating</label>
-    <input id="rating" type="number" placeholder="Enter your rating(1-10)"name="ratingInput" value="{{rating}}">
+    <input id="rating" type="number" placeholder="Enter your rating(1-10)"name="ratingInput" value="{{prevReview.userRating}}">
     {{!-- <button type="submit">Edit review</button> --}}
     <input type="hidden" name="_method" value="PUT" >
     <input type="submit" value="Edit">
@@ -18,3 +18,6 @@
     {{/each}}
   </ul>
 {{/if}}
+<div id="editRatingError" class="error" hidden>Errors: 
+<ul class="client-side-error-edit-review" id="client-side-error-edit-review"></ul>
+</div>
