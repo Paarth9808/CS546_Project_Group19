@@ -1,10 +1,10 @@
 
 body {
-  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+  background: linear-gradient(90deg, rgb(174, 208, 238) 0%, rgb(134, 177, 226) 100%);
 }
 .dark-mode {
   /* gradient background color*/
-  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%) !important;
+  background: linear-gradient(-90deg, rgb(21, 8, 44) 0%,rgb(0, 0, 0) 100%) !important;
   color: white;
 }
 

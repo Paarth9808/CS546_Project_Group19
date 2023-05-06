@@ -13,13 +13,17 @@
 <h3><a href="/user/{{id}}/delete" style="color: red">Delete User</a></h3>
 {{/if}}
 {{!-- to do --}}
-<h2>Reviewed Posts</h2>
+<h2>Comments by User</h2>
 {{!-- getCommentID use --}}
 {{#each posts}}
 <section class="reviews">
-    <h3><a href="/games/{{gameId}}">{{gameId}}</a></h3>
-    <p>{{rating}} {{userReviews}}</p>
+    <p><a href="/games/{{this.gameID}}">{{this.content}}</a></p>
+    {{!-- <p>{{rating}} {{userReviews}}</p> --}}
 </section>
 {{/each}}
 
+<h2>Games Rated by User</h2>
+{{#each rated}}
+    <p><a href="/games/{{this._id}}">{{this.name}}</a></p>
+{{/each}}
 {{!-- link to games comparison page --}}

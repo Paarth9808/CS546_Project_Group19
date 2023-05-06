@@ -160,6 +160,18 @@ const getCommentById=async(
     return tempcomment;
 }
 
+const getAllCommentsByUserId=async(
+    userId
+)=>{
+    // commentid=checkcommentID(commentid);
+    const commentCollection=await comment();
+    const comments=await commentCollection.find({userID: userId});
+    // if((await commentCollection.countDocuments({userID: userId})) === 0)
+        // throw "no comment is found";
+    // tempcomment._id=tempcomment._id.toString();
+    return comments;
+}
+
 
 const likeComment=async(
     commentid,userid
@@ -277,4 +289,5 @@ const reportComment=async(
 }
 
 
-export{createComment,getpartComment,getreportedComment,deleteComment,updateComment,getCommentById,likeComment,dislikeComment,reportComment};
+export{createComment,getpartComment,getreportedComment,deleteComment,updateComment,getCommentById,likeComment,dislikeComment,reportComment,
+    getAllCommentsByUserId};

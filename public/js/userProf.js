@@ -12,7 +12,10 @@ editProfileButton.onclick = (e) => {
     //   window.alert('Passwords do not match'); // do whatever
     // }
     window.alert("Please fill all the fields"); // do whatever
-  } else {
+  } else if (parseInt(age) < 13) {
+    window.alert("Age should be 13+"); // do whatever
+  }
+  else {
     editProfileButton.form.submit();
     console.log(name, opassword, npassword, age);
   }

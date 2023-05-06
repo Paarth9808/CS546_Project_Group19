@@ -1,13 +1,16 @@
 import { Router } from "express";
 const router = Router();
 import { userData } from "../data/index.js";
+import { gameData } from "../data/index.js";
+import { getAllCommentsByUserId } from "../data/comment.js";
 import validation from "../validations/userValidation.js";
 import fs from "fs";
 import path from "path";
+import session from "express-session";
 import fileUpload from 'express-fileupload'; // this is used for profile picture upload
 
 //app.use(fileUpload()); // this is used for profile picture upload
-import session from "express-session";
+
 // import multer from 'multer';
 // const upload = multer({ dest: './public/userimages/' , limits: { fileSize: 10 * 1024 * 1024 }});
 
@@ -20,20 +23,36 @@ router.route("/:id").get(async (req, res) => {
   try {
     //if not logged in will be redirected to login page ??? how to do
     const user1 = await userData.getUserById(req.params.id);
-    const revPost = await comm
+    
     // const comments = await commentCollection.getMany({userId: req.params.id});
+    let comments = []
+    let cursor = await getAllCommentsByUserId(req.params.id);
+    for await (const doc of cursor) {
+      console.dir(doc);
+      comments.push(doc)
+    }
+    // r is a str
+    let ratedArr = [];
+    for (let r of user1.ratedIds){
+      // console.log(r.toString());
+      let game1 = await gameData.getGame(r.toString());
+      console.log(game1);
+      ratedArr.push(game1);
+    }
+    console.log(ratedArr)
+    let bool1 =  req.session?.user?.role === 'admin' || req.session?.user?.userId === req.params.id;
     return res.render("userProfile", {
       id: req.params.id,
       avatar: user1.avatar,
       username: user1.userName,
       age: user1.age,
       email: user1.email,
-      // change1
-      isLoggedInUser: (req.session?.user?.role === 'admin' || req.session?.user?.userId === req.params.id), // if logged in user is the same as the user being viewed
-      // posts: comments // type array
+      isLoggedInUser: bool1, // if logged in user is the same as the user being viewed
+      posts: comments, // type array
+      rated: ratedArr
     });
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.render('error', {errorMessage: e})
   }
 });
 
@@ -43,21 +62,15 @@ router.route("/:id/delete").get(async (req, res) => {
     try {
       req.params.id = validation.checkId(req.params.id);
     } catch (e) {
-      return res.status(400).json({ error: e });
+      return res.render('error', {errorMessage: e})
     }
     try {
       const user1 = await userData.getUserById(req.params.id);
-      res.render("userProfile", {
-        id : req.params.id,
-        avatar: user1.avatar,
-        username: user1.userName,
-        age: user1.age,
-        email: user1.email
-      });
+      req.session.destroy()
       await userData.deleteUser(req.params.id);
-      return res.status(200).json({ userId: req.params.id, deleted: true });
+      res.render('deleted', {name : user1.userName});
     } catch (e) {
-      return res.status(404).json({ error: e });
+      return res.render('error', {errorMessage: e})
     }
   } else {
     return res
@@ -141,7 +154,7 @@ router
       let currUser = await userData.getUserById(req.params.id);
       if(req.session?.user?.userId !== req.params.id) throw "You are not logged in as this user";
     } catch (e) {
-      return res.status(400).json({ error: e });
+      res.render('error', {errorMessage : JSON.stringify(e)});
     }
     res.render("editAvatar");
   })

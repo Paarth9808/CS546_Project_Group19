@@ -76,7 +76,7 @@ const addRating= async(
     )
     const userCollection = await user();
     let updatedUser=await userCollection.findOneAndUpdate({_id: new ObjectId(newRating.userId)},
-    {$push:{ratedIds:newRating._id}},
+    {$push:{ratedIds:gameId}},
     {ReturnDocument:'after'})
     if(updatedUser.lastErrorObject.n ===0){throw `RatedIds not updated successfully`}
     const newReview=get(gameId,userId)
@@ -228,7 +228,7 @@ const remove=async (gameId,userId)=>{
     )
     const userCollection = await user();
     let updatedUser=await userCollection.findOneAndUpdate({_id: new ObjectId(userId)},
-    {$pull:{ratedIds: new ObjectId(reviewId)}},
+    {$pull:{ratedIds: gameId}},
     {ReturnDocument:'after'})
     if(updatedUser.lastErrorObject.n ===0){throw `RatedIds not updated successfully`}
 
