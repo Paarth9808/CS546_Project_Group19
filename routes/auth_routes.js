@@ -110,7 +110,6 @@ router
     })
 
     router.route('/logout').get(async (req, res) => {
-        //code here for GET
         req.session.destroy();
         res.render('logout',{title:'Logout'})
       });
