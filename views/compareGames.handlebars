@@ -18,34 +18,40 @@
 {{#if game1}}
 <div id="game1div">
     <h1>{{game1.name}}</h1>
-    <h2>Rating: {{game1.rating}}</h2>
+    {{#if game1.rating}}
+        <h2>Rating: {{game1.rating}}</h2>
+    {{else}}
+        <h2>Rating: N/A</h2>
+    {{/if}}
     {{#if game1.description}}
     <p>{{game1.description}}</p>
     {{/if}}
     <h3>System requirements</h3>
-    <ul>
+    {{!-- <ul>
     {{#each game1.systemRequirements}}
         <li>{{this}}</li>
     {{/each}}
-    </ul>
+    </ul> --}}
+    {{game1.systemRequirements}}
     <h3>Genre</h3>
-    <ul>
+    {{game1.genre}}
+    {{!-- <ul>
         {{#each game1.genre}}
         <li>{{this}}</li>
         {{/each}}
-    </ul>
+    </ul> --}}
     <h1>Reviews for {{game1.name}}: </h1>
     {{#each game1Reviews}}
         <div>
             <dl>Username: {{this.userName}}</dl>
             <dl>Review: {{this.review}}</dl>
             <dl>Rating: {{this.userRating}}</dl>
-            {{#if (ifEqual this.userName  ../currentUser.userName) }}
+            {{!-- {{#if (ifEqual this.userName  ../currentUser.userName) }}
                 <a href="edit">Edit review</a>
             {{/if}}
             {{#if (or (ifEqual this.userName  ../currentUser.userName) (ifEqual ../currentUser.role "admin"))}}
                 <a href="delete">Delete review</a>
-            {{/if}}
+            {{/if}} --}}
         </div>
     {{/each}}
 {{/if}}
@@ -54,36 +60,42 @@
 </div>
 <div id="game2div">
     <h1>{{game2.name}}</h1>
-    <h2>Rating: {{game2.rating}}</h2>
+    {{#if game2.rating}}
+        <h2>Rating: {{game2.rating}}</h2>
+    {{else}}
+        <h2>Rating: N/A</h2>
+    {{/if}}
     {{#if game2.description}}
     <p>{{game2.description}}</p>
     {{else}}
         <p>No description</p>
     {{/if}}
     <h3>System requirements</h3>
-    <ul>
+    {{!-- <ul>
     {{#each game2.systemRequirements}}
         <li>{{this}}</li>
     {{/each}}
-    </ul>
+    </ul> --}}
+    {{game2.systemRequirements}}
     <h3>Genre</h3>
-    <ul>
+    {{game2.genre}}
+    {{!-- <ul>
         {{#each game2.genre}}
         <li>{{this}}</li>
         {{/each}}
-    </ul>
+    </ul> --}}
     <h1>Reviews for {{game2.name}}: </h1>
     {{#each game2Reviews}}
         <div>
             <dl>Username: {{this.userName}}</dl>
             <dl>Review: {{this.review}}</dl>
             <dl>Rating: {{this.userRating}}</dl>
-            {{#if (ifEqual this.userName  ../currentUser.userName) }}
+            {{!-- {{#if (ifEqual this.userName  ../currentUser.userName) }}
                 <a href="edit">Edit review</a>
             {{/if}}
             {{#if (or (ifEqual this.userName  ../currentUser.userName) (ifEqual ../currentUser.role "admin"))}}
                 <a href="delete">Delete review</a>
-            {{/if}}
+            {{/if}} --}}
         </div>
     {{/each}}
 </div>
