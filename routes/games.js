@@ -228,6 +228,7 @@ router.route('/reviews/:id').get(async (req,res)=>{
         return res.render('gameReviews',{Titlename:'Game Reviews',game:game,reviews: reviews,currentUser:currentUser})
     }catch(e){
         res.status(400).render('error',{Titlename:'Error page', errorMessage: e});
+        res.status(400).render('error',{Titlename:'Error page', errorMessage: e});
     }
 }).post(async (req,res)=>{
     //Add reviews
@@ -334,6 +335,16 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
     }catch(e){
         errors.push(e);
     }
+    let userId=undefined
+    let prevReview=undefined;
+
+    try{
+        currentUser=req.session.user;
+        userId=currentUser.userId;
+        prevReview=await ratingData.get(req.params.id,userId)
+    }catch(e){
+        errors.push(e);
+    }
     try{
         review=ratingValidation.checkReview(review);
     }catch(e){
@@ -351,6 +362,7 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
     }
     if(errors.length>0){
         return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating,prevReview:prevReview})
+        return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating,prevReview:prevReview})
     }
     try{
         let gameId=req.params.id;
@@ -362,8 +374,10 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
         game=await gameData.getGame(req.params.id);
         reviews=game.individualRatings;
         res.status(200).render('gameReviews',{Titlename:'Game Reviews',status:'Your review has been updated',isAdded:isAdded,game:game,reviews:reviews,currentUser:currentUser,prevReview:prevReview})
+        res.status(200).render('gameReviews',{Titlename:'Game Reviews',status:'Your review has been updated',isAdded:isAdded,game:game,reviews:reviews,currentUser:currentUser,prevReview:prevReview})
     }catch(e){
         errors.push(e);
+        return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating,prevReview:prevReview})
         return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating,prevReview:prevReview})
     }
 })
