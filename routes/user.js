@@ -3,6 +3,10 @@ const router = Router();
 import { userData } from "../data/index.js";
 import validation from "../validations/userValidation.js";
 import fs from "fs";
+import path from "path";
+import fileUpload from 'express-fileupload'; // this is used for profile picture upload
+
+//app.use(fileUpload()); // this is used for profile picture upload
 import session from "express-session";
 // import multer from 'multer';
 // const upload = multer({ dest: './public/userimages/' , limits: { fileSize: 10 * 1024 * 1024 }});
