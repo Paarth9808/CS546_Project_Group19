@@ -35,7 +35,7 @@ let exportedMethods = {
     const newId = insertUser.insertedId.toString();
 
     const user_ret = await this.getUserById(newId);
-    return {insertedUser : true};
+    return user_ret;
   },
 
   async getAllUsers() {

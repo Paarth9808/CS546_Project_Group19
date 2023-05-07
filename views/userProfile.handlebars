@@ -10,7 +10,12 @@
 {{#if isLoggedInUser}}
 <h3><a href="/user/{{id}}/edit">Edit profile</h3>
 <h3><a href="/user/{{id}}/edit/avatar">Change avatar</a></h3>
-<h3><a href="/user/{{id}}/delete" style="color: red">Delete User</a></h3>
+{{!-- <h3><a href="/user/{{id}}/delete" style="color: red">Delete User</a></h3>  --}}
+<form action="{{id}}" method="POST" class="delete-button">
+                <input type="hidden" name="_method" value="DELETE" >
+                <input type="submit" value="Delete">
+            </form>
+{{!-- change here ^ --}}
 {{/if}}
 {{!-- to do --}}
 <h2>Comments by User</h2>
