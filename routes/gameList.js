@@ -135,7 +135,7 @@ router.route('/').get(async (req,res)=>{
         const game = await gameData.getAll();
         let filteredGame = gameListData.ageFilter(userAge, game);
         // console.log('!!rsi', req.session?.user, req.session?.user?.userId);
-        res.render('gameList', {title: "gameList", sortTerm: filteredGame,
+        res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame,
          profileId: req.session?.user?.userId,userRole: req.session?.user?.role
         });
         // render -> profileId: req.session?.user?.userId
