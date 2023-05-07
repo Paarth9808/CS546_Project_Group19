@@ -2,6 +2,7 @@ import { Router } from "express";
 const router = Router();
 import { gameListData } from "../data/index.js";
 import { gameData } from "../data/index.js";
+import xss from 'xss';
 
 
 router.route('/creategame').get(async (req, res)=>{
@@ -14,7 +15,7 @@ router.route('/creategame').get(async (req, res)=>{
     res.render('error', {errorMessage : 'you are not admin'});
     return;
   }
-  res.render('createGame', {title : 'createGame'});
+  res.render('createGame', {Titlename : 'createGame'});
 
 })
 .post(async (req, res) =>{
@@ -25,6 +26,13 @@ router.route('/creategame').get(async (req, res)=>{
   let releaseDate = req.body.releaseDateInput;
   let age = Number(req.body.ageInput);
   let description = req.body.descriptionInput;
+
+  genre = xss(genre);
+  systemRequirements = xss(systemRequirements);
+  name = xss(name);
+  description = xss(description);
+  platform = xss(platform);
+  releaseDate = xss(releaseDate);
 
   try {
     if (genre) {
@@ -91,12 +99,12 @@ router.route('/creategame').get(async (req, res)=>{
     if (testName == 'exist') throw 'name exist';
 
     const newGame = await gameListData.createGame(releaseDate, name, genre, description, systemRequirements, age, platform);
-    if (newGame) res.render('createGame', {title: "createGame", showErrorMessage : 'Game Added!'});
+    if (newGame) res.render('createGame', {Titlename: "createGame", showErrorMessage : 'Game Added!'});
     if (!newGame) throw 'not created';
 
 
   } catch (e) {
-    res.render('createGame', {title: "createGame", showErrorMessage : e});
+    res.render('createGame', {Titlename: "createGame", showErrorMessage : e});
 
   }
 
@@ -161,7 +169,12 @@ router.route('/').get(async (req,res)=>{
     let sortWay = req.body.sortWayInput;
     let sortBy = req.body.sortByInput;
 
-    if (!genre && !platform && !sortWay && !sortBy) res.status(400).render('gameList', {title: "gameList", showErrorMessage : 'Sort/Filter missing'});
+    platform = xss(platform);
+    genre = xss(genre);
+    sortWay = xss(sortWay);
+    sortBy = xss(sortBy);
+
+    if (!genre && !platform && !sortWay && !sortBy) res.status(400).render('gameList', {Titlename: "gameList", showErrorMessage : 'Sort/Filter missing'});
 
 
 
@@ -186,7 +199,7 @@ router.route('/').get(async (req,res)=>{
 
 
     } catch (e) {
-      return res.status(400).render('gameList', {title: "gameList", showErrorMessage : e});
+      return res.status(400).render('gameList', {Titlename: "gameList", showErrorMessage : e});
     }
 
 
@@ -202,7 +215,7 @@ router.route('/').get(async (req,res)=>{
 
            if (filteredGame.length == 0) nogame = 'no games found';
             
-           res.render('gameList', {title: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
+           res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
         
 
       } else if (platform) {
@@ -214,7 +227,7 @@ router.route('/').get(async (req,res)=>{
 
         if (filteredGame.length == 0) nogame = 'no games found';
          
-        res.render('gameList', {title: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
+        res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
 
       } else if (sortWay && sortBy) {
         if (sortBy == 'date') {
@@ -225,7 +238,7 @@ router.route('/').get(async (req,res)=>{
 
             if (filteredGame.length == 0) nogame = 'no games found';
              
-            res.render('gameList', {title: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
+            res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
 
         } else if (sortBy == 'rate') {
 
@@ -236,15 +249,15 @@ router.route('/').get(async (req,res)=>{
 
            if (filteredGame.length == 0) nogame = 'no games found';
             
-          res.render('gameList', {title: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
+          res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
         }
 
       } else {
-        res.status(500).render('gameList', {title : "error", showErrorMessage: "Internal Server Error" });
+        res.status(500).render('gameList', {Titlename : "error", showErrorMessage: "Internal Server Error" });
       }
 
     } catch (e) {
-      return res.render('gameList', {title: "gameList", showErrorMessage : e});
+      return res.render('gameList', {Titlename: "gameList", showErrorMessage : e});
     }
 
   });
