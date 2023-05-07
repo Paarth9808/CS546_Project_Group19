@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router=Router();
 import { gameData } from "../data/index.js";
-import { getpartComment } from "../data/comment.js";
+import { getpartComment,improveComment } from "../data/comment.js";
 import userMethods from "../data/user.js";
 import validation from '../validations/gameValidation.js'
 import ratingValidation from '../validations/individualRatingValidation.js'
@@ -28,6 +28,7 @@ router.route('/:id').get(async (req,res)=>{
             isAdmin=(req.session.user.role=="admin")
             for(var i=0;i<tempcomments.length;i++)
             {
+                tempcomments[i]=await improveComment(tempcomments[i]);
                 console.log(req.session.user);
                 if(tempcomments[i].userID==req.session.user.userId||req.session.user.role=="admin")
                     tempcomments[i].deletable=true;
@@ -376,8 +377,8 @@ router.route('/reviews/:id/delete').delete(async (req,res)=>{
     }
     try{
         if(!req.session.user){return res.redirect('/login')}
-        currentUser=req.session.user;
-        let userId=currentUser.userId;
+        //currentUser=req.session.user;
+        //let userId=currentUser.userId;
         let deletedCount=await ratingData.remove(id,userId);
         if(deletedCount>0){isDeleted=true}
         game=await gameData.getGame(req.params.id);
