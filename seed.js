@@ -1,6 +1,6 @@
 import {closeConnection,dbConnection} from './config/mongoConnection.js'
 import {gameData,userData} from './data/index.js'
-import { gameListData } from "../data/index.js";
+import { gameListData } from "./data/index.js";
 import {createComment,getpartComment,deleteComment,updateComment,getCommentById,likeComment,dislikeComment,reportComment} from './data/comment.js'
 import ratingData from './data/individualRatings.js'
 
