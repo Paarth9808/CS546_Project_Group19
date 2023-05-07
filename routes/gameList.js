@@ -49,6 +49,10 @@ router.route('/creategame').get(async (req, res)=>{
       }
       if (res == systemRequirements.length) throw 'invalid systemRequirements input';
     }
+    if (systemRequirements) {
+      if (systemRequirements.trim() == '') throw 'genre should be no empty spaces';
+      if (typeof(systemRequirements) != 'string') throw 'genre type wrong';
+    }
     if (platform) {
       if (platform.trim() == '') throw 'platform should be no empty spaces';
       if (typeof(platform) != 'string') throw 'platform type wrong';
@@ -115,7 +119,14 @@ router.route('/').get(async (req,res)=>{
     try{
         const game = await gameData.getAll();
         let filteredGame = gameListData.ageFilter(userAge, game);
-        res.render('gameList', {title: "gameList", sortTerm: filteredGame});
+        // console.log('!!rsi', req.session?.user, req.session?.user?.userId);
+        res.render('gameList', {title: "gameList", sortTerm: filteredGame,
+         profileId: req.session?.user?.userId,userRole: req.session?.user?.role
+        });
+        // render -> profileId: req.session?.user?.userId
+        // {{#if profileId}}
+        // <a href="/user/{{profileId}}">profile</a>
+        // {{/if}}
         
     }catch(e){
         return res.status(404).json({error:e})

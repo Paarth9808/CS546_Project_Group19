@@ -100,6 +100,7 @@ router.route('/:id/edit').get(async (req,res)=>{
     const updatedData=req.body;
     let game=undefined
     if(!req.session.user){return res.redirect('/login')}
+    if(req.session.user.role==='user'){return res.status(403).render('unauthorized',{titleName:'Unauthorized'})}
     try{
         game=await gameData.getGame(req.params.id)
     }catch(e){
@@ -288,6 +289,7 @@ router.route('/reviews/:id').get(async (req,res)=>{
 })
 
 router.route('/reviews/:id/edit').get(async (req,res)=>{
+    let currentUserId=undefined
     try{
         req.params.id=validation.checkId(req.params.id);
     }catch(e){
@@ -296,7 +298,7 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
     try{
         const game=await gameData.getGame(req.params.id);
         //let reviews=game.individualRatings;
-        let currentUserId=req.session.user.userId;
+        if(req.session.user){currentUserId=req.session.user.userId;}
         let review= await ratingData.get(req.params.id,currentUserId)
         return res.render('editReview',{Titlename:'Edit Review',game: game,prevReview:review})
         // if(!req.session.user){return res.redirect('/login')}
@@ -374,8 +376,8 @@ router.route('/reviews/:id/delete').delete(async (req,res)=>{
     }
     try{
         if(!req.session.user){return res.redirect('/login')}
-        //currentUser=req.session.user;
-        //let userId=currentUser.userId;
+        currentUser=req.session.user;
+        let userId=currentUser.userId;
         let deletedCount=await ratingData.remove(id,userId);
         if(deletedCount>0){isDeleted=true}
         game=await gameData.getGame(req.params.id);

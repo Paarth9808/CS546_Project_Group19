@@ -56,8 +56,11 @@
     <input id="rating" type="number" placeholder="Enter your rating(1-10)"name="ratingInput">
     <button type="submit">Add review</button>
 </form> --}}
-<a href="reviews/{{game._id}}/">Reviews</a>
+<a href="reviews/{{game._id}}/">Click here to view and add reviews</a>
 
 
 </div>
+<div>
+<h3>Comments: </h3>
 {{>comments commentlist=commentlist gameid=game._id isAdmin=isAdmin}}
+</div>

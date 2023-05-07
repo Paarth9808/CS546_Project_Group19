@@ -1,36 +1,77 @@
 import { Router } from "express";
 const router = Router();
 import { userData } from "../data/index.js";
+import { gameData } from "../data/index.js";
+import { getAllCommentsByUserId } from "../data/comment.js";
 import validation from "../validations/userValidation.js";
 import fs from "fs";
+import xss from 'xss';
 import path from "path";
+import session from "express-session";
 import fileUpload from 'express-fileupload'; // this is used for profile picture upload
 
 //app.use(fileUpload()); // this is used for profile picture upload
+
 // import multer from 'multer';
 // const upload = multer({ dest: './public/userimages/' , limits: { fileSize: 10 * 1024 * 1024 }});
 
 router.route("/:id").get(async (req, res) => {
+  let user1=undefined
   try {
     req.params.id = validation.checkId(req.params.id);
   } catch (e) {
-    return res.status(400).json({ error: e });
+    res.render('error', {errorMessage : JSON.stringify(e)});
   }
+  try{
+    user1 = await userData.getUserById(req.params.id);
+  }catch(e){
+    return res.render('error', {errorMessage: e})
+  }
+  let ratedArr = [];
+  try{
+      for (let r of user1.ratedIds){
+      // console.log(r.toString());
+        let game1 = await gameData.getGame(r.toString());
+        console.log(game1);
+        ratedArr.push(game1);
+    }
+  }catch(e){
+    console.log(e)
+  }
+
   try {
     //if not logged in will be redirected to login page ??? how to do
-    const user1 = await userData.getUserById(req.params.id);
+    //const user1 = await userData.getUserById(req.params.id);
+    
     // const comments = await commentCollection.getMany({userId: req.params.id});
+    let comments = []
+    let cursor = await getAllCommentsByUserId(req.params.id);
+    for await (const doc of cursor) {
+      console.dir(doc);
+      comments.push(doc)
+    }
+    // r is a str
+    
+    // for (let r of user1.ratedIds){
+    //   // console.log(r.toString());
+    //   let game1 = await gameData.getGame(r.toString());
+    //   console.log(game1);
+    //   ratedArr.push(game1);
+    // }
+    console.log(ratedArr)
+    let bool1 =  req.session?.user?.role === 'admin' || req.session?.user?.userId === req.params.id;
     return res.render("userProfile", {
       id: req.params.id,
       avatar: user1.avatar,
       username: user1.userName,
       age: user1.age,
       email: user1.email,
-      isLoggedInUser: req.session?.user?.userId === req.params.id, // if logged in user is the same as the user being viewed
-      // posts: comments // type array
+      isLoggedInUser: bool1, // if logged in user is the same as the user being viewed
+      posts: comments, // type array
+      rated: ratedArr
     });
   } catch (e) {
-    return res.status(404).json({ error: e });
+    return res.render('error', {errorMessage: e})
   }
 });
 
@@ -40,26 +81,18 @@ router.route("/:id/delete").get(async (req, res) => {
     try {
       req.params.id = validation.checkId(req.params.id);
     } catch (e) {
-      return res.status(400).json({ error: e });
+      return res.render('error', {errorMessage: e})
     }
     try {
       const user1 = await userData.getUserById(req.params.id);
-      return res.render("userProfile", {
-        id : req.params.id,
-        avatar: user1.avatar,
-        username: user1.userName,
-        age: user1.age,
-        email: user1.email
-      });
+      req.session.destroy()
       await userData.deleteUser(req.params.id);
-      return res.status(200).json({ userId: req.params.id, deleted: true });
+      res.render('deleted', {name : user1.userName});
     } catch (e) {
-      return res.status(404).json({ error: e });
+      return res.render('error', {errorMessage: e})
     }
   } else {
-    return res
-      .status(400)
-      .json({ error: "You are not logged in as this user" });
+    res.render('error', {errorMessage : JSON.stringify(e)});
   }
 });
 // link to edit page
@@ -69,7 +102,7 @@ router
     try {
       req.params.id = validation.checkId(req.params.id);
       let currUser = await userData.getUserById(req.params.id);
-      if(req.session?.user?.userId !== req.params.id) throw "You are not logged in as this user";
+      if(req.session?.user?.userId !== req.params.id ) throw "You are not logged in as this user";
       res.render("editProfile", { id: req.params.id, age: currUser.age, username: currUser.userName });
     } catch (e) {
       res.render('error', {errorMessage : JSON.stringify(e)});
@@ -79,13 +112,17 @@ router
     let { userName: userName, oldpassword, newpassword, age: age } = req.body;
     let errors = [];
     try {
+      userName = xss(userName);
       userName = validation.checkString(userName, "userName");
     } catch (e) {
       errors.push(e);
     }
     try {
+      oldpassword = xss(oldpassword);
       oldpassword = validation.checkPass(oldpassword);
+      newpassword = xss(newpassword);
       newpassword = validation.checkPass(newpassword);
+      
     } catch (e) {
       errors.push(e);
     }
@@ -96,6 +133,7 @@ router
     //   errors.push(e);
     // }
     try {
+      age = xss(age);
       age = validation.checkAge(age);
     } catch (e) {
       errors.push(e);
@@ -138,7 +176,7 @@ router
       let currUser = await userData.getUserById(req.params.id);
       if(req.session?.user?.userId !== req.params.id) throw "You are not logged in as this user";
     } catch (e) {
-      return res.status(400).json({ error: e });
+      res.render('error', {errorMessage : JSON.stringify(e)});
     }
     res.render("editAvatar");
   })
