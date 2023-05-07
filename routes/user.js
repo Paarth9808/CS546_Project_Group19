@@ -73,11 +73,9 @@ router.route("/:id").get(async (req, res) => {
   } catch (e) {
     return res.render('error', {errorMessage: e})
   }
-});
-
-// delete user
-router.route("/:id/delete").get(async (req, res) => {
-  if (req.params.id === req.session?.user?.userId) {
+}
+).delete(async(req, res) =>{
+  if (req.params.id === req.session?.user?.userId || req.session?.user?.role === 'admin') {
     try {
       req.params.id = validation.checkId(req.params.id);
     } catch (e) {
@@ -87,14 +85,35 @@ router.route("/:id/delete").get(async (req, res) => {
       const user1 = await userData.getUserById(req.params.id);
       req.session.destroy()
       await userData.deleteUser(req.params.id);
-      res.render('deleted', {name : user1.userName});
+      res.render('deleted', {name : user1.userName, id : user1._id});
     } catch (e) {
       return res.render('error', {errorMessage: e})
     }
   } else {
-    res.render('error', {errorMessage : JSON.stringify(e)});
+    res.render('error', {errorMessage : "not logged in as the user or you are not the admin!"});
   }
-});
+})
+
+// // delete user
+// router.route("/:id/delete").get(async (req, res) => {
+//   if (req.params.id === req.session?.user?.userId || req.session?.user?.role === 'admin') {
+//     try {
+//       req.params.id = validation.checkId(req.params.id);
+//     } catch (e) {
+//       return res.render('error', {errorMessage: e})
+//     }
+//     try {
+//       const user1 = await userData.getUserById(req.params.id);
+//       req.session.destroy()
+//       await userData.deleteUser(req.params.id);
+//       res.render('deleted', {name : user1.userName});
+//     } catch (e) {
+//       return res.render('error', {errorMessage: e})
+//     }
+//   } else {
+//     res.render('error', {errorMessage : "not logged in as the user or you are not the admin!"});
+//   }
+// });
 // link to edit page
 router
   .route("/:id/edit")
@@ -108,6 +127,7 @@ router
       res.render('error', {errorMessage : JSON.stringify(e)});
     }
   })
+  // post to put
   .post(fileUpload(),async (req, res) => {
     let { userName: userName, oldpassword, newpassword, age: age } = req.body;
     let errors = [];
