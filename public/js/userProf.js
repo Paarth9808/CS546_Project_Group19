@@ -20,3 +20,4 @@ editProfileButton.onclick = (e) => {
     console.log(name, opassword, npassword, age);
   }
 };
+
