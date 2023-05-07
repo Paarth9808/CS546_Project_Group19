@@ -10,7 +10,7 @@ function adderrorsolution(element)
     {
         const img=images[i]
         img.addEventListener('error', function() {
-        img.src = '/public/userimages/default.jpg';
+        img.src = '/public/userimages/default.png';
         });
     }
 }

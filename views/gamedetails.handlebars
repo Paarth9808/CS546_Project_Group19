@@ -17,9 +17,15 @@
 {{else}}
     <h2>Rating: N/A</h2>
 {{/if}}
+{{#if game.genre}}
+    <h3>Genre: </h3>
+    <p>{{game.genre}}</p>
+{{/if}}
 {{#if game.description}}
+    <h3>Description: </h3>
     <p>{{game.description}}</p>
 {{else}}
+    <h3>Description: </h3>
     <p>No description</p>
 {{/if}}
 <h3>System requirements: </h3>
