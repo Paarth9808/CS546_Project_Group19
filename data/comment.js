@@ -29,6 +29,15 @@ import { checkuserID,checkgameID,checkcommentID,checkcontent,checkphoto } from "
 
 
 
+const improveComment=async(tempcomment)=>{
+    const userCollection=await user();
+    const tempuser=await userCollection.findOne({_id:new ObjectId(tempcomment.userID)});
+    if(tempuser==null)
+        throw "user does not exist";
+    tempcomment.username=tempuser.userName;
+    tempcomment.profilepath=tempuser.avatar;
+    return tempcomment;
+}
 
 const createComment=async(
     userID,
@@ -53,8 +62,8 @@ const createComment=async(
     const now=new Date();
     const tempcomment={
         userID:userID,
-        username:tempuser.userName,
-        profilepath:tempuser.avatar,
+        //username:tempuser.userName,
+        //profilepath:tempuser.avatar,
         gameID:gameID,
         content:content,
         photo:photo,
@@ -97,7 +106,7 @@ const getpartComment=async(gameid,start,length)=>{
     gameid=checkgameID(gameid);
     const res=commentCollection.find({gameID:gameid}).skip(start).limit(length).toArray();
     for(var i=0;i<res.length;i++)
-        res[i]._id=res[i]._id.toString();
+        res[i]._id=res[i]._id.toString(); 
     return res;
 }
 const deleteComment=async(
@@ -277,4 +286,4 @@ const reportComment=async(
 }
 
 
-export{createComment,getpartComment,getreportedComment,deleteComment,updateComment,getCommentById,likeComment,dislikeComment,reportComment};
+export{createComment,getpartComment,getreportedComment,deleteComment,updateComment,getCommentById,likeComment,dislikeComment,reportComment,improveComment};

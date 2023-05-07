@@ -4,7 +4,8 @@ import {v4 as uuidv4} from 'uuid';
 import fs from 'fs';
 import Handlebars from 'handlebars';
 import path from 'path';
-import {createComment,deleteComment,getpartComment,getreportedComment,likeComment,dislikeComment,reportComment} from '../data/comment.js';
+import xss from 'xss';
+import {createComment,deleteComment,getpartComment,getreportedComment,likeComment,dislikeComment,reportComment,improveComment} from '../data/comment.js';
 const router = Router();
 const commentsource=fs.readFileSync(path.join('./views', 'partials', 'commentT.handlebars'));
 const mycomment=Handlebars.compile(commentsource+"");
@@ -19,14 +20,15 @@ router.route('/getmore/:gameid/:index').get(async (req,res)=>{
     return;
   }
   try{
-    const start=req.params.index;
-    const gameid=req.params.gameid;
+    const start=xss(req.params.index);
+    const gameid=xss(req.params.gameid);
     //console.log(start);
     const newcomment=await getpartComment(gameid,Number(start),10);
     //console.log(newcomment);
     const htmllist=[];
     for(var i=0;i<newcomment.length;i++)
     {
+      newcomment[i]=await improveComment(newcomment[i]);
       if(req.session.user.userId==newcomment[i].userID||req.session.user.role=="admin")
         newcomment[i].deletable=true;
       else
@@ -46,8 +48,7 @@ router.route('/getmore/:gameid/:index').get(async (req,res)=>{
 
 router.route('/getreported/:gameid').get(async (req,res)=>{
   try{
-    const start=req.params.index;
-    const gameid=req.params.gameid;
+    const gameid=xss(req.params.gameid);
     //console.log(start);
     const newcomment=await getreportedComment(gameid);
     //console.log(newcomment);
@@ -55,6 +56,7 @@ router.route('/getreported/:gameid').get(async (req,res)=>{
     for(var i=0;i<newcomment.length;i++)
     {
       newcomment[i].deletable=true;
+      newcomment[i]=await improveComment(newcomment[i]);
       //console.log(mycomment({comment:newcomment[i]}));
       htmllist.push(mycomment({comment:newcomment[i]}));
     }
@@ -135,7 +137,7 @@ router.route("/sendcomment").post(async (req, res)=> {
         //console.log(fields);
         //console.log(files);
         //console.log(...files);
-        const text=fields.text;
+        const text=xss(fields.text);
         const gameid=fields.gameid;
         const pics=[];
         var picCount=0;
@@ -165,7 +167,8 @@ router.route("/sendcomment").post(async (req, res)=> {
         try{
           if(text.trim()==0&&pics.length==0)
             throw "empty content";
-          const newcomment=await createComment(req.session.user.userId,gameid,text,pics);
+          var newcomment=await createComment(req.session.user.userId,gameid,text,pics);
+          newcomment=await improveComment(newcomment);
           //console.log(newcomment);
           newcomment.deletable=true;
           res.send(mycomment({comment:newcomment}));

@@ -3,7 +3,7 @@
     <div class="commentinfo">
         <div class="profilediv">
             <a href={{concat "/user/" comment.userID}}>
-                <img class="commentprofile" src={{comment.profilepath}}/>
+                <img class="commentprofile" alt="user's profile" src="/public/userimages/{{comment.profilepath}}">
             </a>
         </div>
         <div>
@@ -26,7 +26,7 @@
         <div class="comment_pic">
             {{#if comment.photo.length}}
                 {{#each comment.photo}}
-                    <img class="commentimg" src={{this}}>
+                    <img class="commentimg" alt="comments'img" src={{this}}>
                 {{/each}}
             {{/if}}
         </div>
