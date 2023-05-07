@@ -135,7 +135,7 @@ router.route('/').get(async (req,res)=>{
         const game = await gameData.getAll();
         let filteredGame = gameListData.ageFilter(userAge, game);
         // console.log('!!rsi', req.session?.user, req.session?.user?.userId);
-        res.render('gameList', {title: "gameList", sortTerm: filteredGame,
+        res.render('gameList', {Titlename: "Game list", sortTerm: filteredGame,
          profileId: req.session?.user?.userId,userRole: req.session?.user?.role
         });
         // render -> profileId: req.session?.user?.userId
@@ -174,7 +174,7 @@ router.route('/').get(async (req,res)=>{
     sortWay = xss(sortWay);
     sortBy = xss(sortBy);
 
-    if (!genre && !platform && !sortWay && !sortBy) res.status(400).render('gameList', {Titlename: "gameList", showErrorMessage : 'Sort/Filter missing'});
+    if (!genre && !platform && !sortWay && !sortBy) res.status(400).render('gameList', {Titlename: "Game List", showErrorMessage : 'Sort/Filter missing'});
 
 
 
@@ -199,7 +199,7 @@ router.route('/').get(async (req,res)=>{
 
 
     } catch (e) {
-      return res.status(400).render('gameList', {Titlename: "gameList", showErrorMessage : e});
+      return res.status(400).render('gameList', {Titlename: "Game list", showErrorMessage : e});
     }
 
 

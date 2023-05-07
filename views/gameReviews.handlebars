@@ -1,9 +1,9 @@
 <h2>Add review:</h2>
-<form action="" method="POST" id="add-review-form" class="add-review-form">
+<form method="POST" id="add-review-form" class="add-review-form">
     <label for="review">Review</label>
     <input id="review" type="text" placeholder="Type your review" name="reviewInput">
     <label for="rating">Rating</label>
-    <input id="rating" type="number" placeholder="Enter your rating(1-10)"name="ratingInput">
+    <input id="rating" type="number" placeholder="Enter your rating(1-10)" name="ratingInput">
     <button type="submit">Add review</button>
 </form>
 {{#if isAdded}}<p>{{status}}</p>{{/if}}
@@ -23,9 +23,9 @@
 <h1>Reviews for {{game.name}}: </h1>
 {{#each reviews}}
     <div>
-        <dl>Username: {{this.userName}}</dl>
-        <dl>Review: {{this.review}}</dl>
-        <dl>Rating: {{this.userRating}}</dl>
+        <p>Username: {{this.userName}}</p>
+        <p>Review: {{this.review}}</p>
+        <p>Rating: {{this.userRating}}</p>
         {{#if (ifEqual this.userName  ../currentUser.userName) }}
             {{!-- <a href="edit">Edit review</a> --}}
             <form action="edit" method="GET" class="update-button">
