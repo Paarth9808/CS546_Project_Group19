@@ -101,11 +101,18 @@ router
     })
     
     router.route('/').get(async (req,res)=>{
-        if (req.session.user) {
-            return res.redirect('/gameList');
-        }
-        else{
-            return res.render('mainpage');
+        // if (req.session.user) {
+        //     return res.redirect('/gameList');
+        // }
+        // else{
+        //     return res.render('mainpage');
+        // }
+        try{
+        let user=undefined;
+        if(req.session.user){user=req.session.user}
+        return res.render('mainpage',{titleName:'Home Page',user:user})
+        }catch(e){
+            res.render('error',{titleName:'Error page',errorMessage:e,profileId: req.session?.user?.userId})
         }
     })
 

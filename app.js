@@ -47,6 +47,91 @@ app.use(
   })
 );
 
+app.use('/register',(req, res, next)=>{
+    if(req.session.user){
+      return res.redirect('/')
+    }else{
+      next();
+    }
+})
+
+app.use('/login',(req, res, next)=>{
+    if(req.session.user){
+      return res.redirect('/')
+    }else{
+      next();
+    }
+})
+
+app.use('/logout',(req,res, next)=>{
+    if(!req.session.user){
+      return res.redirect('/login')
+    }else{
+      next();
+    }
+})
+
+app.use('/gamelist/creategame',(req,res, next)=>{
+  if(!req.session.user){
+    return res.redirect('/login')
+  }else{
+    next();
+  }
+})
+
+app.use('/games/:id/edit',(req,res, next)=>{
+  if(!req.session.user){
+    return res.redirect('/login')
+  }else{
+    if(req.session.user.role==='admin'){
+      next();
+    }else{
+      return res.status(403).render('unauthorized',{titleName:'Unauthorized'})
+    }
+  }
+})
+
+app.use('/games/reviews/:id/edit',(req,res, next)=>{
+  if(!req.session.user){
+    return res.redirect('/login')
+  }else{
+    next();
+  }
+})
+
+app.use('/user/:id',(req, res, next)=>{
+  if(!req.session.user){
+    return res.redirect('/login')
+  }else{
+    next();
+  }
+})
+
+app.use('/user/:id/edit',(req, res, next)=>{
+  if(!req.session.user){
+    return res.redirect('/login')
+  }else{
+    next();
+  }
+})
+
+app.use('/user/:id/edit/avatar',(req, res, next)=>{
+  if(!req.session.user){
+    return res.redirect('/login')
+  }else{
+    next();
+  }
+})
+
+app.use('/user/:id/delete',(req, res, next)=>{
+  if(!req.session.user){
+    return res.redirect('/login')
+  }else{
+    next();
+  }
+})
+
+
 
 app.use('/public', staticDir);
 app.use(express.json());
