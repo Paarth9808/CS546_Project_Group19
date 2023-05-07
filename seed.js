@@ -27,22 +27,6 @@ async function main(){
         await gameListData.createGame('01/01/2015', 'game15', 'action', 'description', 'systemRequirements', 13, 'switch');
 
 
-        let game1 = await gameListData.getGameByName('game1');
-        let game2 = await gameListData.getGameByName('game2');
-        let game3 = await gameListData.getGameByName('game3');
-        let game4 = await gameListData.getGameByName('game4');
-        let game5 = await gameListData.getGameByName('game5');
-        let game6 = await gameListData.getGameByName('game6');
-        let game7 = await gameListData.getGameByName('game7');
-        let game8 = await gameListData.getGameByName('game8');
-        let game9 = await gameListData.getGameByName('game9');
-        let game10 = await gameListData.getGameByName('game10');
-        let game11 = await gameListData.getGameByName('game11');
-        let game12 = await gameListData.getGameByName('game12');
-        let game13 = await gameListData.getGameByName('game13');
-        let game14 = await gameListData.getGameByName('game14');
-        let game15 = await gameListData.getGameByName('game15');
-
 
         await userData.createUser("Admin", 27, "test0@gmail.com", "Password@1", "admin");
         await userData.createUser("Caraxes", 27, "test1@gmail.com", "Password@1");

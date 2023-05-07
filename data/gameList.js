@@ -218,8 +218,10 @@ const createGame= async (
     const gameCollection= await games();
     const insertInfo=await gameCollection.insertOne(newGame);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not add game';
+    const newId = insertInfo.insertedId.toString();
+    newGame._id = newId;
     
-    return ' game created';
+    return newGame;
 }
 // let test = await sortGameByDate('ascending');
 // console.log(ageFilter(13, test));
