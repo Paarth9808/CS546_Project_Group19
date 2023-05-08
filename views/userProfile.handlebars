@@ -1,5 +1,5 @@
 <div class="profile">
-    <img src="/public/userimages/{{avatar}}" class="profile" alt="Avatar" width="100" height="100" />
+    <img src="/public/userimages/{{avatar}}" class="profile" id="userprofile" alt="Avatar" width="100" height="100" />
     <h2>Username</h2>
     <h3 class='profile-text'>{{username}}</h3>
     <h2>Age</h2>
@@ -27,3 +27,4 @@
     <p><a href="/games/{{this._id}}">{{this.name}}</a></p>
 {{/each}}
 {{!-- link to games comparison page --}}
+<script src="/public/js/profile_fix.js"></script>
