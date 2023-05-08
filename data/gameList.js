@@ -140,13 +140,24 @@ const sortGameByDate = async (sortWay) => {
 
     if (sortWay.trim() == '') throw 'sortWay should be no empty spaces';
     if (typeof(sortWay) != 'string') throw 'sortWay type wrong';
-    if (sortWay != 'ascending' && sortWay != 'descending') throw 'sortWay input wrong';
+    if (sortWay != 'ascending' && sortWay != 'descending') throw 'you have to choose a correct order';
     let s = 0;
     if (sortWay == 'ascending') s = 1;
     if (sortWay == 'descending') s = -1;
 
     const gameCollection = await games();
     let res = await gameCollection.find({}).sort({ releaseDate : s }).toArray();
+    if (s == 1) {
+      res.forEach(game => {
+        game.releaseDate = new Date(game.releaseDate);
+      });
+      res.sort((a, b) => a.releaseDate - b.releaseDate);
+    } else {
+      res.forEach(game => {
+        game.releaseDate = new Date(game.releaseDate);
+      });
+      res.sort((a, b) => b.releaseDate - a.releaseDate);
+    }
     for (let i = 0; i < res.length; i++) {
         res[i]._id = res[i]._id.toString();
     }

@@ -115,7 +115,7 @@
         } catch (e) {
           
           const message = typeof e === 'string' ? e : e.message;
-          errorTextElement.innerHTML = e;
+          errorTextElement.innerHTML = message;
           errorTextElement.hidden = false;
   
           event.preventDefault();
@@ -171,7 +171,72 @@
         } catch (e) {
           
           const message = typeof e === 'string' ? e : e.message;
-          errorTextElement.innerHTML = e;
+          errorTextElement.innerHTML = message;
+          errorTextElement.hidden = false;
+  
+          event.preventDefault();
+          
+        }
+        
+  
+      });
+
+
+
+    }
+
+
+
+    const sortForm = document.getElementById('sortForm');
+
+    if (sortForm) {
+
+      const errorTextElement = document.getElementById('errorText');
+    //   const gameNameInput = document.getElementById('gameNameInput');
+    //   const releaseDateInput = document.getElementById('releaseDateInput');
+      const sortByInput = document.getElementById('sortByInput');
+      const sortWayInput = document.getElementById('sortWayInput');
+    //   const descriptionInput = document.getElementById('descriptionInput');
+    //   const platformInput = document.getElementById('platformInput');
+
+
+
+    sortForm.addEventListener('submit', (event) => {
+        
+        try {
+
+  
+          const text1 = sortByInput.value;
+          const text2 = sortWayInput.value;
+        //   const text3 = ageInput.value;
+          // const text4 = genreInput.value;
+        //   const text5 = descriptionInput.value;
+        //   const text6 = platformInput.value;
+
+        if (text1 == 'asascending' || text1 == 'descending') {
+          if (text2 != 'rate' && text2 != 'date') throw 'you have to enter both order and sort way';
+        }
+
+        if (text2 == 'rate' || text2 == 'date') {
+          if (text1 != 'asascending' && text1 != 'descending') throw 'you have to enter both order and sort way';
+        }
+        //   let v1 = validation.vname(text1);
+        //   let v2 = validation.vreleaseDate(text2);
+        //   let v3 = validation.vage(text3);
+          // let v4 = validation.vgenre(text4);
+        //   let v5 = validation.vdescription(text5);
+        //   let v6 = validation.vplatformInput(text6);
+
+          errorTextElement.innerHTML = '';
+          errorTextElement.hidden = true;
+  
+  
+          
+
+        } catch (e) {
+          
+          const message = typeof e === 'string' ? e : e.message;
+          errorTextElement.innerHTML = message;
           errorTextElement.hidden = false;
   
           event.preventDefault();

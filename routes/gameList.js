@@ -191,10 +191,10 @@ router.route('/').get(async (req,res)=>{
         if (sortWay && sortBy) {
             if (sortWay.trim() == '') throw 'sortWay should be no empty spaces';
             if (typeof(sortWay) != 'string') throw 'sortWay type wrong';
-            if (sortWay != 'ascending' && sortWay != 'descending') throw 'sortWay input wrong';
-            if (sortWay.trim() == '') throw 'sortWay should be no empty spaces';
-            if (typeof(sortWay) != 'string') throw 'sortWay type wrong';
-            if (sortWay != 'ascending' && sortWay != 'descending') throw 'sortWay input wrong';
+            if (sortWay != 'ascending' && sortWay != 'descending') throw 'you have to choose a correct order';
+            if (sortBy.trim() == '') throw 'sortWay should be no empty spaces';
+            if (typeof(sortBy) != 'string') throw 'sortWay type wrong';
+            if (sortBy != 'rate' && sortBy != 'date') throw 'you have to choose a correct sort way';
         }
 
 
