@@ -80,7 +80,9 @@ async function main(){
             if(Math.random()>0.5)
                 await reportComment(commentobj[i]._id,users[1]._id);
         }
-
+        const reviews=[
+            {}
+        ]
         
     }catch(e){
         console.log(e)
