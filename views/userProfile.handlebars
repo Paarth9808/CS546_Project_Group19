@@ -1,5 +1,5 @@
 <div class="profile">
-    <img src="/public/userimages/{{avatar}}" class="profile" id="userprofile" alt="Avatar" width="100" height="100" />
+    <img src="/public/userimages/{{avatar}}" class="profile" id="userprofile" alt="Avatar" width="100" height="100">
     <h2>Username</h2>
     <h3 class='profile-text'>{{username}}</h3>
     <h2>Age</h2>
@@ -8,9 +8,8 @@
     <h3 class='profile-text'>{{email}}</h3>
 </div>
 {{#if isLoggedInUser}}
-<h3><a href="/user/{{id}}/edit">Edit profile</h3>
+<h3><a href="/user/{{id}}/edit">Edit profile</a></h3>
 <h3><a href="/user/{{id}}/edit/avatar">Change avatar</a></h3>
-{{!-- <h3><a href="/user/{{id}}/delete" style="color: red">Delete User</a></h3>  --}}
 <form action="{{id}}" method="POST" class="delete-button">
                 <input type="hidden" name="_method" value="DELETE" >
                 <input type="submit" value="Delete">
