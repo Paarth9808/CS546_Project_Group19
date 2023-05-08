@@ -228,6 +228,7 @@ router.route('/reviews/:id').get(async (req,res)=>{
         return res.render('gameReviews',{Titlename:'Game Reviews',game:game,reviews: reviews,currentUser:currentUser})
     }catch(e){
         res.status(400).render('error',{Titlename:'Error page', errorMessage: e});
+        res.status(400).render('error',{Titlename:'Error page', errorMessage: e});
     }
 }).post(async (req,res)=>{
     //Add reviews
@@ -335,6 +336,13 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
         errors.push(e);
     }
     try{
+        currentUser=req.session.user;
+        userId=currentUser.userId;
+        prevReview=await ratingData.get(req.params.id,userId)
+    }catch(e){
+        errors.push(e);
+    }
+    try{
         review=ratingValidation.checkReview(review);
     }catch(e){
         errors.push(e);
@@ -350,6 +358,7 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
         errors.push(e);
     }
     if(errors.length>0){
+        return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating,prevReview:prevReview})
         return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating,prevReview:prevReview})
     }
     try{

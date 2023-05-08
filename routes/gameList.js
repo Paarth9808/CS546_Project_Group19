@@ -26,6 +26,7 @@ router.route('/creategame').get(async (req, res)=>{
   let releaseDate = req.body.releaseDateInput;
   let age = Number(req.body.ageInput);
   let description = req.body.descriptionInput;
+  
 
   genre = xss(genre);
   systemRequirements = xss(systemRequirements);
