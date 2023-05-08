@@ -39,7 +39,7 @@ ul {
   overflow: hidden;
 }
 #uploadimage #filelabel{ 
-  background-color: #44b549; 
+  background-color: #06750c; 
   cursor: pointer; 
 }
 #uploadimage #select-img{ 
@@ -102,7 +102,7 @@ ul {
 
 .submitbtn,#loadingbtn,#checkreported{
   border: none;
-  background-color: #44b549; 
+  background-color: #06750c; 
   width: 120px;  
   height: 30px;  
   line-height: 30px; 
