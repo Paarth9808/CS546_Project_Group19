@@ -19,6 +19,9 @@ router.route('/:id').get(async (req,res)=>{
         //if not logged in will be redirected to login page
         if(!req.session.user){return res.redirect('/login')} 
         let currentUser=req.session.user;
+        if(currentUser.age<game.ageRating){
+            return res.render('unauthorized',{Titlename:'Unauthorized'})
+        }
         //Heng's comments loading
         const tempcomments=await getpartComment(req.params.id,0,3);
         var isAdmin=false;
@@ -219,6 +222,9 @@ router.route('/reviews/:id').get(async (req,res)=>{
         let reviews=game.individualRatings;
         if(!req.session.user){return res.redirect('/login')}
         let currentUser=req.session.user;
+        if(currentUser.age<game.ageRating){
+            return res.render('unauthorized',{Titlename:'Unauthorized'})
+        }
         return res.render('gameReviews',{Titlename:'Game Reviews',game:game,reviews: reviews,currentUser:currentUser})
     }catch(e){
         res.status(400).render('error',{Titlename:'Error page', errorMessage: e});
@@ -266,10 +272,11 @@ router.route('/reviews/:id').get(async (req,res)=>{
         let gameId=req.params.id;
         if(!req.session.user){return res.redirect('/login')}
         currentUser=req.session.user;
+        game=await gameData.getGame(req.params.id);
+        if(currentUser.age<game.ageRating){
+            return res.render('unauthorized',{Titlename:'Unauthorized'})
+        }
         let userId=req.session.user.userId;
-
-        
-
         let indReview=await ratingData.addRating(gameId,userId,review,rating)
         if(indReview){isAdded=true}
         game=await gameData.getGame(req.params.id);
@@ -306,7 +313,7 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
         // let currentUser=req.session.user;
         // return res.render('gameReviews',{Titlename:'Game Reviews',game:game,reviews: reviews,currentUser:currentUser})
     }catch(e){
-        res.status(400).render('error',{Titlename:'Error page', errorMessage: e});
+        return res.status(400).render('error',{Titlename:'Error page', errorMessage: e});
     }
 
 }).put(async (req,res)=>{
@@ -377,13 +384,14 @@ router.route('/reviews/:id/delete').delete(async (req,res)=>{
     }
     try{
         if(!req.session.user){return res.redirect('/login')}
-        //currentUser=req.session.user;
-        //let userId=currentUser.userId;
+        currentUser=req.session.user;
+        let userId=currentUser.userId;
         let deletedCount=await ratingData.remove(id,userId);
         if(deletedCount>0){isDeleted=true}
         game=await gameData.getGame(req.params.id);
         reviews=game.individualRatings;
-        res.status(200).render('gameReviews',{Titlename:'Game Reviews',status:'Your review has been deleted',isDeleted:isDeleted,game:game,reviews:reviews,currentUser:currentUser})
+        res.redirect(`/games/reviews/${id}`)
+        //return res.status(200).render('gameReviews',{Titlename:'Game Reviews',status:'Your review has been deleted',isDeleted:isDeleted,game:game,reviews:reviews,currentUser:currentUser})
 
     }catch(e){
         errors.push(e);

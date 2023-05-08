@@ -3,6 +3,7 @@ const router = Router();
 import validation from '../validations/authValidation.js'
 import userDataFunctions from '../data/user.js'
 import authFunction from '../data/auth.js'
+import xss from 'xss';
 
 router
     .route('/register')
@@ -14,6 +15,7 @@ router
         let errors=[];
         try{
             if(!user.emailAddressInput){throw `Email not provided`}
+            user.emailAddressInput=xss(user.emailAddressInput);
             if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(user.emailAddressInput.trim())){throw `Invalid email id`}
         }catch(e){
             errors.push(e);
