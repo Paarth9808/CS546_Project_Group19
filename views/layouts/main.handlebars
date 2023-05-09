@@ -4,20 +4,22 @@
     <meta charset="utf-8">
     <title>{{Titlename}}</title>
     <link rel="stylesheet" href="/public/css/main-styles.css">
-    {{!-- <link rel="stylesheet" href="/public/css/game-styles.css"> --}}
+    <link rel="stylesheet" href="/public/css/game-styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div>
-    <a href="/">home</a>
+    <div class="col-md-1 text-left">
+    <a href="/" class="btn btn-primary">home</a>
     
     </div>
     <br>
     {{{body}}}
     <br>
-    <button id="toggleDarkMode">dark mode</button>
+    <div class="col-md-1 text-left ">
+        <button id="toggleDarkMode" class="btn btn-secondary">dark mode</button>
+    </div>
     <script src="/public/js/darkmode.js"></script>
     <script src="/public/js/gameDetails.js"></script>
     <script src="/public/js/auth.js"></script>

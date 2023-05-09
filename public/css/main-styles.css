@@ -4,7 +4,13 @@ body {
 }
 .dark-mode {
   /* gradient background color*/
-  background: linear-gradient(-90deg, rgb(21, 8, 44) 0%,rgb(0, 0, 0) 100%) !important;
+  background: black;
+  /* background: linear-gradient(-90deg, rgb(21, 8, 44) 0%,rgb(0, 0, 0) 100%) ; */
+  color: white;
+  
+}
+.dark-mode select {
+  background-color: black;
   color: white;
 }
 
@@ -167,6 +173,10 @@ ul {
   margin-left: 400px;
 }
 
+h1{
+  margin-bottom: 5px;
+  text-align: center;
+}
 
 
 
