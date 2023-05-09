@@ -153,7 +153,7 @@ router.route('/:id/edit').get(async (req,res)=>{
     try{
         updatedData.systemRequirements=xss(updatedData.systemRequirements);
         //if(updatedData.systemRequirements){
-            updatedData.systemRequirements=validation.checkString(updatedData.systemRequirements,'System Requirements')
+        updatedData.systemRequirements=validation.checkString(updatedData.systemRequirements,'System Requirements')
         //}
     }catch(e){
         errors.push(e);
@@ -227,7 +227,6 @@ router.route('/reviews/:id').get(async (req,res)=>{
         }
         return res.render('gameReviews',{Titlename:'Game Reviews',game:game,reviews: reviews,currentUser:currentUser})
     }catch(e){
-        res.status(400).render('error',{Titlename:'Error page', errorMessage: e});
         res.status(400).render('error',{Titlename:'Error page', errorMessage: e});
     }
 }).post(async (req,res)=>{
@@ -358,7 +357,6 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
         errors.push(e);
     }
     if(errors.length>0){
-        return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating,prevReview:prevReview})
         return res.status(400).render('editReview',{Titlename:'Edit Review',errors,hasErrors:true,review:review,rating:rating,prevReview:prevReview})
     }
     try{
