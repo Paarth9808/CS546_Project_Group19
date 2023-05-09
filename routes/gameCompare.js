@@ -1,6 +1,7 @@
 import { Router } from "express";
 const router=Router();
 import { gameData } from "../data/index.js";
+import xss from "xss";
 
 
 router.route('/').get(async (req,res)=>{
@@ -11,8 +12,8 @@ router.route('/').get(async (req,res)=>{
         res.status(500).json('Internal server error')
     }
 }).post(async (req,res)=>{
-    let game1Name=req.body.game1;
-    let game2Name=req.body.game2;
+    let game1Name=xss(req.body.game1);
+    let game2Name=xss(req.body.game2);
     let game1=undefined;
     let game2=undefined;
     let games=undefined;

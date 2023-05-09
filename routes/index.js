@@ -15,7 +15,8 @@ const constructor=(app)=>{
     app.use('/compare',gameCompareRouter)
     app.use('/user', userRouter);
     app.use('*', (req, res) => {
-        res.status(404).json({error: 'Route Not found'});
+        // res.status(404).json({error: 'Route Not found'});
+        return res.render('notFound',{Titlename:'Page not found'})
       });
 
 }

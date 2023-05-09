@@ -11,7 +11,7 @@
 {{#if isLoggedInUser}}
 <a href="/user/{{id}}/edit" class="btn btn-primary">Edit profile</a>
 <a href="/user/{{id}}/edit/avatar" class="btn btn-primary">Change avatar</a>
-<form action="{{id}}" method="POST" class="delete-button ">
+<form action="{{id}}" method="POST" class="delete-button " >
                 <input type="hidden" name="_method" value="DELETE" >
                 <input type="submit" value="Delete">
             </form>
