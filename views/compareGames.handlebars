@@ -66,9 +66,9 @@
     <h1>Reviews for {{game1.name}}: </h1>
     {{#each game1Reviews}}
         <div>
-            <dl>Username: {{this.userName}}</dl>
-            <dl>Review: {{this.review}}</dl>
-            <dl>Rating: {{this.userRating}}</dl>
+            <p>Username: {{this.userName}}</p>
+            <p>Review: {{this.review}}</p>
+            <p>Rating: {{this.userRating}}</p>
             {{!-- {{#if (ifEqual this.userName  ../currentUser.userName) }}
                 <a href="edit">Edit review</a>
             {{/if}}
@@ -110,9 +110,9 @@
     <h1>Reviews for {{game2.name}}: </h1>
     {{#each game2Reviews}}
         <div>
-            <dl>Username: {{this.userName}}</dl>
-            <dl>Review: {{this.review}}</dl>
-            <dl>Rating: {{this.userRating}}</dl>
+            <p>Username: {{this.userName}}</p>
+            <p>Review: {{this.review}}</p>
+            <p>Rating: {{this.userRating}}</p>
             {{!-- {{#if (ifEqual this.userName  ../currentUser.userName) }}
                 <a href="edit">Edit review</a>
             {{/if}}

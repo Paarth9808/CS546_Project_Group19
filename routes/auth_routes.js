@@ -14,6 +14,7 @@ router
         let user=req.body;
         let errors=[];
         try{
+            user.emailAddressInput=xss(user.emailAddressInput)
             if(!user.emailAddressInput){throw `Email not provided`}
             user.emailAddressInput=xss(user.emailAddressInput);
             if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(user.emailAddressInput.trim())){throw `Invalid email id`}
@@ -21,6 +22,7 @@ router
             errors.push(e);
         }
         try{
+            user.userNameInput=xss(user.userNameInput);
             user.userNameInput=validation.checkName(user.userNameInput,'First Name')
         }catch(e){
             errors.push(e);
@@ -31,17 +33,20 @@ router
         //     errors.push(e);
         // }
         try{
+            user.passwordInput=xss(user.passwordInput)
             user.passwordInput=validation.checkPassword(user.passwordInput);
         }catch(e){
             errors.push(e);
         }
         try{
+            user.confirmPasswordInput=xss(user.confirmPasswordInput);
             if(!user.confirmPasswordInput){throw `Confirm password not provided`}
             if(user.confirmPasswordInput!==user.passwordInput){throw `Passwords don't match`}
         }catch(e){
             errors.push(e);
         }
         try{
+            user.ageInput=xss(user.ageInput);
             user.ageInput=validation.checkAge(parseInt(user.ageInput))
         }catch(e){
             errors.push(e);
@@ -76,12 +81,14 @@ router
         let errors=[];
         try{
             //user.emailAddressInput=validation.checkEmail(user.emailAddressInput);
+            user.emailAddressInput=xss(user.emailAddressInput)
             if(!user.emailAddressInput){throw `Email not provided`}
             if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(user.emailAddressInput.trim())){throw `Invalid email id`}
         }catch(e){
             errors.push(e);
         }
         try{
+            user.passwordInput=xss(user.passwordInput)
             user.passwordInput=validation.checkPassword(user.passwordInput);
         }catch(e){
             errors.push(e);
