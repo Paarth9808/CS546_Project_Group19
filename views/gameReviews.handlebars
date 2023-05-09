@@ -5,7 +5,7 @@
     <br>
     <label for="rating">Rating</label>
     <input id="rating" type="number" placeholder="Enter your rating(1-10)" name="ratingInput">
-    <button type="submit">Add review</button>
+    <button type="submit" class="btn btn-primary">Add review</button>
 </form>
 {{#if isAdded}}<p>{{status}}</p>{{/if}}
 {{#if isDeleted}}<p>{{status}}</p>{{/if}}
@@ -30,14 +30,14 @@
         {{#if (ifEqual this.userName  ../currentUser.userName) }}
             {{!-- <a href="edit">Edit review</a> --}}
             <form action="/games/reviews/{{../game._id}}/edit" method="GET" class="update-button">
-                <input type="submit" value="Edit">
+                <input type="submit" value="Edit" class="btn btn-primary">
             </form>
         {{/if}}
         {{#if (or (ifEqual this.userName  ../currentUser.userName) (ifEqual ../currentUser.role "admin"))}}
             {{!-- <a href="delete">Delete review</a> --}}
             <form action="/games/reviews/{{../game._id}}/delete" method="POST" class="update-button">
                 <input type="hidden" name="_method" value="DELETE" >
-                <input type="submit" value="Delete">
+                <input type="submit" value="Delete" class="btn btn-primary">
             </form>
         {{/if}}
     </div>
