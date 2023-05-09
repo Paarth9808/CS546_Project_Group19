@@ -1,8 +1,13 @@
-{{#if profileId}}
+{{!-- {{#if profileId}}
 <a href="/user/{{profileId}}">profile</a>
+{{/if}} --}}
+{{#if profileId}}
+<div class="col-md-12 text-right ">
+<a href="/user/{{profileId}}" class="btn btn-primary">profile</a>
+</div>
 {{/if}}
 {{#if user}}
-<div class="col-md-12 bg-light text-right">
+<div class="col-md-12 text-right">
     <a href="/logout" class="btn btn-primary">Logout</a>
 </div>
 {{else}}
@@ -14,12 +19,10 @@
 
 <h1>Game Review System</h1>
 <p>
-    The website is aimed to provide a comprehensive and user-friendly platform for gamers 
-    to discover, rate, and discuss their favorite games. We will try to help gamers make 
-    informed purchasing decisions by providing insights on the game.
-    On this website users can find reviews of the latest and popular games, as well as lesser 
-    known gems. The website will also have a community page where users can discuss 
-    games, ask for recommendations, and share their opinions.
+    Our website is designed to cater to the needs of gaming enthusiasts by providing them with a one-stop-shop for discovering, rating, and discussing their favorite games. 
+    Our aim is to assist gamers in making informed decisions by offering them insights into the games they're interested in.
+    We've got you covered whether you're into the newest, most popular titles or lesser-known hidden gems. 
+    We've also got a comment section where gamers can engage in conversations, seek recommendations, and share their views.
 </p>
 {{!-- {{#if user}}
 <div class="col-md-12 bg-light text-right">

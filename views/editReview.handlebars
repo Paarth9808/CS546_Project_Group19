@@ -1,3 +1,4 @@
+<h1>Edit Review</h1>
 <form action="edit" method="POST" id="edit-review-form" class="edit-review-form">
     <label for="review">Review</label>
     <textarea id="review" type="text" placeholder="Type your review" name="reviewInput" >{{prevReview.review}}</textarea>
@@ -6,7 +7,7 @@
     <input id="rating" type="number" placeholder="Enter your rating(1-10)"name="ratingInput" value="{{prevReview.userRating}}">
     {{!-- <button type="submit">Edit review</button> --}}
     <input type="hidden" name="_method" value="PUT" >
-    <input type="submit" value="Edit">
+    <input type="submit" value="Edit" class="btn btn-primary">
 
 </form>
 {{#if isAdded}}<p>{{status}}</p>{{/if}}

@@ -112,7 +112,7 @@ router
         try{
         let user=undefined;
         if(req.session.user){user=req.session.user}
-        return res.render('mainpage',{Titlename:'Home Page',user:user})
+        return res.render('mainpage',{Titlename:'Home Page',user:user,profileId: req.session?.user?.userId})
         }catch(e){
             res.render('error',{Titlename:'Error page',errorMessage:e,profileId: req.session?.user?.userId})
         }

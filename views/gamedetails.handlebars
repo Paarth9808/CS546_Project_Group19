@@ -1,16 +1,22 @@
 <header><h1>{{game.name}}</h1></header>
-<div>
+
     {{#if (ifEqual currentUser.role "admin")}}
+        <div class="row">
+            <div class="col-md-6 text-center">
             <form action="{{game._id}}/edit" method="GET" class="update-button">
                 {{!-- <input type="hidden" name="_method" value="PATCH" > --}}
-                <input type="submit" value="Update game">
+                <input type="submit" value="Update game" class="btn btn-primary">
             </form>
+            </div>
+            <div class="col-md-6 text-center">
             <form action="{{game._id}}" method="POST" class="delete-button">
                 <input type="hidden" name="_method" value="DELETE" >
-                <input type="submit" value="Delete">
+                <input type="submit" value="Delete" class="btn btn-primary">
             </form>
+            </div>
+        </div>
     {{/if}}
-</div>
+
 <div>
 {{#if game.rating}}
     <h2>Rating: {{game.rating}}</h2>
@@ -62,7 +68,7 @@
     <input id="rating" type="number" placeholder="Enter your rating(1-10)"name="ratingInput">
     <button type="submit">Add review</button>
 </form> --}}
-<a href="reviews/{{game._id}}/">Click here to view and add reviews</a>
+<a href="reviews/{{game._id}}/" class="btn btn-primary">Click here to view and add reviews</a>
 
 
 </div>
