@@ -5,6 +5,8 @@ import {createComment,getpartComment,deleteComment,updateComment,getCommentById,
 import ratingData from './data/individualRatings.js'
 import games from './data/games.js';
 import path from 'path';
+import {v4 as uuidv4} from 'uuid';
+import fs from 'fs';
 
 
 
@@ -67,7 +69,7 @@ async function main(){
         const pics=[];
         for(var i=0;i<7;i++)
         {
-            pics[i]='/public/userfile/comments/'+i+'.jpg';
+            pics[i]=path.join('./seedpics',i+'.jpg');
         }
         const commentobj=[];
         for(var i=0;i<100;i++)
@@ -76,13 +78,14 @@ async function main(){
             let randomgame = Math.floor(Math.random() * 15);
             let randomcomment = Math.floor(Math.random() * 15);
             let randompics=Math.floor(Math.random()*7);
-            commentobj[i]=await createComment(users[randomuser]._id,games[randomgame]._id,comments[randomcomment],[pics[randompics]]);
+            const picName = uuidv4() ;
+            const imgpath=path.join('./public', 'userfile', 'comments',picName+'.jpg');
+            fs.copyFileSync(pics[randompics], imgpath)
+            commentobj[i]=await createComment(users[randomuser]._id,games[randomgame]._id,comments[randomcomment],['/public/userfile/comments/' + picName+'.jpg']);
             if(Math.random()>0.5)
                 await reportComment(commentobj[i]._id,users[1]._id);
         }
-        const reviews=[
-            {}
-        ]
+
         
     }catch(e){
         console.log(e)
