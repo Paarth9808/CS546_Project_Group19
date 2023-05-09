@@ -42,12 +42,24 @@
       vgenre (genre) {
         if (genre.trim() == '') throw 'genre should be no empty spaces';
         if (typeof(genre) != 'string') throw 'genre type wrong';
+        let dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        let res = 0;
+        for (let i = 0; i < genre.length; i++) {
+          if (dict.indexOf(genre.charAt(i)) < 0) res++;
+        }
+        if (res > 0) throw 'invalid genre input';
 
       },
 
       vdescription (description) {
         if (description.trim() == '') throw 'description should be no empty spaces';
         if (typeof(description) != 'string') throw 'description type wrong';
+        let dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        let res = 0;
+        for (let i = 0; i < description.length; i++) {
+          if (dict.indexOf(description.charAt(i)) < 0) res++;
+        }
+        if (res == description.length) throw 'invalid description input';
       },
 
       vplatformInput (platform) {
@@ -55,9 +67,15 @@
         if (typeof(platform) != 'string') throw 'platform type wrong';
       },
 
-      vsystemRequirements (description) {
-        if (description.trim() == '') throw 'systemRequirements should be no empty spaces';
-        if (typeof(description) != 'string') throw 'systemRequirements type wrong';
+      vsystemRequirements (systemRequirements) {
+        if (systemRequirements.trim() == '') throw 'systemRequirements should be no empty spaces';
+        if (typeof(systemRequirements) != 'string') throw 'systemRequirements type wrong';
+        let dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        let res = 0;
+        for (let i = 0; i < systemRequirements.length; i++) {
+          if (dict.indexOf(systemRequirements.charAt(i)) < 0) res++;
+        }
+        if (res == systemRequirements.length) throw 'invalid systemRequirements input';
       }
 
 

@@ -6,12 +6,12 @@
   
   .comparison-form {
     margin-bottom: 20px;
+    margin-left: 20px;
 
   }
   
   #game1div, #game2div {
     padding: 20px;
-    background-color: rgb(182, 181, 181);
     width: 45%;
   }
   

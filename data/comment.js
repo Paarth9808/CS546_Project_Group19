@@ -29,6 +29,21 @@ import { checkuserID,checkgameID,checkcommentID,checkcontent,checkphoto } from "
 
 
 
+const improveComment=async(tempcomment)=>{
+    const userCollection=await user();
+    const tempuser=await userCollection.findOne({_id:new ObjectId(tempcomment.userID)});
+    if(tempuser==null)
+    {
+        tempcomment.username="DeletedUser";
+        tempcomment.profilepath="";
+    }
+    else
+    {
+        tempcomment.username=tempuser.userName;
+        tempcomment.profilepath=tempuser.avatar;
+    }
+    return tempcomment;
+}
 
 const createComment=async(
     userID,
@@ -53,8 +68,8 @@ const createComment=async(
     const now=new Date();
     const tempcomment={
         userID:userID,
-        username:tempuser.userName,
-        profilepath:tempuser.avatar,
+        //username:tempuser.userName,
+        //profilepath:tempuser.avatar,
         gameID:gameID,
         content:content,
         photo:photo,
@@ -97,7 +112,7 @@ const getpartComment=async(gameid,start,length)=>{
     gameid=checkgameID(gameid);
     const res=commentCollection.find({gameID:gameid}).skip(start).limit(length).toArray();
     for(var i=0;i<res.length;i++)
-        res[i]._id=res[i]._id.toString();
+        res[i]._id=res[i]._id.toString(); 
     return res;
 }
 const deleteComment=async(
@@ -127,9 +142,9 @@ const deleteComment=async(
     var gameupdatedInfo=await gameCollection.findOneAndUpdate({_id:new ObjectId(gameID)},{$pull:{commentIds:commentid}},{returnDocument: 'after'});
     var userupdatedInfo=await userCollection.findOneAndUpdate({_id:new ObjectId(userID)},{$pull:{reviewedIds:commentid}},{returnDocument: 'after'});
     if(gameupdatedInfo.lastErrorObject.n==0)
-        throw "could not delete this comment in games db";
+        console.log("could not delete this comment in games db, maybe this game doesn't exist");
     if(userupdatedInfo.lastErrorObject.n==0)
-        throw "could not delete this review in user db";
+        console.log("could not delete this comment in users db, maybe this user doesn't exist");
 }
 
 const updateComment=async(
@@ -158,6 +173,18 @@ const getCommentById=async(
         throw "no comment is found";
     tempcomment._id=tempcomment._id.toString();
     return tempcomment;
+}
+
+const getAllCommentsByUserId=async(
+    userId
+)=>{
+    // commentid=checkcommentID(commentid);
+    const commentCollection=await comment();
+    const comments=await commentCollection.find({userID: userId});
+    // if((await commentCollection.countDocuments({userID: userId})) === 0)
+        // throw "no comment is found";
+    // tempcomment._id=tempcomment._id.toString();
+    return comments;
 }
 
 
@@ -277,4 +304,5 @@ const reportComment=async(
 }
 
 
-export{createComment,getpartComment,getreportedComment,deleteComment,updateComment,getCommentById,likeComment,dislikeComment,reportComment};
+export{createComment,getpartComment,getreportedComment,deleteComment,updateComment,getCommentById,likeComment,dislikeComment,reportComment,improveComment,
+    getAllCommentsByUserId};

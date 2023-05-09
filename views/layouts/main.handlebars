@@ -5,12 +5,27 @@
     <title>{{Titlename}}</title>
     <link rel="stylesheet" href="/public/css/main-styles.css">
     <link rel="stylesheet" href="/public/css/game-styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+    <div class="col-md-1 text-left">
+    <a href="/" class="btn btn-primary">home</a>
+    
+    </div>
+    <br>
     {{{body}}}
-    <button id="toggleDarkMode">dark mode</button>
+    <br>
+    <div class="col-md-1 text-left ">
+        <button id="toggleDarkMode" class="btn btn-primary">dark mode</button>
+    </div>
     <script src="/public/js/darkmode.js"></script>
     <script src="/public/js/gameDetails.js"></script>
     <script src="/public/js/auth.js"></script>
+    <script src="/public/js/editGame.js"></script>
+    {{!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script> --}}
 </body>
 </html>

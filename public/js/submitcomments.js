@@ -10,12 +10,25 @@ function adderrorsolution(element)
     {
         const img=images[i]
         img.addEventListener('error', function() {
-        img.src = '/public/userimages/default.jpg';
+        img.src = '/public/userimages/default.png';
+        });
+    }
+}
+
+function adderrorsolution2(element)
+{
+    const images = element.querySelectorAll('.commentimg');
+    for(var i=0;i<images.length;i++)
+    {
+        const img=images[i]
+        img.addEventListener('error', function() {
+        img.src = '/public/userfile/comments/No_Image_Available.jpg';
         });
     }
 }
 
 adderrorsolution(document)
+adderrorsolution2(document)
 
 var offset=0;
 
@@ -119,6 +132,7 @@ if(reportbtn)
                             newli.innerHTML=response[i];
                             addlistener(newli,()=>{});
                             adderrorsolution(newli);
+                            adderrorsolution2(newli);
                             document.getElementById("commentslist").append(newli);
                         }
                     }
@@ -180,6 +194,7 @@ document.getElementById("loadingbtn").addEventListener("click",function(event){
                         continue;
                     addlistener(newli,()=>{});
                     adderrorsolution(newli);
+                    adderrorsolution2(newli);
                     document.getElementById("commentslist").append(newli);
                     islast=false;
                 }
@@ -243,6 +258,7 @@ document.getElementById("commentForm").addEventListener("submit",function(event)
             newli.innerHTML=response;
             addlistener(newli,()=>{offset--;});
             adderrorsolution(newli);
+            adderrorsolution2(newli);
             document.getElementById("commentslist").insertAdjacentElement("afterbegin",newli);
             offset++;
         }

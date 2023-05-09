@@ -1,5 +1,6 @@
+<h1>User profile</h1>
 <div class="profile">
-    <img src="/public/userimages/{{avatar}}" class="profile" alt="Avatar" width="100" height="100" />
+    <img src="/public/userimages/{{avatar}}" class="profile" id="userprofile" alt="Avatar" width="100" height="100">
     <h2>Username</h2>
     <h3 class='profile-text'>{{username}}</h3>
     <h2>Age</h2>
@@ -8,17 +9,27 @@
     <h3 class='profile-text'>{{email}}</h3>
 </div>
 {{#if isLoggedInUser}}
-<h3><a href="/user/{{id}}/edit">Edit profile</h3>
-<h3><a href="/user/{{id}}/edit/avatar">Change avatar</a></h3>
-<h3><a href="/user/{{id}}/delete" style="color: red">Delete User</a></h3>
+<a href="/user/{{id}}/edit" class="btn btn-primary">Edit profile</a>
+<a href="/user/{{id}}/edit/avatar" class="btn btn-primary">Change avatar</a>
+<form action="{{id}}" method="POST" class="delete-button ">
+                <input type="hidden" name="_method" value="DELETE" >
+                <input type="submit" value="Delete">
+            </form>
+{{!-- change here ^ --}}
 {{/if}}
 {{!-- to do --}}
-<h2>Reviewed Posts</h2>
+<h2>Comments by User</h2>
+{{!-- getCommentID use --}}
 {{#each posts}}
 <section class="reviews">
-    <h3><a href="/games/{{gameId}}">{{gameId}}</a></h3>
-    <p>{{rating}} {{userReviews}}</p>
+    <p><a href="/games/{{this.gameID}}">{{this.content}}</a></p>
+    {{!-- <p>{{rating}} {{userReviews}}</p> --}}
 </section>
 {{/each}}
 
+<h2>Games Rated by User</h2>
+{{#each rated}}
+    <p><a href="/games/{{this._id}}">{{this.name}}</a></p>
+{{/each}}
 {{!-- link to games comparison page --}}
+<script src="/public/js/profile_fix.js"></script>

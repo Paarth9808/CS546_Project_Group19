@@ -1,6 +1,7 @@
 <div>
     <form id="commentForm" class={{gameid}}>
         <div class="inputgroup">
+            <label for="text"></label>
             <textarea name="text" id="text" rows="4" cols="50"></textarea>
             <div class="btngroup">
                 <div id="uploadimage">
@@ -15,7 +16,7 @@
 </div>
 <div>
     {{#if isAdmin}}
-        <button id="checkreported">Check reported comments</button>
+        <button id="checkreported">Check reported</button>
     {{/if}}
     <ul id="commentslist">
         {{#each commentlist}}

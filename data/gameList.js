@@ -43,18 +43,44 @@ const validation = {
     vgenre (genre) {
       if (genre.trim() == '') throw 'genre should be no empty spaces';
       if (typeof(genre) != 'string') throw 'genre type wrong';
+      genre = genre.trim();
+      let dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      let res = 0;
+      for (let i = 0; i < genre.length; i++) {
+        if (dict.indexOf(genre.charAt(i)) < 0) res++;
+      }
+      if (res > 0) throw 'invalid genre input';
 
     },
 
     vdescription (description) {
       if (description.trim() == '') throw 'description should be no empty spaces';
       if (typeof(description) != 'string') throw 'description type wrong';
+      description = description.trim();
+      let dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      let res = 0;
+      for (let i = 0; i < description.length; i++) {
+        if (dict.indexOf(description.charAt(i)) < 0) res++;
+      }
+      if (res == description.length) throw 'invalid description input';
     },
 
     vplatformInput (platform) {
       if (platform.trim() == '') throw 'platform should be no empty spaces';
       if (typeof(platform) != 'string') throw 'platform type wrong';
-    }
+    },
+
+    vsystemRequirements (systemRequirements) {
+        if (systemRequirements.trim() == '') throw 'systemRequirements should be no empty spaces';
+        if (typeof(systemRequirements) != 'string') throw 'systemRequirements type wrong';
+        systemRequirements = systemRequirements.trim()
+        let dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        let res = 0;
+        for (let i = 0; i < systemRequirements.length; i++) {
+          if (dict.indexOf(systemRequirements.charAt(i)) < 0) res++;
+        }
+        if (res == systemRequirements.length) throw 'invalid systemRequirements input';
+      }
 
 
 
@@ -65,7 +91,9 @@ const getGameByGerne = async (genre) => {
     if (typeof(genre) != 'string') throw 'sortWay type wrong';
 
     const gameCollection = await games();
-    let res = await gameCollection.find({ genre : genre }).toArray();
+    genre = genre.trim().toLowerCase();
+    const regex = new RegExp(genre, 'i');
+    let res = await gameCollection.find({ genre : regex }).toArray();
     for (let i = 0; i < res.length; i++) {
         res[i]._id = res[i]._id.toString();
     }
@@ -112,13 +140,24 @@ const sortGameByDate = async (sortWay) => {
 
     if (sortWay.trim() == '') throw 'sortWay should be no empty spaces';
     if (typeof(sortWay) != 'string') throw 'sortWay type wrong';
-    if (sortWay != 'ascending' && sortWay != 'descending') throw 'sortWay input wrong';
+    if (sortWay != 'ascending' && sortWay != 'descending') throw 'you have to choose a correct order';
     let s = 0;
     if (sortWay == 'ascending') s = 1;
     if (sortWay == 'descending') s = -1;
 
     const gameCollection = await games();
     let res = await gameCollection.find({}).sort({ releaseDate : s }).toArray();
+    if (s == 1) {
+      res.forEach(game => {
+        game.releaseDate = new Date(game.releaseDate);
+      });
+      res.sort((a, b) => a.releaseDate - b.releaseDate);
+    } else {
+      res.forEach(game => {
+        game.releaseDate = new Date(game.releaseDate);
+      });
+      res.sort((a, b) => b.releaseDate - a.releaseDate);
+    }
     for (let i = 0; i < res.length; i++) {
         res[i]._id = res[i]._id.toString();
     }
@@ -162,7 +201,7 @@ const createGame= async (
         let v3 = validation.vage(ageRating);
         let v4 = validation.vgenre(genre);
         let v5 = validation.vdescription(description);
-        let v6 = validation.vplatformInput(systemRequirements);
+        let v6 = validation.vsystemRequirements(systemRequirements);
         let v7 = validation.vplatformInput(platform);
     } catch (e) {
 
@@ -185,13 +224,15 @@ const createGame= async (
 
     if (platform != 'ps5' && platform != 'xbox' && platform != 'pc' && platform != 'switch') throw 'platform wrong';
     
-    if (ageRating != 18 && ageRating != 15 && ageRating != 12) throw 'ageRating format wrong';
+    if (ageRating != 18 && ageRating != 15 && ageRating != 13) throw 'ageRating format wrong';
 
     const gameCollection= await games();
     const insertInfo=await gameCollection.insertOne(newGame);
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Could not add game';
+    const newId = insertInfo.insertedId.toString();
+    newGame._id = newId;
     
-    return ' game created';
+    return newGame;
 }
 // let test = await sortGameByDate('ascending');
 // console.log(ageFilter(13, test));

@@ -24,10 +24,10 @@ router.route('/').get(async (req,res)=>{
     try{
         games=await gameData.getAllGameNames();
     }catch(e){
-        res.status(500).json('Internal server error')
+        res.status(500).render('error',{Titlename:'Error page',errorMessage:e})
     }
-    if(!req.session.user){return res.redirect('/login')}
-    currentUser=req.session.user;
+    //if(!req.session.user){return res.redirect('/login')}
+    if(req.session.user){currentUser=req.session.user;}
     try{
         game1=await gameData.getGameByName(game1Name);
         game1Reviews=game1.individualRatings;

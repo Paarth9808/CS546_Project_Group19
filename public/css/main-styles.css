@@ -1,10 +1,16 @@
 
 body {
-  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+  background: linear-gradient(90deg, rgb(174, 208, 238) 0%, rgb(134, 177, 226) 100%);
 }
 .dark-mode {
   /* gradient background color*/
-  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%) !important;
+  background: black;
+  /* background: linear-gradient(-90deg, rgb(21, 8, 44) 0%,rgb(0, 0, 0) 100%) ; */
+  color: white;
+  
+}
+.dark-mode select {
+  background-color: black;
   color: white;
 }
 
@@ -39,7 +45,7 @@ ul {
   overflow: hidden;
 }
 #uploadimage #filelabel{ 
-  background-color: #44b549; 
+  background-color: #06750c; 
   cursor: pointer; 
 }
 #uploadimage #select-img{ 
@@ -102,7 +108,7 @@ ul {
 
 .submitbtn,#loadingbtn,#checkreported{
   border: none;
-  background-color: #44b549; 
+  background-color: #06750c; 
   width: 120px;  
   height: 30px;  
   line-height: 30px; 
@@ -167,6 +173,10 @@ ul {
   margin-left: 400px;
 }
 
+h1{
+  margin-bottom: 5px;
+  text-align: center;
+}
 
 
 

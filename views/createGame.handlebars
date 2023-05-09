@@ -1,6 +1,6 @@
-<h1>Add A New Game</h1>
+<h1>Add a New Game</h1>
 
-<a href="/gamelist/">return to game list</a>
+<a href="/gamelist/" class="btn btn-primary">Return to game list </a>
 
 <form method="POST" id="createGame-form" class="createGame-form">
 
@@ -36,7 +36,7 @@
         </select>
 
 <br>
-<button type="submit">create</button>
+<button type="submit" class="btn btn-primary">create</button>
 </form>
 
     {{#if showErrorMessage }}
@@ -44,8 +44,8 @@
     {{/if}}
 
 
-        <div id="errorText" class="hidden">
-
+        <div id="errorText" hidden>
+            {{!-- <ul class="client-side-error-createGame" id="client-side-error-createGame"></ul> --}}
        </div>
 
 <script src="/public/js/createGame.js"></script>

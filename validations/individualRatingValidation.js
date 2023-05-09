@@ -12,8 +12,11 @@ const exportedMethods={
     },
     checkReview(review){
         if(!review){throw 'Review not provided'}
-        if(!isNaN(review)){throw `Review cannot be just numbers`}
-        return review.trim();
+        if (typeof(review)!== 'string'){ throw `Error: Review must be a string!`; }
+        review = review.trim();
+        if (review.length === 0){throw `Error: Review cannot be an empty string or string with just spaces`;}
+        //if(!isNaN(review)){throw `Review cannot be just numbers`}
+        return review;
     },
     checkNumber(numVal,numName){
         if(!numVal){throw `${numName} not provided`}

@@ -3,17 +3,19 @@ const router = Router();
 import validation from '../validations/authValidation.js'
 import userDataFunctions from '../data/user.js'
 import authFunction from '../data/auth.js'
+import xss from 'xss';
 
 router
     .route('/register')
     .get(async (req,res)=>{
-        res.render('register',{title:'Registration page'})
+        res.render('register',{Titlename:'Registration page'})
     })
     .post(async (req,res)=>{
         let user=req.body;
         let errors=[];
         try{
             if(!user.emailAddressInput){throw `Email not provided`}
+            user.emailAddressInput=xss(user.emailAddressInput);
             if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(user.emailAddressInput.trim())){throw `Invalid email id`}
         }catch(e){
             errors.push(e);
@@ -50,7 +52,7 @@ router
         //     errors.push(e);
         // }
         if (errors.length > 0) {
-            return res.status(400).render('register',{title:'Registration page',errors:errors,hasErrors:true})
+            return res.status(400).render('register',{Titlename:'Registration page',errors:errors,hasErrors:true})
           }
         try{
             const {userNameInput,ageInput,emailAddressInput,passwordInput,roleInput}=user
@@ -59,7 +61,7 @@ router
             if(newUser){res.redirect('login')}
         }catch(e){
             errors.push(e);
-            res.status(400).render('register',{title:'Registration page',errors:errors,hasErrors:true})
+            res.status(400).render('register',{Titlename:'Registration page',errors:errors,hasErrors:true})
             //res.status(500).json('Internal server error')
         }
 
@@ -67,7 +69,7 @@ router
 
     router.route('/login')
     .get(async (req,res)=>{
-        res.render('login',{title: 'Login page'})
+        res.render('login',{Titlename: 'Login page'})
     })
     .post(async (req,res)=>{
         let user=req.body;
@@ -85,7 +87,7 @@ router
             errors.push(e);
         }
         if(errors.length>0){
-            return res.status(400).render('login',{title:'Login page',errors:errors,hasErrors:true,user:user})
+            return res.status(400).render('login',{Titlename:'Login page',errors:errors,hasErrors:true,user:user})
 
         }
         try{
@@ -96,16 +98,23 @@ router
 
         }catch(e){
             errors.push(e);
-            res.status(400).render('login',{title:'Login page',errors:errors,hasErrors:true})
+            res.status(400).render('login',{Titlename:'Login page',errors:errors,hasErrors:true})
         }
     })
     
     router.route('/').get(async (req,res)=>{
-        if (req.session.user) {
-            return res.redirect('/gameList');
-        }
-        else{
-            return res.render('mainpage');
+        // if (req.session.user) {
+        //     return res.redirect('/gameList');
+        // }
+        // else{
+        //     return res.render('mainpage');
+        // }
+        try{
+        let user=undefined;
+        if(req.session.user){user=req.session.user}
+        return res.render('mainpage',{Titlename:'Home Page',user:user,profileId: req.session?.user?.userId})
+        }catch(e){
+            res.render('error',{Titlename:'Error page',errorMessage:e,profileId: req.session?.user?.userId})
         }
     })
 
