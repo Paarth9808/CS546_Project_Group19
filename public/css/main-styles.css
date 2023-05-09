@@ -9,6 +9,8 @@ body {
   color: white;
   
 }
+
+
 .dark-mode select {
   background-color: black;
   color: white;
@@ -45,7 +47,7 @@ ul {
   overflow: hidden;
 }
 #uploadimage #filelabel{ 
-  background-color: #06750c; 
+  background-color: #337ab7; 
   cursor: pointer; 
 }
 #uploadimage #select-img{ 
@@ -108,7 +110,7 @@ ul {
 
 .submitbtn,#loadingbtn,#checkreported{
   border: none;
-  background-color: #06750c; 
+  background-color: #337ab7; 
   width: 120px;  
   height: 30px;  
   line-height: 30px; 
@@ -138,17 +140,17 @@ ul {
 }
 
 .comment{
-  border-top: 3px solid rgb(191, 244, 0);
+  border-top: 3px solid #3366b7;
   margin-top: 20px;
   width: 800px;  
-  background-color: #c4f9d5;
+  background-color: #c4e5f9;
 }
 
 .commentinfo{
   display: inline-block;
   width: 120px;  
   height: 120px; 
-  border-bottom: 3px solid #306b2f;
+  border-bottom: 3px solid #1c4b74;
 }
 
 /* I have changed the class name and will not cause conflict */
