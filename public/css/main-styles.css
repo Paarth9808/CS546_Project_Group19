@@ -16,6 +16,14 @@ body {
   color: white;
 }
 
+.dark-mode textarea{
+  background-color: black;
+}
+
+/* .dark-mode input[type="text"]{
+  background-color: black;
+} */
+
 a {
   text-decoration: none;
 }

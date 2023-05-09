@@ -48,7 +48,7 @@
         for (let i = 0; i < genre.length; i++) {
           if (dict.indexOf(genre.charAt(i)) < 0) res++;
         }
-        if (res > 0) throw 'invalid genre input';
+        if (res > 0) throw 'Invalid input for genre';
 
       },
 
