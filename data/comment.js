@@ -33,9 +33,15 @@ const improveComment=async(tempcomment)=>{
     const userCollection=await user();
     const tempuser=await userCollection.findOne({_id:new ObjectId(tempcomment.userID)});
     if(tempuser==null)
-        throw "user does not exist";
-    tempcomment.username=tempuser.userName;
-    tempcomment.profilepath=tempuser.avatar;
+    {
+        tempcomment.username="DeletedUser";
+        tempcomment.profilepath="";
+    }
+    else
+    {
+        tempcomment.username=tempuser.userName;
+        tempcomment.profilepath=tempuser.avatar;
+    }
     return tempcomment;
 }
 
@@ -136,9 +142,9 @@ const deleteComment=async(
     var gameupdatedInfo=await gameCollection.findOneAndUpdate({_id:new ObjectId(gameID)},{$pull:{commentIds:commentid}},{returnDocument: 'after'});
     var userupdatedInfo=await userCollection.findOneAndUpdate({_id:new ObjectId(userID)},{$pull:{reviewedIds:commentid}},{returnDocument: 'after'});
     if(gameupdatedInfo.lastErrorObject.n==0)
-        throw "could not delete this comment in games db";
+        console.log("could not delete this comment in games db, maybe this game doesn't exist");
     if(userupdatedInfo.lastErrorObject.n==0)
-        throw "could not delete this review in user db";
+        console.log("could not delete this comment in users db, maybe this user doesn't exist");
 }
 
 const updateComment=async(
