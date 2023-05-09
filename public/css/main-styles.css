@@ -114,6 +114,10 @@ ul {
   top: -10px; 
 }
 
+#text{
+  color: #000000 !important;
+}
+
 
 
 .submitbtn,#loadingbtn,#checkreported{
@@ -134,10 +138,23 @@ ul {
   display: flex;
 }
 
-.likelabel,.dislikelabel,.reportlabel{
+.likelabel,.dislikelabel,.reportlabel,.deletelabel{
   width: 80px;  
   height: 20px;  
   cursor: pointer; 
+}
+
+.likelabel,.dislikelabel,.reportlabel,.deletelabel,.comment_time,.comment_name{
+  color: #14006b !important;
+  background-color: #eadfff !important;
+}
+
+.comment{
+  background-color: #2b0670 !important;
+}
+
+.comment_text{
+  color: #eadfff;
 }
 
 .comment,.attitude{
@@ -187,7 +204,6 @@ h1{
   margin-bottom: 5px;
   text-align: center;
 }
-
 
 
 
