@@ -1,18 +1,18 @@
 <form method="POST" id="comparison-form" class="comparison-form">
     <label for="game1">Game 1</label>
-    <select name="game1" id="game1">
+    <select name="game1" id="game1" class="form-select">
         {{#each games}}
         <option value="{{this}}">{{this}}</option>
     {{/each}}
     </select>
     
     <label for="game2">Game 2</label>
-    <select name="game2" id="game2">
+    <select name="game2" id="game2" class="form-select">
         {{#each games}}
         <option value="{{this}}">{{this}}</option>
     {{/each}}
     </select>
-    <button type="submit">Compare</button>
+    <button type="submit" class="btn btn-primary">Compare</button>
 </form>
 <div class="container">
 {{#if game1}}

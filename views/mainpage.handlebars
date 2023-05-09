@@ -1,6 +1,18 @@
 {{#if profileId}}
 <a href="/user/{{profileId}}">profile</a>
 {{/if}}
+{{#if user}}
+<div class="col-md-12 bg-light text-right">
+    <a href="/logout" class="btn btn-primary">Logout</a>
+</div>
+{{else}}
+<div class="col-md-12 text-right">
+    <a href="/login" class="btn btn-primary">Login </a>
+    <a href="/register" class="btn btn-primary">Register</a>
+</div>
+{{/if}}
+
+<h1>Game Review System</h1>
 <p>
     The website is aimed to provide a comprehensive and user-friendly platform for gamers 
     to discover, rate, and discuss their favorite games. We will try to help gamers make 
@@ -9,13 +21,18 @@
     known gems. The website will also have a community page where users can discuss 
     games, ask for recommendations, and share their opinions.
 </p>
-{{#if user}}
-    <a href="/logout">Logout</a>
+{{!-- {{#if user}}
+<div class="col-md-12 bg-light text-right">
+    <a href="/logout" class="btn btn-primary">Logout</a>
+</div>
 {{else}}
-    <a href="/login">Login</a>
-    <br>
-    <a href="/register">Register</a>
-    <br>
-{{/if}}
-<a href="/gamelist">GameList</a>
-<a href="/compare">Compare games</a>
+<div class="col-md-12 text-right">
+    <a href="/login" class="btn btn-primary">Login </a>
+    <a href="/register" class="btn btn-primary">Register</a>
+</div>
+{{/if}} --}}
+<div class="text-center">
+<a href="/gamelist" class="btn btn-primary">GameList</a>
+<a href="/compare" class="btn btn-primary">Compare games</a>
+</div>
+

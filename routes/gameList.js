@@ -26,6 +26,7 @@ router.route('/creategame').get(async (req, res)=>{
   let releaseDate = req.body.releaseDateInput;
   let age = Number(req.body.ageInput);
   let description = req.body.descriptionInput;
+  
 
   genre = xss(genre);
   systemRequirements = xss(systemRequirements);
@@ -36,8 +37,8 @@ router.route('/creategame').get(async (req, res)=>{
 
   try {
     if (genre) {
-      if (genre.trim() == '') throw 'genre should be no empty spaces';
-      if (typeof(genre) != 'string') throw 'genre type wrong';
+      if (genre.trim() == '') throw 'Genre should not be empty spaces';
+      if (typeof(genre) != 'string') throw 'Genre type wrong';
       genre = genre.trim();
       let dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
       let res = 0;
@@ -96,7 +97,7 @@ router.route('/creategame').get(async (req, res)=>{
     }
 
     let testName = await gameListData.getGameByName(name);
-    if (testName == 'exist') throw 'name exist';
+    if (testName == 'exist') throw 'Name exists';
 
     const newGame = await gameListData.createGame(releaseDate, name, genre, description, systemRequirements, age, platform);
     if (newGame) res.render('createGame', {Titlename: "createGame", showErrorMessage : 'Game Added!'});
@@ -174,7 +175,7 @@ router.route('/').get(async (req,res)=>{
     sortWay = xss(sortWay);
     sortBy = xss(sortBy);
 
-    if (!genre && !platform && !sortWay && !sortBy) res.status(400).render('gameList', {Titlename: "Game List", showErrorMessage : 'Sort/Filter missing'});
+    if (!genre && !platform && !sortWay && !sortBy) res.status(400).render('gameList', {Titlename: "Game List", showErrorMessage : 'Sort/Filter missing',profileId: req.session?.user?.userId,userRole: req.session?.user?.role});
 
 
 
@@ -191,15 +192,15 @@ router.route('/').get(async (req,res)=>{
         if (sortWay && sortBy) {
             if (sortWay.trim() == '') throw 'sortWay should be no empty spaces';
             if (typeof(sortWay) != 'string') throw 'sortWay type wrong';
-            if (sortWay != 'ascending' && sortWay != 'descending') throw 'sortWay input wrong';
-            if (sortWay.trim() == '') throw 'sortWay should be no empty spaces';
-            if (typeof(sortWay) != 'string') throw 'sortWay type wrong';
-            if (sortWay != 'ascending' && sortWay != 'descending') throw 'sortWay input wrong';
+            if (sortWay != 'ascending' && sortWay != 'descending') throw 'you have to choose a correct order';
+            if (sortBy.trim() == '') throw 'sortWay should be no empty spaces';
+            if (typeof(sortBy) != 'string') throw 'sortWay type wrong';
+            if (sortBy != 'rate' && sortBy != 'date') throw 'you have to choose a correct sort way';
         }
 
 
     } catch (e) {
-      return res.status(400).render('gameList', {Titlename: "Game list", showErrorMessage : e});
+      return res.status(400).render('gameList', {Titlename: "Game list", showErrorMessage : e,profileId: req.session?.user?.userId,userRole: req.session?.user?.role});
     }
 
 
@@ -215,7 +216,7 @@ router.route('/').get(async (req,res)=>{
 
            if (filteredGame.length == 0) nogame = 'no games found';
             
-           res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
+           return res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame, showErrorMessage : nogame, profileId: req.session?.user?.userId,userRole: req.session?.user?.role});
         
 
       } else if (platform) {
@@ -227,7 +228,7 @@ router.route('/').get(async (req,res)=>{
 
         if (filteredGame.length == 0) nogame = 'no games found';
          
-        res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
+        return res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame, showErrorMessage : nogame, profileId: req.session?.user?.userId,userRole: req.session?.user?.role});
 
       } else if (sortWay && sortBy) {
         if (sortBy == 'date') {
@@ -238,7 +239,7 @@ router.route('/').get(async (req,res)=>{
 
             if (filteredGame.length == 0) nogame = 'no games found';
              
-            res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
+            return res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame, showErrorMessage : nogame,profileId: req.session?.user?.userId,userRole: req.session?.user?.role});
 
         } else if (sortBy == 'rate') {
 
@@ -249,15 +250,15 @@ router.route('/').get(async (req,res)=>{
 
            if (filteredGame.length == 0) nogame = 'no games found';
             
-          res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame, showErrorMessage : nogame});
+          return res.render('gameList', {Titlename: "gameList", sortTerm: filteredGame, showErrorMessage : nogame, profileId: req.session?.user?.userId,userRole: req.session?.user?.role});
         }
 
       } else {
-        res.status(500).render('gameList', {Titlename : "error", showErrorMessage: "Internal Server Error" });
+        return res.status(500).render('gameList', {Titlename : "error", showErrorMessage: "Internal Server Error" });
       }
 
     } catch (e) {
-      return res.render('gameList', {Titlename: "gameList", showErrorMessage : e});
+      return res.render('gameList', {Titlename: "gameList", showErrorMessage : e, profileId: req.session?.user?.userId,userRole: req.session?.user?.role});
     }
 
   });

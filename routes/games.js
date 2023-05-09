@@ -153,7 +153,7 @@ router.route('/:id/edit').get(async (req,res)=>{
     try{
         updatedData.systemRequirements=xss(updatedData.systemRequirements);
         //if(updatedData.systemRequirements){
-            updatedData.systemRequirements=validation.checkString(updatedData.systemRequirements,'System Requirements')
+        updatedData.systemRequirements=validation.checkString(updatedData.systemRequirements,'System Requirements')
         //}
     }catch(e){
         errors.push(e);
@@ -327,6 +327,13 @@ router.route('/reviews/:id/edit').get(async (req,res)=>{
     let userId=undefined
     let prevReview=undefined;
 
+    try{
+        currentUser=req.session.user;
+        userId=currentUser.userId;
+        prevReview=await ratingData.get(req.params.id,userId)
+    }catch(e){
+        errors.push(e);
+    }
     try{
         currentUser=req.session.user;
         userId=currentUser.userId;

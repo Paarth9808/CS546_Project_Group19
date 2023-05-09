@@ -60,7 +60,7 @@ router.route("/:id").get(async (req, res) => {
     // }
     console.log(ratedArr)
     let bool1 =  req.session?.user?.role === 'admin' || req.session?.user?.userId === req.params.id;
-    return res.render("userProfile", {
+    return res.render("userProfile", {Titlename : "User Profile",
       id: req.params.id,
       avatar: user1.avatar,
       username: user1.userName,
@@ -73,11 +73,9 @@ router.route("/:id").get(async (req, res) => {
   } catch (e) {
     return res.render('error', {errorMessage: e})
   }
-});
-
-// delete user
-router.route("/:id/delete").get(async (req, res) => {
-  if (req.params.id === req.session?.user?.userId) {
+}
+).delete(async(req, res) =>{
+  if (req.params.id === req.session?.user?.userId || req.session?.user?.role === 'admin') {
     try {
       req.params.id = validation.checkId(req.params.id);
     } catch (e) {
@@ -87,14 +85,35 @@ router.route("/:id/delete").get(async (req, res) => {
       const user1 = await userData.getUserById(req.params.id);
       req.session.destroy()
       await userData.deleteUser(req.params.id);
-      res.render('deleted', {name : user1.userName});
+      res.render('deleted', {Titlename : "User Deleted", name : user1.userName, id : user1._id});
     } catch (e) {
       return res.render('error', {errorMessage: e})
     }
   } else {
-    res.render('error', {errorMessage : JSON.stringify(e)});
+    res.render('error', {errorMessage : "not logged in as the user or you are not the admin!"});
   }
-});
+})
+
+// // delete user
+// router.route("/:id/delete").get(async (req, res) => {
+//   if (req.params.id === req.session?.user?.userId || req.session?.user?.role === 'admin') {
+//     try {
+//       req.params.id = validation.checkId(req.params.id);
+//     } catch (e) {
+//       return res.render('error', {errorMessage: e})
+//     }
+//     try {
+//       const user1 = await userData.getUserById(req.params.id);
+//       req.session.destroy()
+//       await userData.deleteUser(req.params.id);
+//       res.render('deleted', {name : user1.userName});
+//     } catch (e) {
+//       return res.render('error', {errorMessage: e})
+//     }
+//   } else {
+//     res.render('error', {errorMessage : "not logged in as the user or you are not the admin!"});
+//   }
+// });
 // link to edit page
 router
   .route("/:id/edit")
@@ -103,11 +122,12 @@ router
       req.params.id = validation.checkId(req.params.id);
       let currUser = await userData.getUserById(req.params.id);
       if(req.session?.user?.userId !== req.params.id ) throw "You are not logged in as this user";
-      res.render("editProfile", { id: req.params.id, age: currUser.age, username: currUser.userName });
+      res.render("editProfile", {Titlename : "User Update", id: req.params.id, age: currUser.age, username: currUser.userName });
     } catch (e) {
       res.render('error', {errorMessage : JSON.stringify(e)});
     }
   })
+  // post to put
   .post(fileUpload(),async (req, res) => {
     let { userName: userName, oldpassword, newpassword, age: age } = req.body;
     let errors = [];
@@ -178,7 +198,7 @@ router
     } catch (e) {
       res.render('error', {errorMessage : JSON.stringify(e)});
     }
-    res.render("editAvatar");
+    res.render("editAvatar", {Titlename : "User Avatar Update"});
   })
   .post(fileUpload(),async (req, res) => {
     let errors = [];
