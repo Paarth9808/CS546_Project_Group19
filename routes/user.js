@@ -83,7 +83,9 @@ router.route("/:id").get(async (req, res) => {
     }
     try {
       const user1 = await userData.getUserById(req.params.id);
-      req.session.destroy()
+      if(req.session.user.userId===req.params.id){
+        req.session.destroy()
+      }
       await userData.deleteUser(req.params.id);
       res.render('deleted', {Titlename : "User Deleted", name : user1.userName, id : user1._id});
     } catch (e) {
