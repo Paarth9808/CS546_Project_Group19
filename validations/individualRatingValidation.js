@@ -16,6 +16,7 @@ const exportedMethods={
         review = review.trim();
         if (review.length === 0){throw `Error: Review cannot be an empty string or string with just spaces`;}
         //if(!isNaN(review)){throw `Review cannot be just numbers`}
+        if(!/[A-Za-z]/.test(review)){throw `Review should contain atleast one letter`}
         return review;
     },
     checkNumber(numVal,numName){

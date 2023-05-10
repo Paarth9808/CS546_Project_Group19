@@ -13,6 +13,7 @@ checkReview=(review)=>{
     if(typeof(review)!== 'string'){ throw `Error: Review must be a string!`; }
     review = review.trim();
     if(review.length === 0){throw `Error: Review cannot be an empty string or string with just spaces`;}
+    if(!/[A-Za-z]/.test(review)){throw `Review should contain atleast one letter`}
     return review;
 }
 checkNumber=(numVal,numName)=>{
