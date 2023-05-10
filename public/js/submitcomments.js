@@ -283,7 +283,7 @@ document.getElementById("select-img").addEventListener("change",function(){
         reader.error=(e)=>{
             console.log("load error");
         }
-        //IFFE
+        //IFFE cited from https://github.com/xiexikang/js-upload-pictures
         ;(function(i){
         reader.onload=(e)=>{
             allfiles[index]=selector.files[i];
